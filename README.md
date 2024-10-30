@@ -16,7 +16,16 @@ tailor-specific requirements and complex technical detail.
 ## Project Requirements
 
 * **Functional Requirements Document (FRD)**:  
-  This document details the functionalities the system must provide. You can access it here: [Functional Requirements Document (FRD)](frd.md)
+  This document details the functionalities the system must provide. You can access it here: [Functional Requirements Document (FRD)](docs/requirements/frd.md)
 
 * **Non-Functional Requirements (NFR)**: 
-  This document specifies the performance, usability, and other non-functional aspects of the system. You can access it here: [Non-Functional Requirements (NFR)](nfr.md)
+  This document specifies the performance, usability, and other non-functional aspects of the system. You can access it here: [Non-Functional Requirements (NFR)](docs/requirements/nfr.md)
+
+## Design Documents 
+
+* **Architecture**:  
+  This document specifies general architecture of the project, not specific to the first minimum viable product. You can access it here: [Architecture](docs/arch/arch.md)
+
+* **High-Level Design**: 
+  This document specifies the high-level service interactions and flow, specific to the first minimum viable product. You can access it here: [High-Level Design](docs/arch/hld.md)
+  
