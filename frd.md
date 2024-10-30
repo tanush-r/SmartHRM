@@ -1,6 +1,6 @@
 # Functional Requirements Document(FRD)
 
-All data mentioned in this document is not finalized and subject to
+All data mentioned in this document is not finalized and subject to 
 review.
 
 ## **Introduction**
@@ -31,6 +31,8 @@ HR team may have. In specific, the scope of HR Hub will be to
 
     -   Projects and Experience from the resume
 
+-   Rank all candidates based on a given requirement, which either considers the candidates associated with the requirement, or all the available candidates in the backlog. 
+
 -   Track all candidates by their resumes and all job descriptions in
     the HR Hub repository
 
@@ -41,8 +43,6 @@ HR team may have. In specific, the scope of HR Hub will be to
     based on which the HR engine should be able to define the tone and
     considerations for its tasks
 
--   Take video recording of interview and generate snippets based on key
-    points for HR team to accept or reject candidate.
 
 ### Target Users
 
@@ -130,6 +130,8 @@ HR Hub will consist of these main components
 -   **Resume Extractor**: A script which will automatically pull resumes
     from the HR email/cloud storage and upload it to the resume
     repository.
+
+- **Resume Ranker**:  A ranking system which returns the top matched resumes from the job description based on the features from Resume Extractor
 
 -   **Smart Screener:** The user interface that facilitates interaction
     with the HR Engine. Users can input instructions, select documents
