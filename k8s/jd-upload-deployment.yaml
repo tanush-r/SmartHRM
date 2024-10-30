@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jd-upload
+  namespace: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jd-upload
+  template:
+    metadata:
+      labels:
+        app: jd-upload
+    spec:
+      containers:
+      - name: jd-upload
+        imagePullPolicy: Always
+        image: opentechxdoclabs/smart_hr_system:jd-upload-arm64
+        ports:
+        - containerPort: 8002
+      imagePullSecrets:
+      - name: docker-registry-secret

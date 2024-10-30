@@ -1,0 +1,74 @@
+<div class="container my-5">
+  <div class="card shadow-lg border-0 rounded-lg" style="max-width: 500px; margin: auto;">
+    <div class="card-body p-4" style="background-color: #f5faff;">
+
+      <!-- Card Header -->
+      <h5 class="card-title text-center mb-4" style="font-weight: bold;">Select Client & Upload Resume</h5>
+
+      <!-- Client Dropdown -->
+      <div class="form-group mb-4">
+        <label for="clientDropdown" class="form-label">Client Name</label>
+        <select
+          class="form-select"
+          id="clientDropdown"
+          [(ngModel)]="selectedClientName"
+          (change)="onClientChange()"
+          required
+        >
+          <option value="" disabled selected>Select Client</option>
+          <option *ngFor="let client of clients" [value]="client.client_name">{{ client.client_name }}</option>
+        </select>
+      </div>
+
+      <!-- Position Dropdown -->
+      <div class="form-group mb-4">
+        <label for="positionDropdown" class="form-label">Position Name</label>
+        <select class="form-select" id="positionDropdown" [(ngModel)]="selectedPosition" required>
+          <option value="" disabled selected>Select Position</option>
+          <option *ngFor="let position of positions" [value]="position">{{ position }}</option>
+        </select>
+      </div>
+
+      <!-- Resume Upload Container -->
+      <div class="upload-container text-center p-4 mb-4"
+           style="border: 2px dashed #0747A6; background-color: #eaf2ff; cursor: pointer;"
+           (click)="triggerFileUpload()">
+        <ng-container *ngIf="!isUploading; else loadingTemplate">
+          <i class="bi bi-cloud-upload" style="font-size: 48px; color: #0747A6;"></i>
+          <p class="mt-2">{{ selectedResume ? selectedResume.name : 'Upload Resumes (PDF)' }}</p>
+          
+          <!-- Success Message -->
+          <div *ngIf="uploadStatus === 'success'" class="text-success mt-2">
+            <i class="fas fa-check-circle"></i> Upload Successful!
+          </div>
+          
+          <!-- Error Message -->
+          <div *ngIf="uploadStatus === 'error'" class="text-danger mt-2">
+            <i class="fas fa-times-circle"></i> Upload Failed!
+          </div>
+        </ng-container>
+        <ng-template #loadingTemplate>
+          <i class="fas fa-spinner fa-spin" style="font-size: 48px; color: #0747A6;"></i>
+          <p class="mt-2">Uploading...</p>
+        </ng-template>
+      </div>
+
+      <!-- Hidden File Input -->
+      <input
+        type="file"
+        #fileInput
+        id="resumeUpload"
+        class="form-control"
+        accept=".pdf"
+        style="visibility: hidden; position: absolute;"
+        (change)="onFileChange($event)"
+      />
+
+      <!-- Submit Button -->
+      <div class="form-group text-center">
+        <button type="button" class="btn btn-success px-4" (click)="submitForm()">Submit</button>
+      </div>
+
+    </div>
+  </div>
+</div>

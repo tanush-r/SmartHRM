@@ -1,0 +1,106 @@
+<div class="resume-section">
+  <!-- Client Name and Position Name Search Section -->
+  <div class="search-section">
+    <div class="input-bar">
+      <label for="clientSelect">Select Client Name:</label>
+      <select
+        id="clientSelect"
+        [(ngModel)]="selectedClientId"
+        (change)="onClientChange()"
+      >
+        <option value="">Select Client Name</option>
+        <option *ngFor="let client of clients" [value]="client.client_id">
+          {{ client.client_name }}
+        </option>
+      </select>
+      <label for="positionSelect">Select Position Name:</label>
+      <select
+        id="positionSelect"
+        [(ngModel)]="selectedPosition"
+        (change)="onPositionSelect()"
+      >
+        <option value="">Select Position Name</option>
+        <option *ngFor="let position of positions" [value]="position.jd_id">
+          {{ position.filename }}
+        </option>
+      </select>
+      <button (click)="fetchResumes()">Search</button>
+    </div>
+  </div>
+
+  <!-- Resume Table Section -->
+  <div class="resume-table-section">
+    <!-- Count of Resumes placed before the table -->
+    <div class="resume-count">
+      <span>Total Resumes: {{ resumes.length }}</span>
+    </div>
+
+    <!-- Resume Table -->
+    <div class="resume-table">
+      <table>
+        <thead>
+          <tr>
+            <th>File Name</th>
+            <th>
+              Date 
+              <i class="fas fa-sort-up" (click)="sortResumes('asc')" style="cursor: pointer;"></i>
+              <i class="fas fa-sort-down" (click)="sortResumes('desc')" style="cursor: pointer;"></i>
+            </th>
+            <th>Time</th>
+            <th>Eligible</th>
+            <th>Not Eligible</th>
+            <th>Onboarded</th>
+            <th>Download</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Skeleton loader -->
+          <ng-container *ngIf="isLoadingResumes">
+            <tr *ngFor="let i of [1,2,3,4,5,6,7,8,9]" class="skeleton-row">
+              <td><p-skeleton></p-skeleton></td>
+              <td><p-skeleton></p-skeleton></td>
+              <td><p-skeleton></p-skeleton></td>
+              <td><p-skeleton></p-skeleton></td>
+              <td><p-skeleton></p-skeleton></td>
+              <td><p-skeleton></p-skeleton></td>
+              <td><p-skeleton></p-skeleton></td>
+              <td><p-skeleton></p-skeleton></td>
+            </tr>
+          </ng-container>
+          <!-- Actual data -->
+          <ng-container *ngIf="!isLoadingResumes">
+            <tr *ngFor="let resume of resumes">
+              <td>{{ resume.filename }}</td>
+              <td>{{ formatDate(resume.timestamp) }}</td>
+              <td>{{ formatTime(resume.timestamp) }}</td>
+              <td>
+                <p-inputSwitch 
+                  [(ngModel)]="resume.eligible" 
+                  (onChange)="onEligibleChange(resume)"></p-inputSwitch>
+              </td>
+              <td>
+                <p-inputSwitch 
+                  [(ngModel)]="resume.notEligible" 
+                  (onChange)="onNotEligibleChange(resume)"></p-inputSwitch>
+              </td>
+              <td>
+                <p-inputSwitch 
+                  [(ngModel)]="resume.onboarded" 
+                  (onChange)="onOnboardedChange(resume)"></p-inputSwitch>
+              </td>
+              <td>
+                <button class="download-btn" (click)="downloadResume(resume.s3_link)">
+                  <i class="bi bi-download"></i> Download
+                </button>
+              </td>
+              <td>
+                <button class="view-btn" (click)="viewResume(resume)">View</button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

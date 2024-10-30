@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resume-upload
+  namespace: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: resume-upload
+  template:
+    metadata:
+      labels:
+        app: resume-upload
+    spec:
+      containers:
+      - name: resume-upload
+        imagePullPolicy: Always
+        image: opentechxdoclabs/smart_hr_system:resume-upload-arm64
+        ports:
+        - containerPort: 8003
+      imagePullSecrets:
+      - name: docker-registry-secret
+

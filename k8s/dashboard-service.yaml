@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard
+  namespace: prod
+spec:
+  selector:
+    app: dashboard
+  ports:
+    - protocol: TCP
+      port: 8005
+      targetPort: 8005
+      nodePort: 30001
+  type: NodePort  # Internal communication within the cluster

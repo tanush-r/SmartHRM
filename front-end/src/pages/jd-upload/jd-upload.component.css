@@ -1,0 +1,21 @@
+/* Change the button background color to #0747A6 */
+.btn-success {
+    background-color: #0747A6;
+    border-color: #0747A6;
+}
+
+.btn-success:hover {
+    background-color: #053b84; /* Slightly darker shade for hover effect */
+    border-color: #053b84;
+}
+
+/* Change the button background color to #0747A6 */
+.btn-primary {
+    background-color: #0747A6;
+    border-color: #0747A6;
+}
+
+.btn-primary:hover {
+    background-color: #053b84; /* Slightly darker shade for hover effect */
+    border-color: #053b84;
+}

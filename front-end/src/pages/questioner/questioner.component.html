@@ -1,0 +1,146 @@
+<div class="row-container">
+  <!-- Question Generator Section -->
+  <div class="question-section">
+    <!-- JD Question Generator -->
+    <div class="jd-question-section">
+      <div class="jd-questions-container">
+        <h4>JD Based Questions</h4>
+        <button class="btn btn-primary" (click)="toggleJDQuestions()">
+          {{ isJDQuestionsVisible ? 'Hide Generated' : 'Generate' }}
+        </button>
+      </div>
+      <div class="faq-item" *ngIf="isJDQuestionsVisible">
+        <div *ngIf="isLoadingJD" class="loader">
+          <p-skeleton styleClass="mb-2"></p-skeleton>
+          <p-skeleton width="10rem" styleClass="mb-2"></p-skeleton>
+          <p-skeleton width="5rem" styleClass="mb-2"></p-skeleton>
+          <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+          <p-skeleton width="10rem" height="4rem"></p-skeleton>
+        </div>
+        <p-accordion *ngIf="!isLoadingJD">
+          <p-accordionTab *ngFor="let question of jdQuestions">
+            <ng-template pTemplate="header">
+              <span style="color: rgb(51, 51, 51); font-weight: 500;">{{ question.question }}</span>
+            </ng-template>
+            <p>{{ question.answer }}</p>
+          </p-accordionTab>
+        </p-accordion>                
+      </div>
+    </div>
+
+    <!-- Resume Question Generator -->
+    <div class="resume-question-section">
+      <div class="resume-questions-container">
+        <h4>Resume Based Questions</h4>
+        <button class="btn btn-primary" (click)="toggleResumeQuestions()">
+          {{ isResumeQuestionsVisible ? 'Hide Generated' : 'Generate' }}
+        </button>
+      </div>
+      <div class="faq-item" *ngIf="isResumeQuestionsVisible">
+        <div *ngIf="isLoadingResume" class="loader">
+          <p-skeleton styleClass="mb-2"></p-skeleton>
+          <p-skeleton width="10rem" styleClass="mb-2"></p-skeleton>
+          <p-skeleton width="5rem" styleClass="mb-2"></p-skeleton>
+          <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+          <p-skeleton width="10rem" height="4rem"></p-skeleton>
+        </div>
+        <p-accordion *ngIf="!isLoadingResume">
+          <p-accordionTab *ngFor="let question of resumeQuestions">
+            <ng-template pTemplate="header">
+              <span style="color: rgb(51, 51, 51); font-weight: 500;">{{ question.question }}</span>
+            </ng-template>
+            <p>{{ question.answer }}</p>
+          </p-accordionTab>
+        </p-accordion>               
+      </div>
+    </div>
+  </div>
+
+  <!-- Resume Viewer Section -->
+  <div class="resume-viewer">
+    <div class="header">
+      <button
+        class="tab-button"
+        [class.active]="activeTab === 'resume-summary'"
+        (click)="setActiveTab('resume-summary')"
+      >
+        Resume View
+      </button>
+      <button
+        class="tab-button"
+        [class.active]="activeTab === 'resume'"
+        (click)="setActiveTab('resume')"
+      >
+        JD View
+      </button>
+    </div>
+
+    <!-- Resume View Content -->
+    <div class="tab-content" *ngIf="activeTab === 'resume-summary'">
+      <div class="resume-content">
+        <!-- Zoom Controls -->
+        <div class="controls">
+          <button (click)="zoomOut()">-</button>
+          <span>Zoom: {{ zoomLevel * 100 | number : '1.0-0' }}%</span>
+          <button (click)="zoomIn()">+</button>
+        </div>
+        
+        <div *ngIf="isPdfFile && resumeS3Link">
+          <pdf-viewer
+            [src]="resumeS3Link"
+            [original-size]="false"
+            [show-all]="true"
+            [zoom]="zoomLevel"
+            style="height: 500px; width: 100%"
+          ></pdf-viewer>
+        </div>
+        <div *ngIf="isDocxFile && resumeS3Link">
+          <ngx-doc-viewer
+            [url]="resumeS3Link"
+            viewer="google"
+            style="width: 100%; height: 500px;"
+          ></ngx-doc-viewer>
+        </div>
+        <ng-template #loadingResume>
+          <p>Loading resume...</p>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- JD View Content -->
+    <div class="tab-content" *ngIf="activeTab === 'resume'">
+      <div class="job-description-template">
+        <div class="controls">
+          <button (click)="zoomOut()">-</button>
+          <span>Zoom: {{ zoomLevel * 100 | number : '1.0-0' }}%</span>
+          <button (click)="zoomIn()">+</button>
+        </div>
+        
+        <div *ngIf="isPdfFile && positionS3Link">
+          <pdf-viewer
+            [src]="positionS3Link"
+            [original-size]="false"
+            [show-all]="true"
+            [zoom]="zoomLevel"
+            style="height: 500px; width: 100%"
+          ></pdf-viewer>
+        </div>
+        <div *ngIf="isDocxFile && positionS3Link">
+          <ngx-doc-viewer
+            [url]="positionS3Link"
+            viewer="google"
+            style="width: 100%; height: 500px;"
+          ></ngx-doc-viewer>
+        </div>
+        <ng-template #loadingJD>
+          <p>Loading job description...</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Router Outlet -->
+<div class="p-4 mt-5" style="padding-top: 100px">
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resume-s3
+  namespace: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: resume-s3
+  template:
+    metadata:
+      labels:
+        app: resume-s3
+    spec:
+      containers:
+      - name: resume-s3
+        imagePullPolicy: Always
+        image: opentechxdoclabs/smart_hr_system:resume-s3-rds-crud-arm64
+        ports:
+        - containerPort: 8000
+        env:
+        - name: AWS_S3_BUCKET_NAME
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: AWS_S3_BUCKET_NAME
+        - name: AWS_REGION_NAME
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: AWS_REGION_NAME
+        - name: MYSQL_DB
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_DB
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_PASSWORD
+        - name: MYSQL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_HOST
+        - name: MYSQL_PORT
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_PORT
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_USER
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: AWS_SECRET_ACCESS_KEY
+
+      imagePullSecrets:
+      - name: docker-registry-secret

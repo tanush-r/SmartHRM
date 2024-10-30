@@ -1,0 +1,57 @@
+.container {
+    padding: 20px;
+    margin-left: 0px ;
+    margin-top: 120px;
+    border-radius: 8px; 
+    background-color: #f1f3f5; /* Card background color */
+    border: 1px solid #e0e0e0; /* Card border */
+  }
+.stats-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .stat-card {
+    background-color: #f8f9fa; /* Card background color */
+    border: 1px solid #e0e0e0; /* Card border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px ; /* Padding inside the card */
+    text-align: center; /* Center align text */
+    flex: 1; /* Flex-grow to take equal space */
+    margin: 0 10px; /* Margin between cards */
+    transition: transform 0.2s; /* Animation on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow */
+  }
+  .icon {
+    float: left;
+    margin-left: 20px;
+    font-size: 40px; /* Adjust icon size */
+    color: #0747A6; /* Change icon color if desired */
+  }
+  
+  .info {
+    float: right;
+    text-align: center;
+  }
+  
+  h4 {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    font-size: 24px;
+    color: #090909;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .stats-container {
+      flex-direction: column; /* Stack cards on smaller screens */
+    }
+  
+    .stat-card {
+      margin-bottom: 20px; /* Bottom margin for cards when stacked */
+    }
+  }

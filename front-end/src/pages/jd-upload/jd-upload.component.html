@@ -1,0 +1,76 @@
+<div class="container my-5">
+  <div class="card shadow-lg border-0 rounded-lg" style="max-width: 500px; margin: auto;">
+    <div class="card-body p-4" style="background-color: #f5faff;">
+      
+      <!-- Card Header -->
+      <h5 class="card-title text-center mb-4" style="font-weight: bold;">Add Client & Upload JDs</h5>
+      
+      <!-- New Client Input -->
+      <div class="form-group mb-4">
+        <label for="newClient" class="form-label">Add New Client</label>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="newClientName" class="form-control" id="newClient" placeholder="Enter client name" required>
+          <button class="btn btn-primary" type="button" (click)="addClient()" data-bs-toggle="tooltip" title="Add new client">
+            <i class="bi bi-plus-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Client Dropdown -->
+      <div class="form-group mb-4">
+        <label for="clientDropdown" class="form-label">Client Name</label>
+        <select class="form-select" id="clientDropdown" [(ngModel)]="selectedClientName" required>
+          <option value="" disabled selected>Select Client</option>
+          <option *ngFor="let client of clients" [value]="client.client_name">{{ client.client_name }}</option>
+        </select>
+      </div>
+
+      <!-- File Upload Section -->
+      <div class="upload-container text-center p-4 mb-4" 
+           style="border: 2px dashed #0747A6; background-color: #eaf2ff; cursor: pointer;" 
+           (click)="jdUpload.click()">
+        
+        <!-- Conditional content based on the upload status -->
+        <ng-container *ngIf="!isUploading">
+          <ng-container *ngIf="uploadStatus === 'success'">
+            <i class="bi bi-check-circle" style="font-size: 48px; color: green;"></i>
+            <p class="mt-2">{{ fileName }}</p>
+          </ng-container>
+          <ng-container *ngIf="uploadStatus === 'error'">
+            <i class="bi bi-x-circle" style="font-size: 48px; color: red;"></i>
+            <p class="mt-2">Upload failed. Try again.</p>
+          </ng-container>
+          <ng-container *ngIf="!uploadStatus">
+            <i class="bi bi-cloud-upload" style="font-size: 48px; color: #0747A6;"></i>
+            <!-- Show selected file name or default text -->
+            <p class="mt-2">{{ fileName ? fileName : 'Upload Job Descriptions (JDs)' }}</p>
+          </ng-container>
+        </ng-container>
+        
+        <!-- Loading state -->
+        <ng-container *ngIf="isUploading">
+          <i class="bi bi-hourglass-split" style="font-size: 48px; color: #0747A6;"></i>
+          <p class="mt-2">Uploading...</p>
+        </ng-container>
+        
+      </div>
+
+      <!-- Hidden File Input -->
+      <input type="file" #jdUpload class="form-control" accept=".pdf,.docx" style="visibility: hidden; position: absolute;" (change)="onFileChange($event)">
+      
+      <!-- Submit Button -->
+      <div class="form-group text-center">
+        <button type="button" class="btn btn-success px-4" (click)="submitForm()">Submit</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Optional Bootstrap Tooltip Activation -->
+<script>
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+</script>
