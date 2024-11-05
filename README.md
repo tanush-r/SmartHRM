@@ -1,12 +1,12 @@
 # Smart HR Management
 
-HR Hub is a cloud-based Generative AI powered HR CRM solution designed
+Smart HR Management is a cloud-based Generative AI powered HR CRM solution designed
 to streamline the recruitment process by automating the generation of
 interview questions based on a candidate\'s resume. 
 
 Our AI powered HR engine will be able to give end-to end assistance to the users,
 providing well-needed assistance in parsing multiple resumes for all
-kinds of requirements. HR hub can be used to save tons of time by doing
+kinds of requirements. Smart HR Management can be used to save tons of time by doing
 the menial repetitive tasks, while the HR team can focus on the overview
 process and supervision of the system. 
 
