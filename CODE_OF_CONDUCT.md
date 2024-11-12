@@ -1,4 +1,4 @@
-# Contributor Covenant Code.
+# Contributor Covenant Code
 
 ## Our Pledge
 
