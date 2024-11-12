@@ -1,4 +1,4 @@
-# Contributor Covenant Code of Conduct testing code PR merge
+# Contributor Covenant Code.
 
 ## Our Pledge
 
