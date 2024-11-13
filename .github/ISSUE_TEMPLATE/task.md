@@ -1,6 +1,6 @@
 ---
-name: Feature Request Template
-about: Template for tracking new feature implementation
+name: Task Template
+about: Template for tracking all tasks
 labels: enhancement
 ---
 
