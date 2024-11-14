@@ -1,0 +1,12 @@
+setuptools==58.1.0
+wheel==0.44.0
+toml==0.10.2
+python-dotenv==1.0.1
+fastapi==0.115.0
+python-multipart==0.0.9
+uvicorn==0.30.6
+torch==2.4.0
+transformers==4.45.1
+bitsandbytes==0.44.1
+accelerate==1.0.0
+sqlparse==0.5.1
