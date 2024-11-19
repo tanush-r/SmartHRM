@@ -21,6 +21,10 @@ tailor-specific requirements and complex technical detail.
 * **Non-Functional Requirements (NFR)**: 
   This document specifies the performance, usability, and other non-functional aspects of the system. You can access it here: [Non-Functional Requirements (NFR)](docs/requirements/nfr.md)
 
+## Release Mapping
+This document specifies the mapping of each requirement from the user persona to the planned release. You can access it here:
+[Release mapping](docs/releases/req_rel_map.md)
+
 ## Releases
 * [MVP 1](docs/releases/mvp1.md)
 * [MVP 2](docs/releases/mvp2.md)
