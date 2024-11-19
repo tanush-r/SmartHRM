@@ -43,9 +43,7 @@ class SQLChain:
         if not torch.cuda.is_available():
             raise GPUNotFoundException()
 
-        # if os.path.exists("/sqlcoder"):
-        #     self.tokenizer = 
-        # else:
+       
         model_name = "defog/sqlcoder-7b-2"
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=r"sqlcoder\tokenizer")
         self.model = AutoModelForCausalLM.from_pretrained(
@@ -56,9 +54,7 @@ class SQLChain:
             use_cache=True,
             cache_dir=r"sqlcoder\model"
         )
-            # self.tokenizer.save_pretrained("/sqlcoder/tokenizer")
-            # self.model.save_pretrained("/sqlcoder/model")
-
+        
         self.prompt = """### Task
         Generate a MySQL query to answer [QUESTION]{question}[/QUESTION]
 
@@ -75,18 +71,18 @@ class SQLChain:
         ### Database Schema
         This query will run on a database whose schema is represented in this string:
         CREATE TABLE clients (
-            client_id BINARY(16) NOT NULL,
-            client_name VARCHAR(255) NOT NULL,
-            PRIMARY KEY (client_id)
+            cl_id BINARY(16) NOT NULL,
+            cl_name VARCHAR(255) NOT NULL,
+            PRIMARY KEY (cl_id)
         );
         CREATE TABLE job_descriptions (
             jd_id VARCHAR(255) NOT NULL,
-            client_id BINARY(16) NOT NULL,
+            cl_id BINARY(16) NOT NULL,
             filename VARCHAR(255) NOT NULL,
             s3_link VARCHAR(255) NOT NULL,
             timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (jd_id),
-            FOREIGN KEY (client_id) REFERENCES clients(client_id)
+            FOREIGN KEY (cl_id) REFERENCES clients(cl_id)
         );
         CREATE TABLE resumes (
             resume_id VARCHAR(32) PRIMARY KEY,
@@ -98,7 +94,7 @@ class SQLChain:
         );
 
         -- resumes.jd_id can be joined with job_descriptions.jd_id
-        -- job_descriptions.client_id can be joined with clients.client_id 
+        -- job_descriptions.cl_id can be joined with clients.cl_id 
 
 
         ### Answer
