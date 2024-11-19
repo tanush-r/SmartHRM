@@ -1,0 +1,217 @@
+
+
+/* General container styling */
+.requirement-master-container {
+    margin-top: 50px; /* Set the top margin based on the header height */
+    max-width: 1500px;
+    margin-left: 100px;
+    background: linear-gradient(145deg, #ffffff); /* Gradient for shine effect */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    border-radius: 8px; /* Rounded corners for the container */
+    padding: 20px; /* Padding around the container */
+  }
+    
+    /* Header styling */
+    h4 {
+      margin: 0; /* Remove default margin */
+      text-align: center; /* Center the heading text */
+      flex-grow: 1; /* Allow the heading to take available space */
+    }
+    .btn-primary {
+      background-color:  #0747A6; /* Primary button color */
+      border-color: #007bff; /* Primary button border color */
+      transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    }
+    
+    .btn-primary:hover {
+      background-color: #007bff; /* Darker shade on hover */
+      border-color: #0056b3; /* Darker border on hover */
+    }
+    
+    .button-gap {
+      margin-left: 10px; /* Space between buttons */
+    }
+    
+    /* Ensure both inputs (dropdown and search box) have the same width */
+  .form-select,
+  .input-group {
+      flex-basis: 0; /* Allow both to grow equally */
+      flex-grow: 1;  /* Make sure both take up equal space */
+      height: 38px; /* Set a fixed height for uniformity */
+  }
+  
+  /* Form Controls */
+  .form-control {
+      border-radius: 0; /* Remove rounded corners for seamless look */
+      border: 1px solid #a8a9ab; /* Border color */
+      transition: border-color 0.3s ease; /* Smooth transition for border color */
+      padding: 10px; /* Padding inside the input */
+      height: 100%; /* Make sure input height matches the parent */
+  }
+  
+  .form-control:focus {
+      border-color: #0747A6; /* Change border color on focus */
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Focus shadow effect */
+  }
+  
+  /* Style for the button */
+  .btn-outline-secondary {
+    background-color: #bfbcbc; /* Light background for the icon */
+    color: #333333;
+    border: 1px solid ; /* Match border with inputs  */
+    border-color: #161616;
+    border-right: none; /* Remove right border for seamless look with input */
+    padding: 10px; /* Padding around the icon */
+    height: 38px; /* Match the height with input */
+    display: flex; /* Align items in the text */
+    align-items: center; /* Center icon vertically */
+    justify-content: center; /* Center icon horizontally */
+    border-radius: 0.375rem 0 0 0.375rem; /* Rounded corners on the left */
+  }
+  
+  /* Ensure vertical alignment for input group */
+  .input-group {
+      display: flex; /* Use flexbox for alignment */
+      align-items: stretch; /* Ensure all items stretch to the same height */
+  }
+  
+  /* Style for input group text */
+  .input-group-text {
+      background-color: #f2f2f2; /* Light background for the icon */
+      border: 1px solid #a8a9ab; /* Match border with inputs */
+      border-right: none; /* Remove right border for seamless look with input */
+      padding: 10px; /* Padding around the icon */
+      height: 38px; /* Match the height with input */
+      display: flex; /* Align items in the text */
+      align-items: center; /* Center icon vertically */
+      justify-content: center; /* Center icon horizontally */
+      border-radius: 0.375rem 0 0 0.375rem; /* Rounded corners on the left */
+  }
+  
+  /* Optional: Ensure icons size in input group */
+  .input-group-text i {
+      font-size: 16px; /* Set a fixed icon size */
+  }
+  
+  .btn-outline-secondar i {
+    font-size: 16px; /* Set a fixed icon size */
+  }
+  
+    
+    /* Table Styles */
+    .table-striped {
+      width: 100%;
+      border-collapse: collapse; /* Collapse borders for cleaner look */
+      margin-top: 1rem; /* Space above the table */
+  }
+  
+  .table-striped th, .table-striped td {
+      border: 1px solid #e0e0e0; /* Light border color */
+      padding: 8px; /* Padding inside table cells */
+      text-align: left; /* Align text to the left */
+  }
+  
+  .table-striped th {
+      background-color: #0747A6; /* Header background color */
+      font-weight: bold; /* Keep header text bold */
+      color: #ffffff;
+  }
+  
+  .table-striped td {
+      background-color: white; /* Table row and column background */
+  }
+  
+  .table-striped tbody tr:nth-child(even) {
+      background-color: white; /* Ensure even rows are white */
+  }
+  
+  .table-striped tbody tr:hover {
+      background-color: #f1f1f1; /* Slight highlight on row hover */
+      cursor: pointer; /* Change cursor on hover */
+  }
+  
+  .table-striped button {
+      padding: 5px 10px; /* Padding inside buttons */
+      margin-right: 5px; /* Small space between buttons */
+      font-size: inherit; /* Keep font style and size */
+      border-radius: 4px; /* Rounded corners for buttons */
+  }
+  
+  .table-striped .btn-primary {
+      background-color: #0747A6; /* Primary button background color */
+      border: none; /* Remove border */
+  }
+  
+  .table-striped .btn-primary:hover {
+      background-color: #2682e4; /* Lighter background on hover */
+  }
+  
+  .table-striped .button-gap {
+      margin-right: 20px; /* Space between action buttons */
+  }
+  
+    /* Button color scheme for action buttons */
+  
+  
+    .btn {
+      padding: 8px 12px; /* Padding for buttons */
+      font-size: 14px; /* Font size */
+      border-radius: 4px; /* Rounded corners */
+      border: none; /* Remove border */
+      cursor: pointer; /* Pointer cursor on hover */
+      transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  }
+  
+  .btn-sm {
+      padding: 5px 10px; /* Smaller padding for small buttons */
+      font-size: 12px; /* Smaller font size */
+  }
+  
+  
+  
+  /* Info button style */
+  .btn-info {
+      background-color:  #0747A6; /* Info button background color */
+      color: white; /* Text color */
+  }
+  
+  .btn-info:hover {
+      background-color: #0880cb; /* Darker shade on hover */
+  }
+  
+  /* Warning button style */
+  .btn-warning {
+      background-color: #ffc107; /* Warning button background color */
+      color: black; /* Text color */
+  }
+  
+  .btn-warning:hover {
+      background-color: #e0a800; /* Darker shade on hover */
+  }
+  
+  /* Danger button style */
+  .btn-danger {
+      background-color: #dc3545; /* Danger button background color */
+      color: white; /* Text color */
+  }
+  
+  .btn-danger:hover {
+      background-color: #c82333; /* Darker shade on hover */
+  }
+  
+   
+    
+   
+    
+    /* Responsive styling */
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px; /* Less padding on smaller screens */
+      }
+    
+      .btn {
+        font-size: 0.75rem; /* Smaller font size for buttons */
+      }
+    }
+   
+    

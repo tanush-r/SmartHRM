@@ -1,93 +1,150 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ClientService } from '../jd-upload/client.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-jd-upload',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PdfViewerModule, NgxDocViewerModule, RouterModule],
   templateUrl: './jd-upload.component.html',
   styleUrls: ['./jd-upload.component.css']
 })
 export class JDUploadComponent implements OnInit {
-  newClientName: string = '';
-  clients: any[] = []; // Array to hold the clients
-  selectedClientName: string = ''; // To store the client name
-  selectedFile: File | null = null; // To hold the uploaded file
-  isUploading: boolean = false; // To manage the upload state (loading spinner)
-  uploadStatus: 'success' | 'error' | null = null; // Track upload success or error
-  fileName: string = ''; // To display the uploaded file name
+  clients: any[] = [];
+  selectedClientName: string = '';
+  selectedPosition: string = '';
+  selectedFile: File | null = null;
+  isUploading: boolean = false;
+  uploadStatus: 'success' | 'error' | null = null;
+  fileName: string = 'Upload JD (PDF or DOCX)';
+  isFileViewActive: boolean = false;
+  pdfSrc: string | null = null;
+  docSrc: string | null = null;
+  isPdfFile: boolean = false;
+  isDocxFile: boolean = false;
+  zoomLevel: number = 1;
 
-  constructor(private clientService: ClientService, private http: HttpClient) {}
+  @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
+
+  constructor(
+    private clientService: ClientService,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.loadClients(); // Load clients when the component initializes
+    this.loadClients();
   }
 
   loadClients(): void {
     this.clientService.getClients().subscribe(
       (data: any[]) => {
-        this.clients = data; // Populate the clients array with data from the API
+        this.clients = data;
       },
-      error => {
+      (error) => {
         console.error('Error fetching clients:', error);
       }
     );
   }
 
   addClient(): void {
-    if (this.newClientName.trim()) {
-      this.clientService.addClient(this.newClientName).subscribe(
-        response => {
-          alert('Client added successfully!');
-          this.newClientName = ''; // Clear the input after successful addition
-          this.loadClients(); // Reload clients to reflect the new addition
-        },
-        error => {
-          console.error('Error adding client:', error);
-          alert('Failed to add client.');
-        }
-      );
-    } else {
-      alert('Please enter a client name.');
+    this.router.navigate(['/clients-master']);
+  }
+  
+  triggerFileUpload(): void {
+    this.fileInput?.nativeElement.click();
+  }
+
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+    if (file) {
+      const allowedExtensions = ['pdf', 'doc', 'docx'];
+      const extension = file.name.split('.').pop()?.toLowerCase();
+
+      if (file.size > 10 * 1024 * 1024) {
+        alert('File size must be less than 10 MB.');
+        this.resetFile();
+        return;
+      }
+
+      if (extension && allowedExtensions.includes(extension)) {
+        this.selectedFile = file;
+        this.fileName = file.name;
+
+        // Automatically show the uploaded file preview
+        this.displayFile(file);
+      } else {
+        alert('Only PDF, DOC, or DOCX files are allowed.');
+        this.resetFile();
+      }
     }
   }
 
-  // Capture the file when it's selected
-  onFileChange(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-      this.fileName = file.name; // Store the file name for display
-    }
+  displayFile(file: File): void {
+    this.isFileViewActive = true; // Automatically activate file view
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    this.isPdfFile = fileExtension === 'pdf';
+    this.isDocxFile = fileExtension === 'docx';
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      if (this.isPdfFile) {
+        this.pdfSrc = e.target.result;
+      } else if (this.isDocxFile) {
+        this.docSrc = e.target.result;
+      } else {
+        alert('Unsupported file type');
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  toggleFileView(): void {
+    this.isFileViewActive = !this.isFileViewActive;
+  }
+
+  resetFile(): void {
+    this.selectedFile = null;
+    this.fileName = 'Upload Resume (PDF or DOC)';
+    this.isFileViewActive = false; // Hide file view if reset
+  }
+
+  zoomIn(): void {
+    this.zoomLevel = Math.min(this.zoomLevel + 0.1, 2);
+  }
+
+  zoomOut(): void {
+    this.zoomLevel = Math.max(this.zoomLevel - 0.1, 0.5);
   }
 
   submitForm(): void {
     if (this.selectedClientName && this.selectedFile) {
       const formData = new FormData();
-      formData.append('client_name', this.selectedClientName); // Use client name here
-      formData.append('file', this.selectedFile); // Append the file
-  
+      formData.append('client_name', this.selectedClientName);
+      formData.append('position', this.selectedPosition);
+      formData.append('file', this.selectedFile);
+
       this.isUploading = true;
-      this.uploadStatus = null; // Reset status
-  
-      // Send the form data to the backend
-      this.http.post('/api/jd_upload/uploadJD', formData).subscribe(
-        response => {
+      this.uploadStatus = null;
+
+      this.http.post('http://localhost:8000/uploadJD', formData).subscribe(
+        () => {
           this.isUploading = false;
-          this.uploadStatus = 'success'; // Set status to success
-         // Display success message
-  
-          // Reload the page after a short delay (e.g., 1 second)
+          this.uploadStatus = 'success';
+          alert('JD uploaded successfully!');
           setTimeout(() => {
-            window.location.reload(); // Reload the page
+            window.location.reload();
           }, 1000);
         },
         (error: any) => {
           this.isUploading = false;
-          this.uploadStatus = 'error'; // Set status to error
+          this.uploadStatus = 'error';
           console.error('Error submitting form:', error);
           alert('Failed to submit the form.');
         }

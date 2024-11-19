@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
   }
 
   fetchSummaryCounts(): void {
-    this.http.get<{ total_clients: number; total_resumes: number; total_jds: number }>('/api/resume_s3/summary/counts')
+    this.http.get<{ total_clients: number; total_resumes: number; total_jds: number }>('http://localhost:8000/summary/counts')
       .subscribe(
         (data) => {
           this.totalClients = data.total_clients;

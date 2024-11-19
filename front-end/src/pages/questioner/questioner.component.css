@@ -51,6 +51,12 @@ body {
   margin: 0;
 }
 
+a {
+  color: black; /* Inherit color from parent element */
+  text-decoration: none; /* Remove underline */
+}
+
+
 .question-list li {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -68,11 +74,6 @@ strong {
   display: block;
   font-size: 0.9em;
   margin-bottom: 5px;
-}
-.no-underline {
-  text-decoration: none !important; /* Force removal of underline */
-  color: black; /* Ensure text color is black */
-  font-weight: 400; /* Adjust font weight */
 }
 
 

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { PrimeNGConfig } from 'primeng/api';
+
 
 
 @Component({

@@ -1,0 +1,129 @@
+<div class="form-container">
+  <div class="showBanner add-client-banner">
+    <span *ngIf="!viewMode">Add Candidate Details</span>
+    <span *ngIf="viewMode">View Candidate Details</span>
+    <button class="close-button" (click)="closeDialog()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <br>
+  <form [formGroup]="candidateForm" (ngSubmit)="onSubmit()">
+    <div class="section">
+      <h6>Candidate Primary Details</h6>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="companyName">Client Name*</label>
+          <select class="form-control" id="companyName" formControlName="cl_id" [disabled]="viewMode" required>
+            <option value="">Select Client Name</option>
+            <option *ngFor="let client of clients" [value]="client.cl_id">{{ client.cl_name }}</option>
+          </select>
+          <div *ngIf="candidateForm.get('cl_id')?.invalid && (candidateForm.get('cl_id')?.touched || candidateForm.get('cl_id')?.dirty)" class="text-danger">
+            <div *ngIf="candidateForm.get('cl_id')?.errors?.['required']">Client Name is required.</div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="requirementName">Requirement Name*</label>
+          <select class="form-control" id="requirementName" formControlName="rq_id" [disabled]="viewMode" required>
+            <option value="">Select Requirement Name</option>
+            <option *ngFor="let requirement of requirements" [value]="requirement.rq_id">{{ requirement.rq_name }}</option>
+          </select>
+          <div *ngIf="candidateForm.get('rq_id')?.invalid && (candidateForm.get('rq_id')?.touched || candidateForm.get('rq_id')?.dirty)" class="text-danger">
+            <div *ngIf="candidateForm.get('rq_id')?.errors?.['required']">Requirement Name is required.</div>
+          </div>
+        </div>        
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First Name*</label>
+          <input type="text" class="form-control" id="firstName" formControlName="cd_first_name" placeholder="Enter first name" [disabled]="viewMode" required>
+          <div *ngIf="candidateForm.get('cd_first_name')?.invalid && (candidateForm.get('cd_first_name')?.touched || candidateForm.get('cd_first_name')?.dirty)" class="text-danger">
+            <div *ngIf="candidateForm.get('cd_first_name')?.errors?.['required']">First Name is required.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" class="form-control" id="lastName" formControlName="cd_last_name" placeholder="Enter last name" [disabled]="viewMode">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Email*</label>
+          <input type="email" class="form-control" id="email" formControlName="cd_email" placeholder="Enter email" [disabled]="viewMode" required>
+          <div *ngIf="candidateForm.get('cd_email')?.invalid && (candidateForm.get('cd_email')?.touched || candidateForm.get('cd_email')?.dirty)" class="text-danger">
+            <div *ngIf="candidateForm.get('cd_email')?.errors?.['required']">Email is required.</div>
+            <div *ngIf="candidateForm.get('cd_email')?.errors?.['email']">Please enter a valid email address.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="phoneNo">Phone No.</label>
+          <input type="tel" class="form-control" id="phoneNo" formControlName="cd_phno" placeholder="Enter phone number" [disabled]="viewMode">
+        </div>
+      </div>      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input type="text" class="form-control" id="location" formControlName="cd_loc" placeholder="Enter location" [disabled]="viewMode">
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <h6>Other Details</h6>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="qualification">Qualification:</label>
+          <input type="text" class="form-control" id="qualification" formControlName="cd_qual" placeholder="Enter qualification" [disabled]="viewMode">
+        </div>
+        <div class="form-group">
+          <label for="skills">Skills</label>
+          <input type="text" class="form-control" id="skills" formControlName="cd_skills" placeholder="Enter skills" [disabled]="viewMode">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="experience">Total Experience (Years)</label>
+          <input type="number" class="form-control" id="experience" formControlName="cd_total_exp" placeholder="Enter total experience" [disabled]="viewMode" min="0">
+        </div>
+        <div class="form-group">
+          <label for="relevantExperience">Relevant Experience (Years):</label>
+          <input type="number" class="form-control" id="relevantExperience" formControlName="cd_related_exp" placeholder="Enter relevant experience" [disabled]="viewMode" min="0">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="currentCTC">Current CTC</label>
+          <input type="number" class="form-control" id="currentCTC" formControlName="cd_cur_ctc" placeholder="Enter current CTC" [disabled]="viewMode" min="0">
+        </div>
+        <div class="form-group">
+          <label for="expectedCTC">Expected CTC</label>
+          <input type="number" class="form-control" id="expectedCTC" formControlName="cd_exp_ctc" placeholder="Enter expected CTC" [disabled]="viewMode" min="0">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="noticePeriod">Notice Period</label>
+          <select class="form-control" id="noticePeriod" formControlName="cd_notice" [disabled]="viewMode">
+            <option value="">Select notice period</option>
+            <option value="immediate">Immediate</option>
+            <option value="15_days">15 Days</option>
+            <option value="30_days">30 Days</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="workMode">Work Mode</label>
+          <select class="form-control" id="workMode" formControlName="cd_work_mode" [disabled]="viewMode">
+            <option value="">Select work mode</option>
+            <option value="remote">Remote</option>
+            <option value="onsite">Onsite</option>
+            <option value="hybrid">Hybrid</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group custom-form-group valid-passport-group">
+        <input type="checkbox" class="form-check-input custom-checkbox" id="validPassport" formControlName="cd_valid_passport" [disabled]="viewMode">
+        <label for="validPassport">Valid Passport</label>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="viewMode">Submit</button>
+  </form>
+</div>

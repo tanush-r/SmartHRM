@@ -1,10 +1,112 @@
-/* Change the button background color to #0747A6 */
-.btn-success {
-    background-color: #0747A6;
-    border-color: #0747A6;
-}
 
+/* General container styling */
+.fullscreen-card {
+  width: 80vw;    /* Full width of the viewport */
+  height: 50vw;    /* Height based on content or adjust as needed */
+  margin: 30px auto;
+  padding: 0;      /* Optional: Remove padding if needed */
+  align-content: center;
+  display: flex;
+}
+/* Form labels */
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+/* Dropdown and input styling */
+select, input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+/* Button styling */
+button {
+  padding: 10px 15px;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+.btn-success {
+  background-color: #0747A6;
+  border-color: #0747A6;
+}
 .btn-success:hover {
-    background-color: #053b84; /* Slightly darker shade for hover effect */
-    border-color: #053b84;
+  background-color: #053B84;
+  border-color: #053B84;
+}
+/* Custom file upload button */
+.file-upload-button {
+  padding: 10px 15px;
+  background-color: #17A2B8;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+.file-upload-button:hover {
+  background-color: #138496;
+}
+/* Uploaded File View */
+.document-preview {
+  margin-top: 16px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #FCFBFB;
+}
+/* Controls and Zoom buttons */
+/* Zoom section alignment */
+.controls {
+  display: flex;
+  justify-content: flex-end;  /* Aligns content to the right */
+  margin-right: 0;  /* Ensures no margin on the right */
+}
+button {
+  background-color: #0747A6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+button:hover {
+  background-color: #053B7A;
+}
+/* PDF and Document Viewers */
+pdf-viewer, ngx-doc-viewer {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  height: 500px;
+}
+/* Title Styling */
+h6 {
+  font-weight: bold;
+  color: #050505;
+  margin-bottom: 20px;
+}
+/* Centering content */
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 10px;
+  }
+  pdf-viewer,
+  ngx-doc-viewer {
+    height: auto;
+  }
 }

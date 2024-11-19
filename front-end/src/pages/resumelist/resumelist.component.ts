@@ -5,14 +5,15 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { ResumeStateService, Client, Position, Resume } from './resumestate.service'; // Adjust the import path
-import { InputSwitchModule } from 'primeng/inputswitch';
-import { Skeleton, SkeletonModule } from 'primeng/skeleton';
+import { SkeletonModule } from 'primeng/skeleton';
+import { ListboxModule } from 'primeng/listbox';
 import { DropdownModule } from 'primeng/dropdown';
+import { MatSelectModule } from '@angular/material/select'; // Import Angular Material select module
 
 @Component({
   selector: 'app-resumelist',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterLink, RouterOutlet,InputSwitchModule,SkeletonModule,DropdownModule],
+  imports: [FormsModule, CommonModule, RouterLink, RouterOutlet, SkeletonModule, ListboxModule, DropdownModule, MatSelectModule],
   templateUrl: './resumelist.component.html',
   styleUrls: ['./resumelist.component.css']
 })
@@ -24,6 +25,7 @@ export class ResumelistComponent implements OnInit {
   resumes: Resume[] = [];
   selectedPositionS3Link: string | null = null; // Store selected position's s3_link
   isLoadingResumes: boolean = false; // Loader state for fetching resumes
+  statusOptions: string[] = ['Initial','Eligible', 'Not Eligible', 'Onboarded']; // Status options for the dropdown
 
   constructor(private http: HttpClient, private router: Router, private resumeStateService: ResumeStateService) {}
 
@@ -48,9 +50,12 @@ export class ResumelistComponent implements OnInit {
   }
 
   loadClients(): void {
-    this.http.get<Client[]>('/api/viewer/clients').subscribe(
-      (data: Client[]) => {
-        this.clients = data; // Store the fetched clients
+    this.http.get<Client[]>('http://localhost:8080/api/viewer/clients').subscribe(
+      (data: any[]) => {
+        this.clients = data.map(client => ({
+          cl_id: client.cl_id,
+          cl_name: client.cl_name
+        })); // Map the response to the new format
       },
       (error) => {
         console.error('Error fetching clients:', error);
@@ -61,6 +66,7 @@ export class ResumelistComponent implements OnInit {
 
   onClientChange(): void {
     this.resumeStateService.setSelectedClientId(this.selectedClientId); // Store selected client ID
+    console.log('Selected Client ID:', this.selectedClientId); // Debugging log
     if (this.selectedClientId) {
       this.loadPositions(this.selectedClientId); // Load positions when a client is selected
     } else {
@@ -70,8 +76,10 @@ export class ResumelistComponent implements OnInit {
   }
 
   loadPositions(clientId: string): void {
-    this.http.get<Position[]>(`/api/viewer/positions?client_id=${clientId}`).subscribe(
+    console.log('Loading positions for client ID:', clientId); // Debugging log
+    this.http.get<Position[]>(`http://localhost:8080/api/viewer/positions?cl_id=${clientId}`).subscribe(
       (data: Position[]) => {
+        console.log('Fetched positions:', data); // Log the fetched positions
         this.positions = data; // Store the fetched positions
       },
       (error) => {
@@ -80,19 +88,18 @@ export class ResumelistComponent implements OnInit {
         alert('Failed to load positions. Please try again later.');
       }
     );
-  }
+  }  
 
   fetchResumes(): void {
     if (this.selectedClientId && this.selectedPosition) {
       this.isLoadingResumes = true; // Start loading
-      this.http.get<Resume[]>(`/api/viewer/resumes?jd_id=${this.selectedPosition}`).subscribe(
+      this.http.get<Resume[]>(`http://localhost:8080/api/viewer/resumes?jd_id=${this.selectedPosition}`).subscribe(
         (data: Resume[]) => {
+          console.log('Fetched resumes:', data); // Log the fetched resumes
           this.resumes = data.map(resume => ({
             ...resume,
-            eligible: resume.status === 'Eligible',
-            notEligible: resume.status === 'Not Eligible',
-            onboarded: resume.status === 'Onboarded'
-          })); // Map the fetched resumes to include the status fields
+            status: resume.status // Store status directly
+          })); // Map the fetched resumes
           this.resumeStateService.setResumes(this.resumes); // Store resumes in the service
           this.isLoadingResumes = false; // Stop loading
         },
@@ -151,30 +158,33 @@ export class ResumelistComponent implements OnInit {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Format time to local string
   }
 
-  updateStatus(resumeId: string, statusType: 'eligible' | 'notEligible' | 'onboarded', value: boolean): void {
-    const apiUrl = `/api/viewer/resumes/status/${resumeId}?status=${statusType === 'eligible' ? (value ? 'Eligible' : 'Not Eligible') :
-                statusType === 'notEligible' ? (value ? 'Not Eligible' : 'Eligible') :
-                statusType === 'onboarded' ? (value ? 'Onboarded' : 'Not Onboarded') : ''}`;
+  updateStatus(resume: Resume): void {
+    if (!resume.status) {
+      alert('Status cannot be empty. Please select a status.');
+      return; // Do not proceed if status is empty
+    }
+  
+    const apiUrl = `http://localhost:8080/resumes/status/${resume.resume_id}?status=${resume.status}`;
   
     this.http.post(apiUrl, {}).subscribe( // Send an empty body since the status is in the URL
       (response) => {
         console.log('Status updated successfully:', response);
         alert('Status updated successfully.');
-        // Optionally, refresh the resumes or update local state as necessary
-        this.fetchResumes(); // Refresh resumes after updating status
+        // Refresh resumes after updating status
+        this.fetchResumes();
       },
       (error) => {
         console.error('Error updating status:', error);
         alert('Failed to update status. Please try again later.');
       }
     );
-  }
+  }  
 
   sortResumes(order: 'asc' | 'desc'): void {
     this.resumes.sort((a, b) => {
-      const dateA = new Date(a.timestamp).getTime();
-      const dateB = new Date(b.timestamp).getTime();
-  
+      const dateA = new Date(a.created_at).getTime();
+      const dateB = new Date(b.created_at).getTime();
+
       if (order === 'asc') {
         return dateA - dateB; // Ascending order
       } else {
@@ -182,28 +192,8 @@ export class ResumelistComponent implements OnInit {
       }
     });
   }
-  onEligibleChange(resume: any) {
-    if (resume.eligible) {
-      resume.notEligible = false;
-      resume.onboarded = false;
-    }
-    this.updateStatus(resume.resume_id, 'eligible', resume.eligible);
+
+  onStatusChange(resume: Resume): void {
+    this.updateStatus(resume); // Update the status when changed in the dropdown
   }
-  
-  onNotEligibleChange(resume: any) {
-    if (resume.notEligible) {
-      resume.eligible = false;
-      resume.onboarded = false;
-    }
-    this.updateStatus(resume.resume_id, 'notEligible', resume.notEligible);
-  }
-  
-  onOnboardedChange(resume: any) {
-    if (resume.onboarded) {
-      resume.eligible = false;
-      resume.notEligible = false;
-    }
-    this.updateStatus(resume.resume_id, 'onboarded', resume.onboarded);
-  }
-  
 }

@@ -1,129 +1,183 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
-
-// Define interfaces for the API response
+import { CommonModule } from '@angular/common';
+import { DropdownModule } from 'primeng/dropdown';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 interface Client {
   client_name: string;
 }
-
 interface PositionResponse {
   jd_filenames: string[];
 }
-
 @Component({
   selector: 'app-resume-upload',
   standalone: true,
-  imports: [FormsModule, NgForOf, NgIf],
+  imports: [CommonModule, FormsModule, DropdownModule, PdfViewerModule, NgxDocViewerModule],
   templateUrl: './resume-upload.component.html',
   styleUrls: ['./resume-upload.component.css'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ResumeUploadComponent implements OnInit {
   clients: Client[] = [];
   positions: string[] = [];
   selectedClientName: string = '';
   selectedPosition: string = '';
-  selectedResume: File | null = null;
-
-  // Additional variables for upload status
+  selectedFile: File | null = null;
   isUploading: boolean = false;
   uploadStatus: 'success' | 'error' | null = null;
-  fileName: string = 'Upload Resumes (PDF)'; // Default text for the upload button
-
-  // Reference to the hidden file input
+  fileName: string = 'Upload Resume (PDF or DOCX)';
+  fileSize: number | null = null; // Store file size
+  isFileViewActive: boolean = false; // Control visibility of file preview
   @ViewChild('fileInput') fileInput: ElementRef | undefined;
-
-  constructor(private http: HttpClient) {}
-
+  pdfSrc: string | undefined = undefined;
+  docSrc: string | undefined = undefined;
+  showPdfViewer = false;
+  showDocViewer = false;
+  isPdfFile: boolean = false;
+  isDocxFile: boolean = false;
+  zoomLevel: number = 1;
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
   ngOnInit(): void {
-    this.loadClients(); // Load clients when the component initializes
+    this.loadClients();
   }
-
-  // Load clients from the API
   loadClients(): void {
-    this.http.get<Client[]>('/api/resume_upload/clients').subscribe(
-      (data: Client[]) => {
-        this.clients = data; // Store the clients in the component
+    this.http.get<Client[]>('http://localhost:8000/clients').subscribe(
+      (data) => {
+        this.clients = data;
       },
       (error) => {
-        console.error('Error fetching clients:', error); // Log any errors
+        console.error('Error fetching clients:', error);
       }
     );
   }
-
-  // Fetch positions based on selected client
   onClientChange(): void {
     if (this.selectedClientName) {
-      this.http.get<PositionResponse>(`/api/resume_upload/positions/${this.selectedClientName}`).subscribe(
-        (data: PositionResponse) => {
-          this.positions = data.jd_filenames; // Store the positions for the selected client
+      this.http.get<PositionResponse>(`http://localhost:8000/jd_filenames_by_name/${this.selectedClientName}`).subscribe(
+        (data) => {
+          this.positions = data.jd_filenames;
         },
         (error) => {
-          console.error('Error fetching positions:', error); // Log any errors
-          this.positions = []; // Clear positions on error
+          console.error('Error fetching positions:', error);
+          this.positions = [];
         }
       );
     } else {
-      this.positions = []; // Clear positions if no client is selected
+      this.positions = [];
     }
   }
-
-  // Trigger file upload
   triggerFileUpload(): void {
-    this.fileInput?.nativeElement.click(); // Programmatically click the file input
+    this.fileInput?.nativeElement.click();
   }
-
-  // Handle file selection
   onFileChange(event: any): void {
-    this.selectedResume = event.target.files[0]; // Get the selected file
-    if (this.selectedResume) {
-      this.fileName = this.selectedResume.name; // Change the button text to the file name
+    this.selectedFile = event.target.files[0];
+    console.log('Selected file:', this.selectedFile);
+    if (this.selectedFile) {
+      const allowedExtensions = ['pdf', 'doc', 'docx'];
+      const extension = this.selectedFile.name.split('.').pop()?.toLowerCase();
+      console.log('File extension:', extension);
+      // Handle Google Docs file
+      if (extension === 'gdoc') {
+        alert('Google Docs files cannot be uploaded directly. Please download as PDF or DOCX and upload.');
+        this.selectedFile = null;
+        this.fileName = 'Upload Resume (PDF or DOC)';
+        return;
+      }
+      // Check file size (10 MB limit)
+      if (this.selectedFile.size > 10 * 1024 * 1024) {
+        alert('File size must be less than 10 MB.');
+        this.selectedFile = null;
+        this.fileName = 'Upload Resume (PDF or DOC)';
+        return;
+      }
+      if (allowedExtensions.includes(extension!)) {
+        this.fileName = this.selectedFile.name;
+        this.fileSize = this.selectedFile.size; // Store file size
+        this.resetViewers();
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const base64String = btoa(e.target?.result as string);
+          this.isFileViewActive = true; // Show the file view immediately when the file is read
+          if (extension === 'pdf') {
+            this.pdfSrc = `data:application/pdf;base64,${base64String}`;
+            this.showPdfViewer = true;
+            this.showDocViewer = false;
+            this.isPdfFile = true;
+            this.isDocxFile = false;
+          } else if (extension === 'doc' || extension === 'docx') {
+            this.docSrc = `data:application/msword;base64,${base64String}`;
+            this.showDocViewer = true;
+            this.showPdfViewer = false;
+            this.isDocxFile = true;
+            this.isPdfFile = false;
+          }
+        };
+        reader.readAsBinaryString(this.selectedFile);
+      } else {
+        alert('Only PDF, DOC, or DOCX files are allowed.');
+        this.selectedFile = null;
+        this.fileName = 'Upload Resume (PDF or DOC)';
+      }
     }
   }
-
-  // Submit form data with success/error handling
   submitForm(): void {
-    if (this.selectedClientName && this.selectedPosition && this.selectedResume) {
+    if (this.selectedClientName && this.selectedPosition && this.selectedFile) {
       const formData = new FormData();
-      formData.append('client_name', this.selectedClientName);  // Client name
-      formData.append('jd_filename', this.selectedPosition);     // JD filename
-      formData.append('file', this.selectedResume);              // Uploaded resume file
-  
-      this.isUploading = true; // Start loading
-      this.uploadStatus = null; // Reset status before submission
-  
-      // Post form data to the server
-      this.http.post('/api/resume_upload/uploadResume', formData).subscribe(
-        (response) => {
-          this.isUploading = false; // Stop loading
-          this.uploadStatus = 'success'; // Set status to success
-          this.fileName = 'Upload Successful'; // Success message
-  
-          // Reload the page after a short delay for success
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
+      formData.append('client_name', this.selectedClientName);
+      formData.append('jd_filename', this.selectedPosition);
+      formData.append('file', this.selectedFile);
+      this.isUploading = true;
+      this.uploadStatus = null;
+      this.http.post('http://localhost:8000/uploadResume', formData).subscribe(
+        () => {
+          this.isUploading = false;
+          this.uploadStatus = 'success';
+          this.fileName = 'Upload Successful';
+          this.isFileViewActive = true; // Show the file view immediately after upload
         },
         (error) => {
-          this.isUploading = false; // Stop loading
-          this.uploadStatus = 'error'; // Set status to error
-          this.fileName = 'Upload Failed'; // Error message
-          console.error('Error submitting form:', error); // Log any errors
+          this.isUploading = false;
+          this.uploadStatus = 'error';
+          this.fileName = 'Upload Failed';
+          console.error('Error submitting form:', error);
         }
       );
     } else {
-      alert('Please select a client, position, and upload a resume.'); // Alert if fields are missing
+      alert('Please select a client, position, and upload a resume.');
     }
   }
-
-  // Reset form after submission
   resetForm(): void {
     this.selectedClientName = '';
     this.selectedPosition = '';
-    this.selectedResume = null;
+    this.selectedFile = null;
     this.positions = [];
-    this.fileName = 'Upload Resumes (PDF)'; // Reset file name text
-    this.uploadStatus = null; // Reset upload status
+    this.fileName = 'Upload Resume (PDF or DOC)';
+    this.resetViewers();
+  }
+  resetViewers(): void {
+    this.showPdfViewer = false;
+    this.showDocViewer = false;
+    this.isFileViewActive = false;
+    this.pdfSrc = undefined;
+    this.docSrc = undefined;
+    this.isPdfFile = false;
+    this.isDocxFile = false;
+    this.fileSize = null; // Reset file size
+  }
+  // Method to toggle file view visibility
+  toggleFileView(): void {
+    this.isFileViewActive = !this.isFileViewActive;
+  }
+  // Method to zoom in on the document
+  zoomIn(): void {
+    this.zoomLevel += 0.1; // Increase zoom level
+  }
+  // Method to zoom out of the document
+  zoomOut(): void {
+    if (this.zoomLevel > 0.2) {
+      this.zoomLevel -= 0.1; // Decrease zoom level
+    }
   }
 }

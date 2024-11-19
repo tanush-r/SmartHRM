@@ -2,39 +2,40 @@ import { Injectable } from '@angular/core';
 
 // Define interfaces for Client, Position, and Resume
 export interface Client {
-  client_id: string;
-  client_name: string;
+  cl_id: string; // Client ID
+  cl_name: string; // Client Name
 }
 
 export interface Position {
-  jd_id: string;
-  client_id: string;
-  filename: string;
-  s3_link: string;
-  timestamp: string;
+  jd_id: string; // Job Description ID
+  cl_id: string; // Client ID (changed from client_id to cl_id)
+  filename: string; // Filename of the position
+  s3_link: string; // S3 link to the position details
+  timestamp: string; // Timestamp of the position creation
 }
 
 export interface Resume {
-  resume_id: string;
-  jd_id: string;
-  filename: string;
-  s3_link: string;
-  timestamp: string;
-  status: string;
-  eligible: boolean;
-  notEligible: boolean;
-  onboarded: boolean;
+  resume_id: string; // Resume ID
+  jd_id: string; // Job Description ID
+  created_at: string; // Creation timestamp
+  s3_link: string; // S3 link to the resume
+  filename: string; // Filename of the resume
+  status: string; // Status of the resume
+  eligible: boolean; // Make this mandatory
+  notEligible: boolean; // Make this mandatory
+  onboarded: boolean; // Make this mandatory
 }
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ResumeStateService {
-  private selectedClientId: string = '';
-  private selectedPosition: string = '';
-  private resumes: Resume[] = [];
+  private selectedClientId: string = ''; // Store selected Client ID
+  private selectedPosition: string = ''; // Store selected Position ID
+  private resumes: Resume[] = []; // Store list of resumes
   private positionS3Link: string = ''; // Store Position S3 Link
-  private jdId: string = ''; // New: Store JD ID
+  private jdId: string = ''; // Store JD ID
 
   // Set the selected client ID
   setSelectedClientId(clientId: string): void {

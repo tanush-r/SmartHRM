@@ -1,0 +1,57 @@
+<div class="container clients-master-container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="text-center">Clients Master</h4>
+    <button class="btn btn-primary" (click)="openAddClientForm()">+ Add Client</button>
+  </div>
+  
+  <div class="input-group search-bar-container mb-3">
+    <span class="input-group-text">
+      <i class="fas fa-search"></i>
+    </span>
+    <input 
+      type="text" 
+      class="form-control" 
+      placeholder="Search clients" 
+      [(ngModel)]="searchQuery"
+    />
+    <button class="btn btn-outline-secondary" (click)="searchQuery = ''">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Primary Contact</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Location</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let client of filterClients()">
+        <td>{{ client.cl_name }}</td>
+        <td>
+          <ng-container *ngIf="client.contacts && client.contacts.length > 0; else noContact">
+            {{ client.contacts[0].co_name }} <!-- Display the primary contact name -->
+          </ng-container>
+          <ng-template #noContact>No Contact</ng-template>
+        </td>
+        <td>{{ client.cl_email }}</td>
+        <td>{{ client.cl_phno }}</td>
+        <td>{{ client.cl_addr || 'N/A' }}</td> <!-- Display 'N/A' if no address -->
+        <td>
+          <button class="btn btn-sm btn-info button-gap" (click)="openViewClientForm(client)">View</button>
+          <button class="btn btn-sm btn-warning button-gap" (click)="openEditClientForm(client)">
+            <i class="fa fa-edit"></i>
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="deleteClient(client)">
+            <i class="fa fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

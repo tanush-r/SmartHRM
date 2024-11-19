@@ -3,27 +3,29 @@
   <div class="search-section">
     <div class="input-bar">
       <label for="clientSelect">Select Client Name:</label>
-      <select
-        id="clientSelect"
-        [(ngModel)]="selectedClientId"
-        (change)="onClientChange()"
-      >
-        <option value="">Select Client Name</option>
-        <option *ngFor="let client of clients" [value]="client.client_id">
-          {{ client.client_name }}
-        </option>
-      </select>
+      <p-dropdown 
+        id="clientSelect" 
+        [(ngModel)]="selectedClientId" 
+        (onChange)="onClientChange()" 
+        [options]="clients" 
+        optionLabel="cl_name"  
+        optionValue="cl_id"   
+        [filter]="true" 
+        placeholder="Select Client Name">
+      </p-dropdown>
+
       <label for="positionSelect">Select Position Name:</label>
-      <select
-        id="positionSelect"
-        [(ngModel)]="selectedPosition"
-        (change)="onPositionSelect()"
-      >
-        <option value="">Select Position Name</option>
-        <option *ngFor="let position of positions" [value]="position.jd_id">
-          {{ position.filename }}
-        </option>
-      </select>
+      <p-dropdown 
+        id="positionSelect" 
+        [(ngModel)]="selectedPosition" 
+        (onChange)="onPositionSelect()" 
+        [options]="positions" 
+        optionLabel="filename"  
+        optionValue="jd_id" 
+        [filter]="true" 
+        placeholder="Select Position Name">
+      </p-dropdown>
+
       <button (click)="fetchResumes()">Search</button>
     </div>
   </div>
@@ -47,9 +49,7 @@
               <i class="fas fa-sort-down" (click)="sortResumes('desc')" style="cursor: pointer;"></i>
             </th>
             <th>Time</th>
-            <th>Eligible</th>
-            <th>Not Eligible</th>
-            <th>Onboarded</th>
+            <th>Status</th>
             <th>Download</th>
             <th>Action</th>
           </tr>
@@ -64,30 +64,21 @@
               <td><p-skeleton></p-skeleton></td>
               <td><p-skeleton></p-skeleton></td>
               <td><p-skeleton></p-skeleton></td>
-              <td><p-skeleton></p-skeleton></td>
-              <td><p-skeleton></p-skeleton></td>
             </tr>
           </ng-container>
           <!-- Actual data -->
           <ng-container *ngIf="!isLoadingResumes">
             <tr *ngFor="let resume of resumes">
               <td>{{ resume.filename }}</td>
-              <td>{{ formatDate(resume.timestamp) }}</td>
-              <td>{{ formatTime(resume.timestamp) }}</td>
+              <td>{{ formatDate(resume.created_at) }}</td>
+              <td>{{ formatTime(resume.created_at) }}</td>
               <td>
-                <p-inputSwitch 
-                  [(ngModel)]="resume.eligible" 
-                  (onChange)="onEligibleChange(resume)"></p-inputSwitch>
-              </td>
-              <td>
-                <p-inputSwitch 
-                  [(ngModel)]="resume.notEligible" 
-                  (onChange)="onNotEligibleChange(resume)"></p-inputSwitch>
-              </td>
-              <td>
-                <p-inputSwitch 
-                  [(ngModel)]="resume.onboarded" 
-                  (onChange)="onOnboardedChange(resume)"></p-inputSwitch>
+                <mat-form-field appearance="fill">
+                  <mat-select [(ngModel)]="resume.status" (selectionChange)="onStatusChange(resume)">
+                    <mat-option value="" disabled>Select Status</mat-option> <!-- Placeholder option -->
+                    <mat-option *ngFor="let status of statusOptions" [value]="status">{{ status }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
               </td>
               <td>
                 <button class="download-btn" (click)="downloadResume(resume.s3_link)">

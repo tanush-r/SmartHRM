@@ -5,6 +5,26 @@ body {
     background-color: #ffffff; /* Light background for contrast */
 }
 
+/* Global styles for dropdown buttons */
+.dropdown-toggle {
+    background-color: #0747A6; /* Blue background */
+    color: white; /* Text color */
+}
+
+/* Style for dropdown menus */
+.dropdown-menu {
+    background-color: #0747A6; /* Match dropdown with button color */
+}
+
+/* Style for dropdown items */
+.dropdown-item {
+    color: white; /* Text color for dropdown items */
+}
+
+.dropdown-item:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
 /* Sidebar styling */
 .sidebar {
     background: #0747A6; /* Gradient background */
