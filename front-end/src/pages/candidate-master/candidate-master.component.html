@@ -1,0 +1,76 @@
+<div class="container candidate-master-container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="candidate-title text-center">Candidate Master</h4>
+    <button class="btn btn-primary" (click)="openCandidateForm()" [disabled]="!clientsLoaded">
+      <i class="fa fa-plus"></i> Add Candidate
+    </button>
+  </div>
+
+  <br>
+  <div class="row align-items-center"> 
+    <div class="col-md-4">
+      <label for="clientSelect" class="form-label">Client Name</label>
+      <select id="clientSelect" class="form-select" [(ngModel)]="selectedClientId" (ngModelChange)="onClientChange()">
+        <option value="" disabled selected>Select a client</option>
+        <option *ngFor="let client of clients" [value]="client.cl_id">{{ client.cl_name }}</option>
+      </select>
+    </div>
+  
+    <div class="col-md-4">
+      <label for="requirementSelect" class="form-label">Requirement Name</label>
+      <select id="requirementSelect" class="form-select" [(ngModel)]="selectedRequirementId" (ngModelChange)="onRequirementChange()">
+        <option value="" disabled selected>Select a requirement</option>
+        <option *ngFor="let requirement of requirements" [value]="requirement.rq_id">{{ requirement.rq_name }}</option>
+      </select>
+    </div>    
+    
+    <div class="col-md-4">
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="fas fa-search"></i>
+        </span>
+        <input type="text" class="form-control" placeholder="Search here..." 
+        [(ngModel)]="searchQuery" (ngModelChange)="filterCandidates()" />
+        <button class="btn btn-outline-secondary" type="button" (click)="searchQuery = ''; filterCandidates();">
+          <i class="fa fa-x"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <div class="table-responsive"> <!-- Added responsive wrapper -->
+    <table class="table table-striped table-bordered"> <!-- Added 'table-bordered' for better visibility -->
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Location</th>
+          <th>Experience</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let candidate of filteredCandidates">
+          <td>{{ candidate?.cd_first_name }} {{ candidate?.cd_last_name }}</td>
+          <td>{{ candidate?.created_at ? (candidate.created_at | date:'shortDate') : 'N/A' }}</td>
+          <td>{{ candidate?.cd_email }}</td>
+          <td>{{ candidate?.cd_phno }}</td>
+          <td>{{ candidate?.cd_loc }}</td>
+          <td>{{ candidate?.cd_total_exp }} years</td>
+          <td>
+            <button class="btn btn-primary" (click)="viewCandidate(candidate)">View</button>
+            <button class="btn btn-warning" (click)="editCandidate(candidate)">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button class="btn btn-danger" (click)="deleteCandidate(candidate)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

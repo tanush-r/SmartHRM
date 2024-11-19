@@ -1,0 +1,135 @@
+<div class="form-container">
+  <div class="showBanner add-client-banner">
+    <span>{{ readonly ? 'View Requirement Details' : (isEditing ? 'Edit Requirement Details' : 'Add Requirement Details') }}</span>
+    <button class="close-button" (click)="closeDialog()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <br>
+
+  <form [formGroup]="requirementForm" (ngSubmit)="onSubmit()">
+    <div class="section">
+      <h6>Requirements Details Section</h6>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="companyName">Company Name*</label>
+            <select class="form-control" id="companyName" formControlName="cl_id" [disabled]="readonly" [ngClass]="{'masked': readonly}" required>
+              <option value="">Select Company</option>
+              <option *ngFor="let client of clients" [value]="client.cl_id">{{ client.cl_name }}</option>
+            </select>
+            <div *ngIf="requirementForm.get('cl_id')?.invalid && requirementForm.get('cl_id')?.touched" class="text-danger">
+              Company Name is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="requirementName">Requirement Name*</label>
+            <input type="text" class="form-control" id="requirementName" formControlName="rq_name" placeholder="Enter requirement name" [disabled]="readonly" [ngClass]="{'masked': readonly}" required>
+            <div *ngIf="requirementForm.get('rq_name')?.invalid && requirementForm.get('rq_name')?.touched" class="text-danger">
+              Requirement Name is required.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" class="form-control" id="location" formControlName="rq_loc" placeholder="Enter location" [disabled]="readonly" [ngClass]="{'masked': readonly}">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="mapLink">Map Link</label>
+            <input type="text" class="form-control" id="mapLink" formControlName="rq_map_url" placeholder="Enter map link" [disabled]="readonly" [ngClass]="{'masked': readonly}">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h6>Job Requirements Section</h6>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="numberOfPositions">No. of Positions</label>
+            <input type="number" class="form-control" id="numberOfPositions" formControlName="rq_no_pos" placeholder="Enter number of positions" [disabled]="readonly" [ngClass]="{'masked': readonly}">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="qualification">Qualification</label>
+            <input type="text" class="form-control" id="qualification" formControlName="rq_qual" placeholder="Enter qualification" [disabled]="readonly" [ngClass]="{'masked': readonly}">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="skills">Skills</label>
+            <input type="text" class="form-control" id="skills" formControlName="rq_skills" placeholder="Enter skills" [disabled]="readonly" [ngClass]="{'masked': readonly}">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="experience">Experience (in years)</label>
+            <input type="number" class="form-control" id="experience" formControlName="rq_exp" placeholder="Enter experience" [disabled]="readonly" [ngClass]="{'masked': readonly}">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="workMode">Work Mode</label>
+            <select class="form-control" id="workMode" formControlName="rq_work_mode" [disabled]="readonly" [ngClass]="{'masked': readonly}">
+              <option value="">Select work mode</option>
+              <option value="remote">Remote</option>
+              <option value="onsite">Onsite</option>
+              <option value="hybrid">Hybrid</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="budget">Budget</label>
+            <input type="number" class="form-control" id="budget" formControlName="rq_budget" placeholder="Enter budget" [disabled]="readonly" [ngClass]="{'masked': readonly}">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="noticePeriod">Notice Period</label>
+            <select class="form-control" id="noticePeriod" formControlName="rq_no_of_days" [disabled]="readonly" [ngClass]="{'masked': readonly}">
+              <option value="">Select notice period</option>
+              <option value="immediate">Immediate</option>
+              <option value="15_days">15 Days</option>
+              <option value="30_days">30 Days</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="requirementNotes">Requirement Notes</label>
+            <textarea class="form-control" id="requirementNotes" formControlName="rq_notes" cols="10" placeholder="Enter notes" [disabled]="readonly" [ngClass]="{'masked': readonly}"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4" *ngIf="!readonly">
+        <div class="button-container">
+          <button type="submit" class="btn btn-secondary submit-button" [disabled]="requirementForm.invalid && !isEditing">Submit</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

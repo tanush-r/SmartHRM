@@ -1,74 +1,147 @@
-<div class="container my-5">
-  <div class="card shadow-lg border-0 rounded-lg" style="max-width: 500px; margin: auto;">
-    <div class="card-body p-4" style="background-color: #f5faff;">
-
-      <!-- Card Header -->
-      <h5 class="card-title text-center mb-4" style="font-weight: bold;">Select Client & Upload Resume</h5>
-
-      <!-- Client Dropdown -->
-      <div class="form-group mb-4">
-        <label for="clientDropdown" class="form-label">Client Name</label>
-        <select
-          class="form-select"
-          id="clientDropdown"
-          [(ngModel)]="selectedClientName"
-          (change)="onClientChange()"
-          required
+<div class="card shadow-lg border-0 rounded-lg fullscreen-card">
+  <!-- Content goes here -->
+  <div class="row">
+    <!-- Left: Resume Upload Component -->
+    <div class="row justify-content-center" style="align-items: center">
+      <div class="col-md-6" [ngClass]="{ 'move-left': isFileViewActive }">
+        <div
+          class="card shadow-lg border-0 rounded-lg"
+          style="
+            height: auto;
+            max-width: 500px;
+            border: 1px solid #FFFFFF;
+            margin-top: 50px;
+          "
         >
-          <option value="" disabled selected>Select Client</option>
-          <option *ngFor="let client of clients" [value]="client.client_name">{{ client.client_name }}</option>
-        </select>
-      </div>
-
-      <!-- Position Dropdown -->
-      <div class="form-group mb-4">
-        <label for="positionDropdown" class="form-label">Position Name</label>
-        <select class="form-select" id="positionDropdown" [(ngModel)]="selectedPosition" required>
-          <option value="" disabled selected>Select Position</option>
-          <option *ngFor="let position of positions" [value]="position">{{ position }}</option>
-        </select>
-      </div>
-
-      <!-- Resume Upload Container -->
-      <div class="upload-container text-center p-4 mb-4"
-           style="border: 2px dashed #0747A6; background-color: #eaf2ff; cursor: pointer;"
-           (click)="triggerFileUpload()">
-        <ng-container *ngIf="!isUploading; else loadingTemplate">
-          <i class="bi bi-cloud-upload" style="font-size: 48px; color: #0747A6;"></i>
-          <p class="mt-2">{{ selectedResume ? selectedResume.name : 'Upload Resumes (PDF)' }}</p>
-          
-          <!-- Success Message -->
-          <div *ngIf="uploadStatus === 'success'" class="text-success mt-2">
-            <i class="fas fa-check-circle"></i> Upload Successful!
+          <div class="card-body p-4" style="background-color: #F5FAFF">
+            <h6 class="card-title text-center mb-4" style="font-weight: bold">
+              Upload Resumes
+            </h6>
+            <!-- Client Dropdown -->
+            <div class="form-group mb-4">
+              <label for="clientDropdown" class="form-label">Client Name</label>
+              <select
+                class="form-select"
+                id="clientDropdown"
+                [(ngModel)]="selectedClientName"
+                (change)="onClientChange()"
+                required
+              >
+                <option value="" disabled selected>Select Client</option>
+                <option
+                  *ngFor="let client of clients"
+                  [value]="client.client_name"
+                >
+                  {{ client.client_name }}
+                </option>
+              </select>
+            </div>
+            <!-- Position Dropdown -->
+            <div class="form-group mb-4">
+              <label for="positionDropdown" class="form-label"
+                >Position Name</label
+              >
+              <select
+                class="form-select"
+                id="positionDropdown"
+                [(ngModel)]="selectedPosition"
+                required
+              >
+                <option value="" disabled selected>Select Position</option>
+                <option *ngFor="let position of positions" [value]="position">
+                  {{ position }}
+                </option>
+              </select>
+            </div>
+            <!-- File Upload Section -->
+            <div
+              class="upload-container text-center p-4 mb-4"
+              style="
+                position: relative;
+                border: 2px dashed #0747A6;
+                background-color: #EAF2FF;
+              "
+            >
+              <input
+                type="file"
+                #fileInput
+                (change)="onFileChange($event)"
+                style="display: none"
+              />
+              <label
+                for="fileInput"
+                (click)="triggerFileUpload()"
+                style="cursor: pointer"
+              >
+                <i
+                  class="bi bi-cloud-upload"
+                  style="font-size: 48px; color: #0747A6"
+                ></i>
+                <p class="mt-2">{{ fileName }}</p>
+              </label>
+              <!-- Resume View Button -->
+              <span
+                class="icon-eye"
+                (click)="toggleFileView()"
+                style="
+                  position: absolute;
+                  top: 10px;
+                  right: 10px;
+                  font-size: 24px;
+                  cursor: pointer;
+                "
+              >
+                <i class="fas fa-eye"></i>
+              </span>
+            </div>
+            <!-- Submit Button -->
+            <div class="form-group text-center">
+              <button
+                type="button"
+                class="btn btn-success px-4"
+                (click)="submitForm()"
+              >
+                Submit
+              </button>
+            </div>
           </div>
-          
-          <!-- Error Message -->
-          <div *ngIf="uploadStatus === 'error'" class="text-danger mt-2">
-            <i class="fas fa-times-circle"></i> Upload Failed!
+        </div>
+      </div>
+      <!-- Right: Uploaded File View Component -->
+      <div class="col-md-6" *ngIf="isFileViewActive">
+        <div class="row">
+          <div class="col-md-12 text-center" style="margin-top: 25px">
+            <h6>Uploaded File Preview</h6>
+            <div class="controls mb-3">
+              <button (click)="zoomOut()">-</button>
+              <span>Zoom: {{ zoomLevel * 100 | number : "1.0-0" }}%</span>
+              <button (click)="zoomIn()">+</button>
+            </div>
+            <div *ngIf="isPdfFile && pdfSrc; else loadingJD">
+              <pdf-viewer
+                [src]="pdfSrc"
+                [original-size]="false"
+                [show-all]="true"
+                [zoom]="zoomLevel"
+                style="height: 550px; width: 100%"
+              ></pdf-viewer>
+            </div>
+            <div *ngIf="isDocxFile && docSrc; else loadingJD">
+              <ngx-doc-viewer
+                [url]="docSrc"
+                viewer="google"
+                style="width: 100%; height: 550px"
+              ></ngx-doc-viewer>
+            </div>
+            <ng-template #loadingJD>
+              <p>Loading .....</p>
+            </ng-template>
+            <button (click)="toggleFileView()" class="btn btn-secondary mt-3">
+              Close Preview
+            </button>
           </div>
-        </ng-container>
-        <ng-template #loadingTemplate>
-          <i class="fas fa-spinner fa-spin" style="font-size: 48px; color: #0747A6;"></i>
-          <p class="mt-2">Uploading...</p>
-        </ng-template>
+        </div>
       </div>
-
-      <!-- Hidden File Input -->
-      <input
-        type="file"
-        #fileInput
-        id="resumeUpload"
-        class="form-control"
-        accept=".pdf"
-        style="visibility: hidden; position: absolute;"
-        (change)="onFileChange($event)"
-      />
-
-      <!-- Submit Button -->
-      <div class="form-group text-center">
-        <button type="button" class="btn btn-success px-4" (click)="submitForm()">Submit</button>
-      </div>
-
     </div>
   </div>
 </div>

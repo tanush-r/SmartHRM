@@ -1,0 +1,31 @@
+/* confirm-dialog.component.css */
+
+.confirm-dialog {
+    min-width: 400px; /* Minimum width for the dialog */
+    max-width: 600px; /* Maximum width for larger displays */
+    padding: 16px;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  }
+  
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px; /* Space above the buttons */
+  }
+  
+  .cancel-button {
+    margin-right: 8px; /* Space between cancel and delete button */
+    color: #666; /* Gray color for the cancel button */
+  }
+  
+  .warning-icon {
+    color: orange; /* Icon color */
+    margin-right: 8px; /* Space between icon and title */
+  }
+  
+  /* Optional: Add hover effect for the delete button */
+  button[mat-raised-button]:hover {
+    background-color: rgba(255, 0, 0, 0.1); /* Light red background on hover */
+  }
+  

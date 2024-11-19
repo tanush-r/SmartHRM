@@ -1,0 +1,67 @@
+<div class="container requirement-master-container">
+    <div class="d-flex justify-content-between align-items-center">
+      <h4 class="text-center flex-grow-1">Requirement Master</h4>
+      <button class="btn btn-primary" (click)="addRequirement()">
+        <i class="fa fa-plus"></i> Add Requirement
+      </button>
+    </div>
+    
+    <br>
+  
+    
+    <div class="d-flex align-items-center mt-3">
+      <!-- Dropdown for Client Name -->
+      <div class="flex-grow-1 me-2">
+        <select class="form-select" [(ngModel)]="selectedClient" (change)="filterRequirements()">
+          <option value="" selected>Client Name</option>
+          <option *ngFor="let client of clients" [value]="client.cl_id">{{ client.cl_name }}</option>
+        </select>
+      </div>
+      
+      <!-- Search Box -->
+      <div class="input-group flex-grow-2">
+        <span class="input-group-text">
+          <i class="fas fa-search"></i>
+        </span>
+        <input type="text" class="form-control" placeholder="Search here..." [(ngModel)]="searchQuery" (input)="filterRequirements()" />
+        <button class="btn btn-outline-secondary" type="button" (click)="searchQuery = ''; filterRequirements();">
+          <i class="fa fa-x"></i>
+        </button>
+      </div>
+    </div>
+    
+    <br>
+  
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Requirement Name</th>
+          <th>Positions</th>
+          <th>Location</th>
+          <th>Skills</th>
+          <th>Experience</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let requirement of filteredRequirements">
+          <td>{{ requirement.rq_name }}</td>       
+          <td>{{ requirement.rq_no_pos}}</td>
+          <td>{{ requirement.rq_loc }}</td>       
+          <td>{{ requirement.rq_skills }}</td>      
+          <td>{{ requirement.rq_exp }}</td>
+          <td>
+            <button class="btn btn-sm btn-info button-gap" (click)="viewRequirement(requirement)"> View
+            </button>
+            <button class="btn btn-sm btn-warning button-gap" (click)="editRequirement(requirement)">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteRequirement(requirement)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

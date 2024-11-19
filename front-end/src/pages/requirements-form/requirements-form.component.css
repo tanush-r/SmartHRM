@@ -1,0 +1,172 @@
+.form-container {
+    max-width: 900px;
+    width: 100%;
+    margin-left: 230px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+
+  .add-client-banner {
+    background-color: #0747A6;
+    height: 100px;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px 5px 0 0; /* Rounded corners for the top */
+  }
+
+  .add-client-banner span {
+    font-size: 18px;
+    font-weight: bold;
+    width: 100%;
+    margin-right: auto; /* Ensures the span is aligned to the left */
+  }
+  .close-button {
+    background-color: transparent;
+    border: none;
+    width: 50px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: auto; 
+  }
+ 
+  h6 {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  /* Section styling */
+  .section {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+  }
+  
+
+  
+  /* Individual form rows and groups */
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+  }
+  
+  .form-group {
+    flex: 1 1 100%; /* 50% width for two-column layout */
+    padding: 10px;
+  }
+  
+  label {
+   
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-group.wide {
+    flex: 1 1 100%; /* Make the container span full width */
+  }
+  
+  /* Button styling */
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0069d9;
+  }
+  
+  /* Modal header */
+  .modal-header {
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  
+  .modal-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .btn-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .submit-button {
+    background-color:#0747A6; /* Different background color for submit button */
+    border-color: #0747A6; /* Different border color for submit button */
+    width:15%;
+    margin-left: 210px;
+    
+  }
+
+  /* Container for select input and custom icon */
+.dropdown-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Style the select input and hide the default arrow */
+.dropdown-container select {
+  width: 100%;
+  appearance: none; /* Removes default dropdown arrow */
+  padding-right: 30px; /* Space for custom icon */
+}
+
+/* Position and style the custom dropdown icon */
+.dropdown-icon {
+  position: absolute;
+  right: 10px; /* Adjust as needed */
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; /* Prevent icon from interfering with select */
+  font-size: 16px;
+  color: #777; /* Customize color as needed */
+}
+
+.masked {
+  background-color: #f0f0f0; 
+  color: transparent; 
+  text-shadow: 0 0 0 black; 
+}
+
+
+  
+  
+  
+  
+  /* Adjustments for smaller screens */
+  @media (max-width: 768px) {
+    .form-container {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  
+    .form-group {
+      flex: 1 1 100%; /* Full width on smaller screens */
+    }
+  
+    .add-client-banner span {
+      font-size: 16px;
+    }
+  }
+  

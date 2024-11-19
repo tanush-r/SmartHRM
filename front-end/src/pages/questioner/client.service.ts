@@ -21,7 +21,7 @@ export interface JDQuestionsResponse {
   providedIn: 'root'
 })
 export class ClientService {
-  private baseUrl = '/api/viewer';
+  private baseUrl = 'http://localhost:8080/api/viewer';
 
   constructor(private http: HttpClient) {}
 
@@ -29,7 +29,7 @@ export class ClientService {
     const params = new HttpParams()
       .set('count', count.toString())
       .set('jd_id', jdId)
-      .set('client_id', clientId);
+      .set('cl_id', clientId);
 
     return this.http.get<JDQuestionsResponse>(`${this.baseUrl}/qa_gen/jd`, { params })
       .pipe(
@@ -44,7 +44,7 @@ export class ClientService {
     const params = new HttpParams()
       .set('count', count.toString())
       .set('resume_id', resumeId)
-      .set('client_id', clientId);
+      .set('cl_id', clientId);
 
     return this.http.get<ResumeQuestionsResponse>(`${this.baseUrl}/qa_gen/resume`, { params })
       .pipe(

@@ -20,7 +20,7 @@
         <p-accordion *ngIf="!isLoadingJD">
           <p-accordionTab *ngFor="let question of jdQuestions">
             <ng-template pTemplate="header">
-              <span style="color: rgb(51, 51, 51); font-weight: 500;">{{ question.question }}</span>
+              <span style="color: rgb(51, 51, 51); font-weight: 500; text-decoration: none;">{{ question.question }}</span>
             </ng-template>
             <p>{{ question.answer }}</p>
           </p-accordionTab>
@@ -47,7 +47,7 @@
         <p-accordion *ngIf="!isLoadingResume">
           <p-accordionTab *ngFor="let question of resumeQuestions">
             <ng-template pTemplate="header">
-              <span style="color: rgb(51, 51, 51); font-weight: 500;">{{ question.question }}</span>
+             <a> <span style="color: rgb(51, 51, 51); font-weight: 500;">{{ question.question }}</span></a>
             </ng-template>
             <p>{{ question.answer }}</p>
           </p-accordionTab>
