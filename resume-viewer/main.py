@@ -248,7 +248,7 @@ async def generate_questions(count: int, resume_id: str):
         doc = ""
         for page in pdf_doc:
             doc += page.get_text()
-    elif extract_filetype(filename) == "pdf":
+    elif extract_filetype(filename) == "docx":
         docx_doc = Document(download_path)
 
         # Extract text from the document
@@ -295,7 +295,7 @@ async def generate_questions(count: int, jd_id: str):
         for page in pdf_doc:
             doc += page.get_text()
             
-    elif extract_filetype(filename) == "pdf":
+    elif extract_filetype(filename) == "docx":
         docx_doc = Document(download_path)
 
         # Extract text from the document
