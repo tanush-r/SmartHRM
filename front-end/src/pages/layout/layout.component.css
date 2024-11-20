@@ -34,6 +34,7 @@ body {
     height: 100vh; /* Full height */
     padding: 1rem; /* Padding for content */
     transition: transform 0.3s ease; /* Smooth transition for opening/closing */
+    
 }
 
 /* Logo styling */
@@ -44,6 +45,7 @@ body {
     text-decoration: none; /* Remove underline */
     color: white; /* Logo text color */
 }
+
 
 .sidebar img {
     width: 40px;
@@ -150,6 +152,18 @@ body {
 .toggle-button {
     display: none; /* Initially hidden */
 }
+/* Hover effect for dropdown toggle */
+.master .dropdown-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Light background on hover */
+    color: white; /* Ensure text remains white */
+}
+
+/* Dropdown item hover effects */
+.dropdown-menu .dropdown-item:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    color: white; /* Keep text color white */
+}
+
 
 /* Show toggle button on mobile */
 @media (max-width: 768px) {

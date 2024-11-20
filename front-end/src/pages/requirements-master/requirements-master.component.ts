@@ -1,21 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar'; // Import MatSnackBar
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { RequirementsFormComponent } from '../requirements-form/requirements-form.component'; 
 import { Requirement, Client } from './requirement.model'; 
 import { RequirementService } from './client.service'; 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-
+import { MatSelectChange } from '@angular/material/select'; // Import MatSelectChange
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-requirements-master',
   templateUrl: './requirements-master.component.html',
   styleUrls: ['./requirements-master.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSelectModule,
+    MatInputModule,
+    MatTableModule
+  ]
 })
 export class RequirementsMasterComponent implements OnInit {
   requirements: Requirement[] = [];
@@ -28,7 +41,7 @@ export class RequirementsMasterComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private requirementService: RequirementService,
-    private snackBar: MatSnackBar // Inject MatSnackBar
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -37,21 +50,29 @@ export class RequirementsMasterComponent implements OnInit {
 
   loadRequirements(clientId: string | null): void {
     if (clientId) {
-      this.requirementService.getRequirementsByClient(clientId).subscribe(
-        (requirements) => {
-          this.requirements = requirements;
-          this.filteredRequirements = requirements; 
-        },
-        (error) => {
-          this.snackBar.open('No Requirements for this client.', 'Close', { duration: 3000 });
-          console.error('Failed to load requirements:', error);
-        }
-      );
+        this.requirementService.getRequirementsByClient(clientId).subscribe(
+            (requirements) => {
+                this.requirements = requirements;
+
+                if (requirements.length === 0) {
+                    this.filteredRequirements = [];
+                    this.snackBar.open('No requirements found for this client.', 'Close', { duration: 3000 });
+                } else {
+                    this.filteredRequirements = requirements;
+                }
+            },
+            (error) => {
+                this.snackBar.open('Failed to load requirements. Please try again.', 'Close', { duration: 3000 });
+                console.error('Failed to load requirements:', error);
+                this.requirements = [];
+                this.filteredRequirements = [];
+            }
+        );
     } else {
-      this.requirements = [];
-      this.filteredRequirements = [];
+        this.requirements = [];
+        this.filteredRequirements = [];
     }
-  }
+}
 
   loadClients(): void {
     this.requirementService.getClients().subscribe(
@@ -65,16 +86,17 @@ export class RequirementsMasterComponent implements OnInit {
     );
   }
 
+  onClientChange(event: MatSelectChange): void { // Change to MatSelectChange
+    this.selectedClient = event.value; // Get the selected client ID
+    this.loadRequirements(this.selectedClient); // Load requirements when client changes
+  }
+
   filterRequirements(): void {
-    // Load requirements based on the selected client
-    this.loadRequirements(this.selectedClient);
-    
-    // Filter requirements based on the search query
     this.filteredRequirements = this.requirements.filter(requirement =>
       (requirement.rq_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
       requirement.rq_loc.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
       requirement.rq_skills.toLowerCase().includes(this.searchQuery.toLowerCase())) &&
-      (this.selectedClient ? requirement.cl_id === this.selectedClient : true) // Ensure the client matches if one is selected
+      (this.selectedClient ? requirement.cl_id === this.selectedClient : true)
     );
   }
 
@@ -145,16 +167,12 @@ export class RequirementsMasterComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.requirementService.updateRequirement(result.rq_id, result).subscribe(
-          (response) => {
-            const updatedRequirement: Requirement = {
-              ...requirement,
-              ...result,
-            };
-            const index = this.requirements.findIndex(r => r.rq_id === updatedRequirement.rq_id);
+          () => {
+            const index = this.requirements.findIndex(r => r.rq_id === result.rq_id);
             if (index !== -1) {
-              this.requirements[index] = updatedRequirement;
+              this.requirements[index] = { ...this.requirements[index], ...result };
+              this.filteredRequirements = [...this.requirements];
             }
-            this.filteredRequirements = [...this.requirements];
             this.snackBar.open('Requirement updated successfully!', 'Close', { duration: 3000 });
           },
           (error) => {
@@ -167,28 +185,28 @@ export class RequirementsMasterComponent implements OnInit {
   }
   
   deleteRequirement(requirement: Requirement): void {
-    if (requirement.rq_id) { // Ensure rq_id is defined
-        const dialogRef = this.dialog.open(ConfirmDialogComponent);
+    if (requirement.rq_id) {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent);
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.requirementService.deleteRequirement(requirement.rq_id).subscribe(
-                    () => {
-                        this.requirements = this.requirements.filter(r => r.rq_id !== requirement.rq_id);
-                        this.filteredRequirements = [...this.requirements];
-                        this.snackBar.open('Requirement deleted successfully!', 'Close', { duration: 3000 });
-                    },
-                    (error) => {
-                        this.snackBar.open('Failed to delete requirement. Please try again.', 'Close', { duration: 3000 });
-                        console.error('Failed to delete requirement:', error);
-                    }
-                );
-            } else {
-                console.log('Requirement deletion was cancelled.');
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.requirementService.deleteRequirement(requirement.rq_id).subscribe(
+            () => {
+              this.requirements = this.requirements.filter(r => r.rq_id !== requirement.rq_id);
+              this.filteredRequirements = [...this.requirements];
+              this.snackBar.open('Requirement deleted successfully!', 'Close', { duration: 3000 });
+            },
+            (error) => {
+              this.snackBar.open('Failed to delete requirement. Please try again.', 'Close', { duration: 3000 });
+              console.error('Failed to delete requirement:', error);
             }
-        });
+          );
+        } else {
+          console.log('Requirement deletion was cancelled.');
+        }
+      });
     } else {
-        console.error('Requirement ID is undefined, cannot delete requirement.');
+      console.error('Requirement ID is undefined, cannot delete requirement.');
     }
   }
 }

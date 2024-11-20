@@ -8,17 +8,31 @@ import { CandidateFormComponent } from '../candidate-form/candidate-form.compone
 import { CandidateService } from '../candidate-master/client.service'; 
 import { Candidate, Client, Requirement } from '../candidate-master/candidate.model';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { MatSelectChange } from '@angular/material/select'; // Import MatSelectChange
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
+
 
 @Component({
   selector: 'app-candidate-master',
   templateUrl: './candidate-master.component.html',
   styleUrls: ['./candidate-master.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [ CommonModule,
+    FormsModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSelectModule,
+    MatInputModule,
+    MatTableModule
+  ]
 })
 export class CandidateMasterComponent implements OnInit {
   candidates: Candidate[] = [];
-  filteredCandidates: Candidate[] = []; // Add this line
+  filteredCandidates: Candidate[] = [];
   clients: Client[] = [];
   requirements: Requirement[] = [];
   searchQuery: string = '';
@@ -56,12 +70,20 @@ export class CandidateMasterComponent implements OnInit {
     this.candidateService.getCandidates().subscribe({
       next: (candidates) => {
         this.candidates = candidates;
-        this.filteredCandidates = candidates; // Initialize filtered candidates
+        this.filteredCandidates = candidates.length > 0 ? candidates : [];
+        
+        if (candidates.length === 0) {
+            console.warn('No candidates found.'); 
+        }
       },
-      error: (err) => console.error('Error loading candidates:', err)
+      error: (err) => {
+        console.error('Error loading candidates:', err);
+        this.candidates = []; 
+        this.filteredCandidates = []; 
+      }
     });
   }
-
+  
   openCandidateForm() {
     const dialogRef = this.dialog.open(CandidateFormComponent, {
       height: '80%',
@@ -176,18 +198,30 @@ export class CandidateMasterComponent implements OnInit {
             console.log('Candidate deletion was cancelled.');
         }
     });
-}
+  }
 
   onClientChange(): void {
     if (this.selectedClientId) {
       this.candidateService.getRequirements(this.selectedClientId).subscribe({
         next: (requirements: Requirement[]) => {
           this.requirements = requirements;
+
+          // Clear candidates and filtered candidates if no requirements are found
+          if (requirements.length === 0) {
+            this.candidates = [];
+            this.filteredCandidates = [];
+            this.snackBar.open('No requirements found for this client.', 'Close', { duration: 3000 });
+          }
         },
-        error: (err) => console.error('Error loading requirements:', err)
+        error: (err) => {
+          console.error('Error loading requirements:', err);
+          this.requirements = [];
+        }
       });
     } else {
       this.requirements = [];
+      this.candidates = [];
+      this.filteredCandidates = []; // Clear candidates if no client is selected
     }
   }
 
@@ -197,9 +231,18 @@ export class CandidateMasterComponent implements OnInit {
         next: (candidates: Candidate[]) => {
           this.candidates = candidates;
           this.filteredCandidates = candidates; // Update filtered candidates
-          this.filterCandidates(); // Apply the search query
+
+          // Check if the candidates array is empty
+          if (candidates.length === 0) {
+            this.filteredCandidates = []; // Clear filtered candidates if none found
+            console.warn('No candidates found for this requirement.'); // Optional: log a warning
+          }
         },
-        error: (err) => console.error('Error loading candidates by requirement:', err)
+        error: (err) => {
+          console.error('Error loading candidates by requirement:', err);
+          this.candidates = [];
+          this.filteredCandidates = []; // Clear filtered candidates on error
+        }
       });
     } else {
       this.candidates = [];
@@ -207,7 +250,6 @@ export class CandidateMasterComponent implements OnInit {
     }
   }
   
-
   filterCandidates(): void {
     this.filteredCandidates = this.candidates.filter(candidate =>
       candidate.cd_first_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
