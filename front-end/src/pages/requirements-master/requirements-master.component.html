@@ -1,67 +1,79 @@
 <div class="container requirement-master-container">
-    <div class="d-flex justify-content-between align-items-center">
-      <h4 class="text-center flex-grow-1">Requirement Master</h4>
-      <button class="btn btn-primary" (click)="addRequirement()">
-        <i class="fa fa-plus"></i> Add Requirement
-      </button>
-    </div>
-    
-    <br>
-  
-    
-    <div class="d-flex align-items-center mt-3">
-      <!-- Dropdown for Client Name -->
-      <div class="flex-grow-1 me-2">
-        <select class="form-select" [(ngModel)]="selectedClient" (change)="filterRequirements()">
-          <option value="" selected>Client Name</option>
-          <option *ngFor="let client of clients" [value]="client.cl_id">{{ client.cl_name }}</option>
-        </select>
-      </div>
-      
-      <!-- Search Box -->
-      <div class="input-group flex-grow-2">
-        <span class="input-group-text">
-          <i class="fas fa-search"></i>
-        </span>
-        <input type="text" class="form-control" placeholder="Search here..." [(ngModel)]="searchQuery" (input)="filterRequirements()" />
-        <button class="btn btn-outline-secondary" type="button" (click)="searchQuery = ''; filterRequirements();">
-          <i class="fa fa-x"></i>
-        </button>
-      </div>
-    </div>
-    
-    <br>
-  
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Requirement Name</th>
-          <th>Positions</th>
-          <th>Location</th>
-          <th>Skills</th>
-          <th>Experience</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let requirement of filteredRequirements">
-          <td>{{ requirement.rq_name }}</td>       
-          <td>{{ requirement.rq_no_pos}}</td>
-          <td>{{ requirement.rq_loc }}</td>       
-          <td>{{ requirement.rq_skills }}</td>      
-          <td>{{ requirement.rq_exp }}</td>
-          <td>
-            <button class="btn btn-sm btn-info button-gap" (click)="viewRequirement(requirement)"> View
-            </button>
-            <button class="btn btn-sm btn-warning button-gap" (click)="editRequirement(requirement)">
-              <i class="fa fa-edit"></i>
-            </button>
-            <button class="btn btn-sm btn-danger" (click)="deleteRequirement(requirement)">
-              <i class="fa fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="text-center flex-grow-1">Requirement Master</h4>
+    <button mat-raised-button color="primary" (click)="addRequirement()">
+      <mat-icon>add</mat-icon> Add Requirement
+    </button>
   </div>
-  
+
+  <div class="d-flex align-items-center mt-3">
+    <!-- Dropdown for Client Name -->
+    <div class="flex-grow-1 me-2">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Client Name</mat-label>
+        <mat-select [(ngModel)]="selectedClient" (selectionChange)="onClientChange($event)">
+          <mat-option value="" disabled>Select Client</mat-option>
+          <mat-option *ngFor="let client of clients" [value]="client.cl_id">{{ client.cl_name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Search Box -->
+    <div class="flex-grow-2">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Search here...</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput [(ngModel)]="searchQuery" (input)="filterRequirements()" />
+        <button mat-icon-button *ngIf="searchQuery" (click)="searchQuery = ''; filterRequirements();">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <br>
+
+  <table mat-table [dataSource]="filteredRequirements" class="mat-elevation-z8 full-width-table">
+    <ng-container matColumnDef="rq_name">
+      <th mat-header-cell *matHeaderCellDef class="table-header">Requirement Name</th>
+      <td mat-cell *matCellDef="let requirement">{{ requirement.rq_name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="rq_no_pos">
+      <th mat-header-cell *matHeaderCellDef class="table-header">Positions</th>
+      <td mat-cell *matCellDef="let requirement">{{ requirement.rq_no_pos }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="rq_loc">
+      <th mat-header-cell *matHeaderCellDef class="table-header">Location</th>
+      <td mat-cell *matCellDef="let requirement">{{ requirement.rq_loc }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="rq_skills">
+      <th mat-header-cell *matHeaderCellDef class="table-header">Skills</th>
+      <td mat-cell *matCellDef="let requirement">{{ requirement.rq_skills }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="rq_exp">
+      <th mat-header-cell *matHeaderCellDef class="table-header">Experience</th>
+      <td mat-cell *matCellDef="let requirement">{{ requirement.rq_exp }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef class="table-header">Action</th>
+      <td mat-cell *matCellDef="let requirement">
+          <button mat-icon-button color="info" (click)="viewRequirement(requirement)">
+              <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button color="accent" (click)="editRequirement(requirement)">
+              <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteRequirement(requirement)">
+              <mat-icon>delete</mat-icon>
+          </button>
+      </td>
+  </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['rq_name', 'rq_no_pos', 'rq_loc', 'rq_skills', 'rq_exp', 'action']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['rq_name', 'rq_no_pos', 'rq_loc', 'rq_skills', 'rq_exp', 'action'];"></tr>
+  </table>
+</div>

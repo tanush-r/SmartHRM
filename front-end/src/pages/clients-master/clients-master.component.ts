@@ -1,30 +1,49 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar'; // Import MatSnackBar
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table'; // Import MatTableDataSource
 import { ClientsService } from './client.service';
 import { ClientWithContacts } from './client.model';
 import { ClientFormComponent } from '../client-form/client-form.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-clients-master',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatTableModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatInputModule,
+    ClientFormComponent,
+    ConfirmDialogComponent
+  ],
   templateUrl: './clients-master.component.html',
   styleUrls: ['./clients-master.component.css'],
 })
 export class ClientsMasterComponent implements OnInit {
   clients: ClientWithContacts[] = [];
   searchQuery: string = '';
+  dataSource = new MatTableDataSource<ClientWithContacts>(); // Define the dataSource
 
   constructor(
     private router: Router,
     private dialog: MatDialog,
     private clientsService: ClientsService,
-    private snackBar: MatSnackBar // Inject MatSnackBar
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -35,6 +54,7 @@ export class ClientsMasterComponent implements OnInit {
     this.clientsService.getClients().subscribe(
       (clients: ClientWithContacts[]) => {
         this.clients = clients;
+        this.dataSource.data = clients; // Set the data for the dataSource
       },
       (error) => {
         this.snackBar.open('Failed to load clients. Please try again.', 'Close', { duration: 3000 });
@@ -56,12 +76,12 @@ export class ClientsMasterComponent implements OnInit {
         cl_type: '',
         cl_notes: '',
         contacts: [{
-          co_name: '', // Ensure this is defined
+          co_name: '',
           co_position_hr: '',
           co_email: '',
           co_phno: ''
         }],
-        formType: 'add' // Set formType to 'add' when creating a new client
+        formType: 'add'
       },
     });
   
@@ -80,7 +100,6 @@ export class ClientsMasterComponent implements OnInit {
       }
     });
   }
-  
 
   openEditClientForm(client: ClientWithContacts): void {
     const dialogRef = this.dialog.open(ClientFormComponent, {
@@ -88,7 +107,7 @@ export class ClientsMasterComponent implements OnInit {
       width: '700px',
       data: {
         ...client,
-        formType: 'update' // Set formType to 'update' for editing
+        formType: 'update'
       },
     });
 
@@ -114,7 +133,7 @@ export class ClientsMasterComponent implements OnInit {
       width: '700px',
       data: {
         ...client,
-        formType: 'view' // Set formType to 'view' for viewing
+        formType: 'view'
       },
     });
 
@@ -122,12 +141,11 @@ export class ClientsMasterComponent implements OnInit {
   }
 
   deleteClient(client: ClientWithContacts): void {
-    if (client.cl_id) { // Ensure cl_id is truthy
+    if (client.cl_id) {
         const dialogRef = this.dialog.open(ConfirmDialogComponent);
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                // Use a non-null assertion here
                 this.clientsService.deleteClient(client.cl_id!).subscribe(
                     () => {
                         this.loadClients();
@@ -147,14 +165,13 @@ export class ClientsMasterComponent implements OnInit {
     }
 }
 
-
 filterClients(): ClientWithContacts[] {
   return this.clients.filter(client =>
     client.cl_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
     (client.cl_email && client.cl_email.toLowerCase().includes(this.searchQuery.toLowerCase())) ||
     (client.cl_addr && client.cl_addr.toLowerCase().includes(this.searchQuery.toLowerCase())) ||
     (client.contacts && client.contacts.length > 0 && 
-      client.contacts[0].co_name.toLowerCase().includes(this.searchQuery.toLowerCase())) // Check primary contact name
+      client.contacts[0].co_name.toLowerCase().includes(this.searchQuery.toLowerCase()))
   );
 }
 }
