@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
 import os
+import re
 from dotenv import load_dotenv
 import boto3
 import tempfile
@@ -304,6 +305,70 @@ async def generate_questions(count: int, jd_id: str):
     
     chain = QuestionAnswerChain(doc=doc, is_resume=False)
     return chain.invoke(count)
+
+# Define regex patterns for extracting name, email, and contact number
+patterns = {
+    'email': r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b',
+    'phone': r'\b(?:\+?\d{1,3}[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}\b'
+}
+
+# Extract name, email, and phone number using regex
+def extract_basic_details(text):
+    details = {}
+
+    # Extract email and phone using regex
+    for key, pattern in patterns.items():
+        match = re.search(pattern, text, re.IGNORECASE)
+        details[key] = match.group(0) if match else 'N/A'
+    
+    # Extract name (assuming the name is the first non-empty line)
+    lines = text.splitlines()
+    details['name'] = next((line.strip() for line in lines if line.strip()), "Name not found")
+
+    return details
+
+@app.get("/primary")
+async def primary_details(resume_id: str):
+
+    cursor = None
+    try:
+        db = get_db_connection()
+        cursor = db.cursor(dictionary=True)
+        cursor.execute("SELECT filename FROM resumes WHERE resume_id = %s", (resume_id,))
+        resumes = cursor.fetchone()
+        if resumes is None:
+            raise HTTPException(status_code=404, detail="Resume not found")
+        
+        filename = resumes['filename']
+        
+        # Redirect to the S3 link for downloading
+        object_name = f'resumes/{filename}'
+
+        download_path = os.path.join(tempfile.gettempdir(), filename)
+        s3.download_file(AWS_S3_BUCKET_NAME, object_name, download_path)  
+    except mysql.connector.Error as err:
+        
+        raise HTTPException(status_code=500, detail=str(err))
+    finally:
+        if cursor:
+            cursor.close()
+            db.close()
+
+    if extract_filetype(filename) == "pdf":
+        pdf_doc = pymupdf.open(download_path)
+
+        # Extract the text from all pages
+        doc = ""
+        for page in pdf_doc:
+            doc += page.get_text()
+    elif extract_filetype(filename) == "docx":
+        docx_doc = Document(download_path)
+
+        # Extract text from the document
+        doc = "\n".join([para.text for para in docx_doc.paragraphs])
+    else:
+        raise HTTPException(status_code=400, detail="File type not allowed. Only PDF and Word documents are accepted.")
+    return extract_basic_details(doc)
 
 # Update the resume status
 @app.post("/resumes/status/{resume_id}")
