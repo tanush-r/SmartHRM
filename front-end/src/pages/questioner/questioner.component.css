@@ -176,5 +176,14 @@ strong {
   background-color: #2783e6; /* Lighter shade for hover effect */
 }
 
+@font-face {
+  font-family: 'Inter';
+  src: url('/src/fonts/Inter-roman.var-5VGNBR6A.woff2') format('woff2'); /* Adjusted path */
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+
 
 
