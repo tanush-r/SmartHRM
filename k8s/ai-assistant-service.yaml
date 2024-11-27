@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: jd-upload
+  name: ai-assistant
   namespace: prod
 spec:
   selector:
-    app: jd-upload
+    app: ai-assistant
   ports:
   - protocol: TCP
     port: 8010
