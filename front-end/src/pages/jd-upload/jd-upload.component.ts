@@ -133,7 +133,7 @@ export class JDUploadComponent implements OnInit {
       this.isUploading = true;
       this.uploadStatus = null;
 
-      this.http.post('http://localhost:8000/uploadJD', formData).subscribe(
+      this.http.post('/api/jd_upload/uploadJD', formData).subscribe(
         () => {
           this.isUploading = false;
           this.uploadStatus = 'success';

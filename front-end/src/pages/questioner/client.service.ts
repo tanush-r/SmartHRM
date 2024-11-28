@@ -21,7 +21,7 @@ export interface JDQuestionsResponse {
   providedIn: 'root'
 })
 export class ClientService {
-  private baseUrl = 'http://localhost:8080/api/viewer';
+  private baseUrl = '/api/viewer';
 
   constructor(private http: HttpClient) {}
 

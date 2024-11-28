@@ -44,7 +44,7 @@ export class ResumeUploadComponent implements OnInit {
     this.loadClients();
   }
   loadClients(): void {
-    this.http.get<Client[]>('http://localhost:8000/clients').subscribe(
+    this.http.get<Client[]>('/api/resume_upload/clients').subscribe(
       (data) => {
         this.clients = data;
       },
@@ -130,7 +130,7 @@ export class ResumeUploadComponent implements OnInit {
       formData.append('file', this.selectedFile);
       this.isUploading = true;
       this.uploadStatus = null;
-      this.http.post('http://localhost:8000/uploadResume', formData).subscribe(
+      this.http.post('api/resume_upload/uploadResume', formData).subscribe(
         () => {
           this.isUploading = false;
           this.uploadStatus = 'success';
