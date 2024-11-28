@@ -129,9 +129,7 @@ def get_resumes(jd_id: str):
         for resume in resumes:
             if resume['created_at']:
                 resume['created_at'] = datetime_to_str(resume['created_at'])
-            
-        print(resumes)
-        
+                
         return resumes
     except mysql.connector.Error as err:
         raise HTTPException(status_code=500, detail=str(err))
