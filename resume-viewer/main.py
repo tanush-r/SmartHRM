@@ -184,7 +184,7 @@ def download_resume(jd_id: str):
         if cursor:
             cursor.close()
             db.close()
-allowed_files = ["pdf", "doc", "docx"]
+allowed_files = ["pdf", "docx"]
 def extract_filetype(filename: str):
     return filename.rsplit('.', 1)[1].lower()
 def read_pdf(content):
@@ -225,7 +225,7 @@ async def generate_questions(count: int, resume_id: str):
         doc = ""
         for page in pdf_doc:
             doc += page.get_text()
-    elif extract_filetype(filename) == "pdf":
+    elif extract_filetype(filename) == "docx":
         docx_doc = Document(download_path)
         # Extract text from the document
         doc = "\n".join([para.text for para in docx_doc.paragraphs])
@@ -260,7 +260,7 @@ async def generate_questions(count: int, jd_id: str):
         doc = ""
         for page in pdf_doc:
             doc += page.get_text()
-    elif extract_filetype(filename) == "pdf":
+    elif extract_filetype(filename) == "docx":
         docx_doc = Document(download_path)
         # Extract text from the document
         doc = "\n".join([para.text for para in docx_doc.paragraphs])
