@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ClientService {
-  private apiUrl = 'http://localhost:8000/clients'; // Replace with your actual API URL
+  private apiUrl = '/api/jd_upload/clients'; // Replace with your actual API URL
 
   constructor(private http: HttpClient) {}
 
