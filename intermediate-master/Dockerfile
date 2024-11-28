@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8011
 
 # Run the FastAPI app using Uvicorn with auto-reload
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8011", "--reload"] 
+CMD ["uvicorn", "main:intermediate_app", "--host", "0.0.0.0", "--port", "8011", "--reload"] 
