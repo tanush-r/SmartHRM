@@ -1,35 +1,94 @@
-<div class="container">
-  <h1>Welcome, HR!</h1>
-  <br>
-  <div class="stats-container">
-    <div class="stat-card">
-      <div class="icon">
-        <i class="fas fa-users"></i>
-      </div>
-      <div class="info">
-        <h4>Total Clients</h4>
-        <p>{{ totalClients }}</p>
-      </div>
-    </div>
+<div class="container mt-4">
+  <!-- Welcome Section -->
+  <div class="text-center">
+    <h5>Welcome, Username!</h5>
+  </div>
 
-    <div class="stat-card">
-      <div class="icon">
-        <i class="fas fa-file-alt"></i>
+  <!-- Master Section -->
+  <mat-card class="p-3 my-4">
+    <mat-card-title class="d-flex justify-content-between align-items-center">
+      <span>Master</span>
+      <div class="btn-group tabs-group">
+        <mat-button-toggle-group [(ngModel)]="selectedTabFirstCard" aria-label="Master Tabs">
+          <mat-button-toggle value="today" (change)="selectTab('today', 'first')">Today</mat-button-toggle>
+          <mat-button-toggle value="this week" (change)="selectTab('this week', 'first')">This Week</mat-button-toggle>
+          <mat-button-toggle value="this month" (change)="selectTab('this month', 'first')">This Month</mat-button-toggle>
+          <mat-button-toggle value="all" (change)="selectTab('all', 'first')">All</mat-button-toggle>
+        </mat-button-toggle-group>
       </div>
-      <div class="info">
-        <h4>Total Resumes</h4>
-        <p>{{ totalResumes }}</p>
+    </mat-card-title>
+
+    <div class="row mt-3">
+      <div class="col-md-4">
+        <mat-card class="text-center p-3 count-card">
+          <p class="font-weight-bold">Clients</p>
+          <p class="display-6">{{ clientCount }}</p>
+        </mat-card>
+      </div>
+      <div class="col-md-4">
+        <mat-card class="text-center p-3 count-card">
+          <p class="font-weight-bold">Requirements</p>
+          <p class="display-6">{{ requirementCount }}</p>
+        </mat-card>
+      </div>
+      <div class="col-md-4">
+        <mat-card class="text-center p-3 count-card">
+          <p class="font-weight-bold">Resume</p>
+          <p class="display-6">{{ candidateCount }}</p>
+        </mat-card>
       </div>
     </div>
-    
-    <div class="stat-card">
-      <div class="icon">
-        <i class="fas fa-file-signature"></i>
+  </mat-card>
+
+  <!-- Status Section -->
+  <mat-card class="p-3 my-4">
+    <mat-card-title class="d-flex justify-content-between align-items-center">
+      <span>Status</span>
+      <div class="btn-group tabs-group">
+        <mat-button-toggle-group [(ngModel)]="selectedTabSecondCard" aria-label="Status Tabs">
+          <mat-button-toggle value="today" (change)="selectTab('today', 'second')">Today</mat-button-toggle>
+          <mat-button-toggle value="this week" (change)="selectTab('this week', 'second')">This Week</mat-button-toggle>
+          <mat-button-toggle value="this month" (change)="selectTab('this month', 'second')">This Month</mat-button-toggle>
+          <mat-button-toggle value="all" (change)="selectTab('all', 'second')">All</mat-button-toggle>
+        </mat-button-toggle-group>
       </div>
-      <div class="info">
-        <h4>Total JDs</h4>
-        <p>{{ totalJDs }}</p>
+    </mat-card-title>
+
+    <div class="row mt-3">
+      <div class="col-md-4">
+        <mat-card class="text-center p-3 count-card">
+          <p class="font-weight-bold">Open positions</p>
+          <p class="display-6">{{ openPositions }}</p>
+        </mat-card>
+      </div>
+      <div class="col-md-4">
+        <mat-card class="text-center p-3 count-card">
+          <p class="font-weight-bold">Closed positions</p>
+          <p class="display-6">{{ closedPositions }}</p>
+        </mat-card>
+      </div>
+      <div class="col-md-4">
+        <mat-card class="text-center p-3 count-card">
+          <p class="font-weight-bold">On Hold</p>
+          <p class="display-6">{{ onHoldPositions }}</p>
+        </mat-card>
       </div>
     </div>
+  </mat-card>
+
+  <!-- Chatbot -->
+  <div class="d-flex flex-column align-items-center mt-4">
+    <div class="d-flex justify-content-center align-items-center">
+      <img src="assets/chatbot.jpeg" alt="AI Assistant" class="assistant-icon" (click)="openChatbot()">
+      <span class="assistant-title">AI Assistant</span>
+    </div>
+    <mat-card class="chat-prompt-container">
+      <div class="d-flex align-items-center">
+        <div class="input-group">
+          <input matInput [(ngModel)]="prompt" placeholder="Type your question or command here..." class="form-control chat-input">
+          <button mat-raised-button color="primary" (click)="openChatbot()" class="generate-button">Generate</button>
+        </div>
+      </div>
+    </mat-card>
   </div>
 </div>

@@ -1,57 +1,243 @@
+/* General container styling */
 .container {
-    padding: 20px;
-    margin-left: 0px ;
-    margin-top: 120px;
-    border-radius: 8px; 
-    background-color: #f1f3f5; /* Card background color */
-    border: 1px solid #e0e0e0; /* Card border */
+  max-width: 1200px; /* Max width of the container */
+  margin-left: 110px;
+}
+
+/* Welcome section */
+.text-center {
+  margin-bottom: 20px;
+}
+
+/* Master Section Card */
+mat-card {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.mat-card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.tabs-group {
+  display: flex;
+  gap: 10px;
+}
+
+button.mat-raised-button {
+  background-color: #007bff;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+button.mat-raised-button.active-tab {
+  background-color: #0056b3;
+}
+
+button.mat-raised-button:hover {
+  background-color: #0056b3;
+}
+
+button.mat-raised-button:focus {
+  outline: none;
+}
+
+/* Card Grid styling */
+.row {
+  display: flex;
+  gap: 20px;
+}
+
+.col-md-4 {
+  flex: 1;
+}
+
+
+
+
+.count-card {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.count-card p {
+  margin: 10px 0;
+}
+
+.count-card .display-6 {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Status Section Card */
+.mat-card-title span {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
+
+.d-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.d-flex img {
+  cursor: pointer;
+  height: 50px;
+  transition: transform 0.3s;
+}
+
+.d-flex img:hover {
+  transform: scale(1.1);
+}
+
+.d-flex span {
+  margin-left: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+
+/* Chat Prompt Container */
+mat-card.p-4 {
+  height: 100px;
+  max-width: 700px;
+  width: 100%;
+  margin-left: 150px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-form-field input {
+  font-size: 16px;
+  padding: 12px;
+  border-radius: 15px 0px 0px 15px;
+}
+
+button.mat-raised-button {
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  padding: 12px 20px;
+  border-radius: 0px 15px 15px 0px;
+  height: 70%;
+}
+
+button.mat-raised-button:hover {
+  background-color: #0056b3;
+}
+
+
+.assistant-icon {
+  cursor: pointer;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.assistant-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.chat-prompt-container {
+  max-width: 700px;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+}
+
+.chat-input {
+  flex: 1;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.generate-button {
+  background-color: #007bff; /* Bootstrap primary blue */
+  color: #fff; /* White text color */
+  border: none; /* Remove default border */
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 10px;
+  height: auto;
+  text-transform: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.generate-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow effect on hover */
+  color: #fff;
+}
+
+.generate-button:focus {
+  background-color: #004085; /* Even darker blue for focus */
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.5); /* Focus ring effect */
+}
+
+.generate-button:active {
+  background-color: #003366; /* Darker blue for active state */
+  box-shadow: none; /* Remove shadow on click */
+}
+
+
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+    gap: 20px;
   }
-.stats-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+
+  .col-md-4 {
+    width: 100%;
   }
-  
-  .stat-card {
-    background-color: #f8f9fa; /* Card background color */
-    border: 1px solid #e0e0e0; /* Card border */
-    border-radius: 8px; /* Rounded corners */
-    padding: 20px ; /* Padding inside the card */
-    text-align: center; /* Center align text */
-    flex: 1; /* Flex-grow to take equal space */
-    margin: 0 10px; /* Margin between cards */
-    transition: transform 0.2s; /* Animation on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow */
+
+  mat-card.p-4 {
+    margin-left: 0;
+    max-width: 100%;
   }
-  .icon {
-    float: left;
-    margin-left: 20px;
-    font-size: 40px; /* Adjust icon size */
-    color: #0747A6; /* Change icon color if desired */
+
+  .tabs-group {
+    flex-direction: column;
+    gap: 10px;
   }
-  
-  .info {
-    float: right;
-    text-align: center;
+
+  button.mat-raised-button {
+    width: 100%;
   }
-  
-  h4 {
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  p {
-    font-size: 24px;
-    color: #090909;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .stats-container {
-      flex-direction: column; /* Stack cards on smaller screens */
-    }
-  
-    .stat-card {
-      margin-bottom: 20px; /* Bottom margin for cards when stacked */
-    }
-  }
+}

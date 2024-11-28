@@ -1,8 +1,8 @@
-<div class="form-container">
+<mat-card>
   <div class="showBanner add-client-banner">
     <span>{{ formHeading }}</span>
-    <button class="close-button" (click)="closeDialog()">
-      <i class="fas fa-times"></i>
+    <button mat-icon-button class="close-button" (click)="closeDialog()">
+      <mat-icon>close</mat-icon>
     </button>
   </div>
   <br>
@@ -10,92 +10,129 @@
   <div class="section">
     <h6>Company Details</h6>
     <div class="form-row">
-      <div class="form-group">
-        <label for="companyName">Company Name *</label>
-        <input type="text" class="form-control" id="companyName" placeholder="Enter company name"
-               [(ngModel)]="client.cl_name" [disabled]="isSubmitDisabled" required>
-        <div *ngIf="submitted && !client.cl_name" class="text-danger">
-          Company Name is required.
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="companyType">Company Type</label>
-        <select class="form-control" id="companyType" [(ngModel)]="client.cl_type" [disabled]="isSubmitDisabled">
-          <option value="" disabled>Select company type</option>
-          <option>Service Based</option>
-          <option>Product Based</option>
-          <option>Both</option>
-        </select>
-      </div>
+      <mat-form-field appearance="fill" style="flex: 1; margin-right: 8px;">
+        <mat-label>Company Name *</mat-label>
+        <input matInput type="text" placeholder="Enter company name"
+               [(ngModel)]="client.cl_name" required>
+        <mat-error *ngIf="submitted && !client.cl_name">Company Name is required.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" style="flex: 1;">
+        <mat-label>Company Type</mat-label>
+        <mat-select [(ngModel)]="client.cl_type">
+          <mat-option value="" disabled>Select company type</mat-option>
+          <mat-option value="Service Based">Service Based</mat-option>
+          <mat-option value="Product Based">Product Based</mat-option>
+          <mat-option value="Both">Both</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label for="companyEmail">Company Email *</label>
-        <input type="email" class="form-control" id="companyEmail" placeholder="Enter company email"
-               [(ngModel)]="client.cl_email" [disabled]="isSubmitDisabled" required>
-        <div *ngIf="submitted && !isEmailValid(client.cl_email)" class="text-danger">
-          Valid Email is required.
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="companyPhone">Company Phone Number </label>
-        <input type="tel" class="form-control" id="companyPhone" placeholder="Enter company phone number"
-               [(ngModel)]="client.cl_phno" [disabled]="isSubmitDisabled" required>
-      </div>
+
+    <div class="form-row" style="margin-top: 16px;">
+      <mat-form-field appearance="fill" style="flex: 1; margin-right: 8px;">
+        <mat-label>Company Email *</mat-label>
+        <input matInput type="email" placeholder="Enter company email"
+               [(ngModel)]="client.cl_email" required>
+        <mat-error *ngIf="submitted && !isEmailValid(client.cl_email)">Valid Email is required.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" style="flex: 1;">
+        <mat-label>Phone Number *</mat-label>
+        <input matInput type="tel" placeholder="Enter phone number with country code"
+               [(ngModel)]="client.cl_phno" required>
+        <mat-error *ngIf="submitted && !isPhoneNumberValid(client.cl_phno)">Phone number must include country code.</mat-error>
+      </mat-form-field>
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label for="address">Address </label>
-        <input type="text" class="form-control" id="address" placeholder="Enter company address"
-               [(ngModel)]="client.cl_addr" [disabled]="isSubmitDisabled" required>
-      </div>
-      <div class="form-group">
-        <label for="mapLink">Map Link </label>
-        <input type="text" class="form-control" id="mapLink" placeholder="Enter map link"
-               [(ngModel)]="client.cl_map_url" [disabled]="isSubmitDisabled" required>
-      </div>
+
+    <div class="form-row" style="margin-top: 16px;">
+      <mat-form-field appearance="fill" style="flex: 1; margin-right: 8px;">
+        <mat-label>Address</mat-label>
+        <input matInput type="text" placeholder="Enter company address"
+               [(ngModel)]="client.cl_addr">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" style="flex: 1;">
+        <mat-label>Map Link</mat-label>
+        <input matInput type="text" placeholder="Enter map link (URL)"
+               [(ngModel)]="client.cl_map_url">
+      </mat-form-field>
     </div>
-    <div class="form-group">
-      <label for="clientsNotes">Clients Notes</label>
-      <textarea class="form-control" id="clientsNotes" rows="3" [(ngModel)]="client.cl_notes" [disabled]="isSubmitDisabled"></textarea>
-    </div>
+
+    <mat-form-field appearance="fill" style="width: 100%; margin-top: 16px;">
+      <mat-label>Clients Notes</mat-label>
+      <textarea matInput rows="3" [(ngModel)]="client.cl_notes"></textarea>
+      <mat-error *ngIf="submitted"></mat-error>
+    </mat-form-field>
   </div>
 
   <div class="section">
     <h6>Primary Contact Person</h6>
-    <div *ngFor="let contact of client.contacts; let i = index" class="form-row">
-      <div class="form-group">
-        <label for="name{{i}}">Name </label>
-        <input type="text" class="form-control" id="name{{i}}" placeholder="Enter name"
-               [(ngModel)]="contact.co_name" [disabled]="isSubmitDisabled" required>
-      </div>
-      <div class="form-group">
-        <label for="hiringPosition{{i}}">Hiring Position</label>
-        <input type="text" class="form-control" id="hiringPosition{{i}}" placeholder="Enter hiring position"
-               [(ngModel)]="contact.co_position_hr" [disabled]="isSubmitDisabled">
-      </div>
-      <div class="form-group">
-        <label for="phoneNo{{i}}">Phone No. </label>
-        <input type="tel" class="form-control" id="phoneNo{{i}}" placeholder="Enter Phone No."
-               [(ngModel)]="contact.co_phno" [disabled]="isSubmitDisabled" required>
-      </div>
-      <div class="form-group">
-        <label for="email{{i}}">Email </label>
-        <input type="email" class="form-control" id="email{{i}}" placeholder="Enter Email"
-               [(ngModel)]="contact.co_email" [disabled]="isSubmitDisabled" required>
-      </div>
-      <button (click)="removeContactPerson(i)" class="remove-button" [disabled]="isSubmitDisabled">
-        <i class="fas fa-times"></i>
+    <div class="form-row" style="display: flex; flex-wrap: wrap; margin-bottom: 16px;">
+      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px; margin-right: 8px;">
+        <mat-label>Name *</mat-label>
+        <input matInput type="text" placeholder="Enter name"
+               [(ngModel)]="client.contacts[0].co_name" required>
+        <mat-error *ngIf="submitted && !client.contacts[0].co_name">Name is required.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px; margin-right: 8px;">
+        <mat-label>Hiring Position</mat-label>
+        <input matInput type="text" placeholder="Enter hiring position"
+               [(ngModel)]="client.contacts[0].co_position_hr">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px; margin-right: 8px;">
+        <mat-label>Phone No. *</mat-label>
+        <input matInput type="tel" placeholder="Enter Phone No."
+               [(ngModel)]="client.contacts[0].co_phno" required>
+        <mat-error *ngIf="submitted && !isPhoneNumberValid(client.contacts[0].co_phno)">Phone number must include country code.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px;">
+        <mat-label>Email *</mat-label>
+        <input matInput type="email" placeholder="Enter Email"
+               [(ngModel)]="client.contacts[0].co_email" required>
+        <mat-error *ngIf="submitted && !isEmailValid(client.contacts[0].co_email)">Valid Email is required.</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div *ngFor="let contact of client.contacts.slice(1); let i = index" class="form-row" style="display: flex; flex-wrap: wrap; margin-bottom: 16px;">
+      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px; margin-right: 8px;">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" placeholder="Enter name"
+               [(ngModel)]="contact.co_name">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px; margin-right: 8px;">
+        <mat-label>Hiring Position</mat-label>
+        <input matInput type="text" placeholder="Enter hiring position"
+               [(ngModel)]="contact.co_position_hr">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px; margin-right: 8px;">
+        <mat-label>Phone No.</mat-label>
+        <input matInput type="tel" placeholder="Enter Phone No."
+               [(ngModel)]="contact.co_phno">
+        <mat-error *ngIf="submitted && !isPhoneNumberValid(contact.co_phno)">Phone number must include country code.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px;">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" placeholder="Enter Email"
+               [(ngModel)]="contact.co_email">
+        <mat-error *ngIf="submitted ">Valid Email is required.</mat-error>
+      </mat-form-field>
+
+      <button mat-icon-button (click)="removeContactPerson(i + 1)" class="remove-button">
+        <mat-icon>close</mat-icon>
       </button>
     </div>
   </div>
 
-  <div class="button-container">
-    <button type="button" class="btn btn-primary add-contact-person-button" 
-            (click)="addContactPerson()" 
-            [disabled]="isAddContactDisabled">Add contact person</button>
-    <button type="button" class="btn btn-secondary submit-button" 
-            (click)="onSubmit()" 
-            [disabled]="isSubmitDisabled || !isFormValid()">Submit</button>
-  </div> 
-</div>
+  <div class="button-container" style="margin-top: 16px;">
+    <button mat-raised-button color="primary" (click)="addContactPerson()" 
+            [disabled]="client.contacts.length >= 5">Add contact person</button>
+    <button mat-raised-button color="accent" (click)="onSubmit()" 
+            [disabled]="!isFormValid()">Submit</button>
+  </div>
+</mat-card>
