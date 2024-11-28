@@ -55,7 +55,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Skeleton loader -->
+          <!-- Skeleton loader for loading state -->
           <ng-container *ngIf="isLoadingResumes">
             <tr *ngFor="let i of [1,2,3,4,5,6,7,8,9]" class="skeleton-row">
               <td><p-skeleton></p-skeleton></td>
@@ -74,14 +74,14 @@
               <td>{{ formatTime(resume.created_at) }}</td>
               <td>
                 <mat-form-field appearance="fill">
-                  <mat-select [(ngModel)]="resume.status" (selectionChange)="onStatusChange(resume)">
-                    <mat-option value="" disabled>Select Status</mat-option> <!-- Placeholder option -->
-                    <mat-option *ngFor="let status of statusOptions" [value]="status">{{ status }}</mat-option>
+                  <mat-select [(ngModel)]="resume.st_id" (selectionChange)="onStatusChange(resume)">
+                    <mat-option value="" disabled>Select Status</mat-option>
+                    <mat-option *ngFor="let status of statusOptions" [value]="status.st_id">{{ status.st_name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
-              </td>
+              </td>                        
               <td>
-                <button class="download-btn" (click)="downloadResume(resume.s3_link)">
+                <button class="download-btn" (click)="downloadResume(resume)">
                   <i class="bi bi-download"></i> Download
                 </button>
               </td>

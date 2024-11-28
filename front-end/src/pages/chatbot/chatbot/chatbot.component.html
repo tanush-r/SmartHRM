@@ -1,0 +1,62 @@
+<div class="chatbot">
+    <!-- Chatbot Header -->
+    <mat-toolbar color="primary" class="chatbot-header">
+      <div class="d-flex align-items-center">
+        <img src="assets/chatboot.webp" alt="Chatbot Icon" class="chatbot-icon" />
+        <span class="chatbot-title ml-2">AI Assistant</span>
+      </div>
+      <button mat-icon-button (click)="closeChatbot()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar>
+  
+    <!-- Chatbot Body -->
+    <div class="chatbot-body">
+      <div class="message-container">
+        <!-- Render each message -->
+        <div
+          *ngFor="let message of messages; let i = index"
+          class="message-wrapper"
+        >
+          <div
+            [ngClass]="{
+              'user-message': message.sender === 'user',
+              'bot-message': message.sender === 'bot'
+            }"
+          >
+            {{ message.text }}
+            <!-- Edit icon for user messages -->
+            <button
+              *ngIf="message.sender === 'user'"
+              mat-icon-button
+              color="accent"
+              (click)="editMessage(i)"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Chat Prompt Container -->
+    <mat-card class="chat-prompt-container">
+      <div class="d-flex align-items-center">
+        <div class="input-group">
+          <input 
+            matInput 
+            [(ngModel)]="userInputForm.value" 
+            placeholder="Type your question or command here..." 
+            class="form-control chat-input"
+          />
+          <button 
+            mat-raised-button 
+            color="primary" 
+            (click)="sendMessage()" 
+            class="generate-button">
+            Generate
+          </button>
+        </div>
+      </div>
+    </mat-card>
+  </div>

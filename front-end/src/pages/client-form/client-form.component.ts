@@ -2,6 +2,12 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 interface Contact {
   co_id?: string;
@@ -19,7 +25,7 @@ interface ClientWithContacts {
   cl_addr?: string;
   cl_map_url?: string;
   cl_type?: string;
-  cl_notes?: string;
+  cl_notes?: string; 
   contacts: Contact[];
   formType?: 'add' | 'update' | 'view';
 }
@@ -29,7 +35,16 @@ interface ClientWithContacts {
   templateUrl: './client-form.component.html',
   styleUrls: ['./client-form.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule
+  ]
 })
 export class ClientFormComponent implements OnInit {
   client: ClientWithContacts = {
@@ -46,8 +61,6 @@ export class ClientFormComponent implements OnInit {
 
   submitted: boolean = false;
   formHeading: string = '';
-  isSubmitDisabled: boolean = false; 
-  isAddContactDisabled: boolean = false;
 
   constructor(
     private dialogRef: MatDialogRef<ClientFormComponent>,
@@ -57,39 +70,29 @@ export class ClientFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.data) {
       this.client = { ...this.data };
-
-      switch (this.client.formType) {
-        case 'view':
-          this.formHeading = 'View Client';
-          this.isSubmitDisabled = true;
-          this.isAddContactDisabled = true;
-          break;
-        case 'update':
-          this.formHeading = 'Edit Client';
-          this.isSubmitDisabled = false;
-          this.isAddContactDisabled = false;
-          break;
-        case 'add':
-        default:
-          this.formHeading = 'Add Client';
-          this.isSubmitDisabled = false;
-          this.isAddContactDisabled = false;
-          break;
-      }
+      this.formHeading = this.client.formType === 'update' ? 'Edit Client' : 'Add Client';
     }
   }
 
   isEmailValid(email?: string): boolean {
-    if (!email) return false; // 이메일이 undefined인 경우 false 반환
+    if (!email) return false;
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
   }
 
-  isFormValid(): boolean {
-    const clientNameValid = typeof this.client.cl_name === 'string' && this.client.cl_name.trim() !== '';
-    const clientEmailValid = this.isEmailValid(this.client.cl_email); // 클라이언트 이메일은 이제 string | undefined를 처리함
+  isPhoneNumberValid(phoneNumber?: string): boolean {
+    if (!phoneNumber) return false; 
+    const phonePattern = /^\+\d{1,3}\d{9,}$/;
+    return phonePattern.test(phoneNumber);
+  }
 
-    return clientNameValid && clientEmailValid;
+  isFormValid(): boolean {
+    const clientNameValid = this.client.cl_name.trim() !== '';
+    const clientEmailValid = this.isEmailValid(this.client.cl_email);
+    const clientPhoneValid = this.isPhoneNumberValid(this.client.cl_phno);
+    const primaryContactNameValid = this.client.contacts[0]?.co_name.trim() !== ''; // Ensure primary contact name is checked
+
+    return clientNameValid && clientEmailValid && clientPhoneValid && primaryContactNameValid;
   }
 
   onSubmit() {
@@ -110,7 +113,9 @@ export class ClientFormComponent implements OnInit {
   }
 
   removeContactPerson(index: number): void {
-    this.client.contacts.splice(index, 1);
+    if (index > 0) { 
+      this.client.contacts.splice(index, 1);
+    }
   }
 
   closeDialog(): void {

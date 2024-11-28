@@ -8,10 +8,10 @@ export interface Client {
 
 export interface Position {
   jd_id: string; // Job Description ID
-  cl_id: string; // Client ID (changed from client_id to cl_id)
+  cl_id: string; // Client ID
   filename: string; // Filename of the position
   s3_link: string; // S3 link to the position details
-  timestamp: string; // Timestamp of the position creation
+  created_at: string; // Creation timestamp
 }
 
 export interface Resume {
@@ -21,9 +21,12 @@ export interface Resume {
   s3_link: string; // S3 link to the resume
   filename: string; // Filename of the resume
   status: string; // Status of the resume
-  eligible: boolean; // Make this mandatory
-  notEligible: boolean; // Make this mandatory
-  onboarded: boolean; // Make this mandatory
+  st_id:string;
+  st_name:string;
+}
+export interface Status {
+  st_id: string; // Status ID
+  st_name: string; // Status Name
 }
 
 
@@ -32,10 +35,10 @@ export interface Resume {
 })
 export class ResumeStateService {
   private selectedClientId: string = ''; // Store selected Client ID
-  private selectedPosition: string = ''; // Store selected Position ID
+  private selectedPositionId: string = ''; // Store selected Position ID
   private resumes: Resume[] = []; // Store list of resumes
   private positionS3Link: string = ''; // Store Position S3 Link
-  private jdId: string = ''; // Store JD ID
+  private jdId: string = ''; // Store Job Description ID
 
   // Set the selected client ID
   setSelectedClientId(clientId: string): void {
@@ -48,13 +51,13 @@ export class ResumeStateService {
   }
 
   // Set the selected position ID
-  setSelectedPosition(position: string): void {
-    this.selectedPosition = position;
+  setSelectedPosition(positionId: string): void {
+    this.selectedPositionId = positionId;
   }
 
   // Get the selected position ID
   getSelectedPosition(): string {
-    return this.selectedPosition;
+    return this.selectedPositionId;
   }
 
   // Set the list of resumes
@@ -77,12 +80,12 @@ export class ResumeStateService {
     return this.positionS3Link;
   }
 
-  // Set the JD ID
+  // Set the Job Description ID
   setJDId(jdId: string): void {
     this.jdId = jdId;
   }
 
-  // Get the JD ID
+  // Get the Job Description ID
   getJDId(): string {
     return this.jdId;
   }
@@ -90,9 +93,9 @@ export class ResumeStateService {
   // Clear the stored state
   clearState(): void {
     this.selectedClientId = '';
-    this.selectedPosition = '';
+    this.selectedPositionId = '';
     this.resumes = [];
     this.positionS3Link = ''; // Clear position S3 link
-    this.jdId = ''; // Clear JD ID
+    this.jdId = ''; // Clear Job Description ID
   }
 }

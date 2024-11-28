@@ -1,33 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: viewer
+  name: requirement-master
   namespace: prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: viewer
+      app: requirement-master
   template:
     metadata:
       labels:
-        app: viewer
+        app: requirement-master
     spec:
       containers:
-      - name: viewer
+      - name: requirement-master
         imagePullPolicy: Always
-        image: opentechxdoclabs/smart_hr_system:resume-viewer-arm64-new
+        image: opentechxdoclabs/smart_hr_system:requirement-master-arm64 # This is the image you built in Minikube
+        ports:
+        - containerPort: 8008
         env:
-        - name: AWS_S3_BUCKET_NAME
-          valueFrom:
-            secretKeyRef:
-              name: credentials
-              key: AWS_S3_BUCKET_NAME
-        - name: AWS_REGION_NAME
-          valueFrom:
-            secretKeyRef:
-              name: credentials
-              key: AWS_REGION_NAME
         - name: MYSQL_DB
           valueFrom:
             secretKeyRef:
@@ -53,23 +45,5 @@ spec:
             secretKeyRef:
               name: credentials
               key: MYSQL_USER
-        - name: OPENAI_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: credentials
-              key: OPENAI_API_KEY
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              name: credentials
-              key: AWS_ACCESS_KEY_ID
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: credentials
-              key: AWS_SECRET_ACCESS_KEY
-
-        ports:
-        - containerPort: 8004
       imagePullSecrets:
       - name: docker-registry-secret

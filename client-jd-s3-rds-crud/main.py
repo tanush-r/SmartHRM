@@ -96,34 +96,6 @@ def generate_jd_id(client_name: str, filename: str, conn):
             return jd_id
         incremental_number += 1
 
-# API to create a new client
-@app.post("/clients")
-def create_client(client_name: str):
-    client_uuid = uuid.uuid4()  # Create a UUID object
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    try:
-        # Check if the client name already exists before inserting
-        cursor.execute("SELECT COUNT(*) FROM clients WHERE client_name = %s", (client_name,))
-        if cursor.fetchone()[0] > 0:
-            raise HTTPException(status_code=400, detail="Client name must be unique.")
-
-        cursor.execute("INSERT INTO clients (client_id, client_name) VALUES (%s, %s)", (client_uuid.bytes, client_name))
-        conn.commit()
-        return {"client_id": client_uuid.hex, "client_name": client_name}  # Use hex to return a string representation
-    except mysql.connector.Error as err:
-        logger.error(f"Error creating client: {err}")
-        conn.rollback()
-        
-        # Check for unique constraint violation
-        if err.errno == mysql.connector.errorcode.ER_DUP_ENTRY:
-            raise HTTPException(status_code=400, detail="Client name must be unique.")
-        
-        raise HTTPException(status_code=500, detail="Failed to create client.")
-    finally:
-        cursor.close()
-        conn.close()
 
 # API to get all clients
 @app.get("/clients")
@@ -132,7 +104,7 @@ def get_clients():
     cursor = conn.cursor(dictionary=True)
 
     try:
-        cursor.execute("SELECT HEX(client_id) as client_id, client_name FROM clients")
+        cursor.execute("SELECT cl_id, cl_name FROM clients")
         clients = cursor.fetchall()
         return clients
     except mysql.connector.Error as err:
@@ -142,45 +114,6 @@ def get_clients():
         cursor.close()
         conn.close()
 
-# API to update a client
-@app.put("/clients/{client_id}")
-def update_client(client_id: str, client_name: str):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    try:
-        cursor.execute("UPDATE clients SET client_name = %s WHERE client_id = %s", (client_name, bytes.fromhex(client_id)))
-        conn.commit()
-        if cursor.rowcount == 0:
-            raise HTTPException(status_code=404, detail="Client not found.")
-        return {"client_id": client_id, "client_name": client_name}
-    except mysql.connector.Error as err:
-        logger.error(f"Error updating client: {err}")
-        conn.rollback()
-        raise HTTPException(status_code=500, detail="Failed to update client.")
-    finally:
-        cursor.close()
-        conn.close()
-
-# API to delete a client
-@app.delete("/clients/{client_id}")
-def delete_client(client_id: str):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    try:
-        cursor.execute("DELETE FROM clients WHERE client_id = %s", (bytes.fromhex(client_id),))
-        conn.commit()
-        if cursor.rowcount == 0:
-            raise HTTPException(status_code=404, detail="Client not found.")
-        return {"detail": "Client deleted successfully."}
-    except mysql.connector.Error as err:
-        logger.error(f"Error deleting client: {err}")
-        conn.rollback()
-        raise HTTPException(status_code=500, detail="Failed to delete client.")
-    finally:
-        cursor.close()
-        conn.close()
 
 # API to upload JD and store S3 link and client name in the database
 @app.post("/uploadJD")
@@ -196,7 +129,7 @@ async def upload(client_name: str = Form(...), file: UploadFile = File(...)):
 
     try:
         # Check if the client exists by name
-        cursor.execute("SELECT client_id FROM clients WHERE client_name = %s", (client_name,))
+        cursor.execute("SELECT cl_id FROM clients WHERE cl_name = %s", (client_name,))
         client_row = cursor.fetchone()
 
         if not client_row:
@@ -209,7 +142,7 @@ async def upload(client_name: str = Form(...), file: UploadFile = File(...)):
 
         # Insert job description into the database
         cursor.execute(
-            "INSERT INTO job_descriptions (jd_id, client_id, filename, s3_link) VALUES (%s, %s, %s, %s)",
+            "INSERT INTO job_descriptions (jd_id, cl_id, filename, s3_link) VALUES (%s, %s, %s, %s)",
             (jd_id, client_id, file.filename, s3_link)
         )
         conn.commit()
@@ -236,7 +169,7 @@ def get_all_jds():
     cursor = conn.cursor(dictionary=True)
 
     try:
-        cursor.execute("SELECT jd_id, HEX(client_id) as client_id, filename, s3_link, timestamp FROM job_descriptions")
+        cursor.execute("SELECT jd_id, cl_id, filename, s3_link, created_at FROM job_descriptions")
         job_descriptions = cursor.fetchall()
         return job_descriptions
     except mysql.connector.Error as err:
@@ -254,8 +187,8 @@ def update_jd(jd_id: str, client_id: str = Form(...), filename: str = Form(...),
 
     try:
         cursor.execute(
-            "UPDATE job_descriptions SET client_id = %s, filename = %s, s3_link = %s WHERE jd_id = %s",
-            (bytes.fromhex(client_id), filename, s3_link, jd_id)
+            "UPDATE job_descriptions SET cl_id = %s, filename = %s, s3_link = %s WHERE jd_id = %s",
+            (client_id, filename, s3_link, jd_id)
         )
         conn.commit()
         if cursor.rowcount == 0:
@@ -292,4 +225,4 @@ def delete_jd(jd_id: str):
 # Run the application (only if this script is executed directly)
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8001)
