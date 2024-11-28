@@ -16,8 +16,34 @@ spec:
       containers:
       - name: client-master
         imagePullPolicy: Always
-        image: opentechxdoclabs/smart_hr_system:front-end-arm64-v1 # This is the image you built in Minikube
+        image: opentechxdoclabs/smart_hr_system:client-master-arm64 # This is the image you built in Minikube
         ports:
         - containerPort: 8009
+        env:
+        - name: MYSQL_DB
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_DB
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_PASSWORD
+        - name: MYSQL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_HOST
+        - name: MYSQL_PORT
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_PORT
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_USER
       imagePullSecrets:
       - name: docker-registry-secret
