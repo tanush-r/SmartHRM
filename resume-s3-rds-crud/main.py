@@ -94,8 +94,9 @@ def delete_from_s3(s3_link: str):
 def get_clients():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
+
     try:
-        cursor.execute("SELECT HEX(client_id) as client_id, client_name FROM clients")
+        cursor.execute("SELECT cl_id, cl_name FROM clients")
         clients = cursor.fetchall()
         return clients
     except mysql.connector.Error as err:
@@ -105,18 +106,19 @@ def get_clients():
         cursor.close()
         conn.close()
 
+
 # API to get job description filenames by client
 @app.get("/jd_filenames_by_name/{client_name}")
 def get_jd_filenames_by_name(client_name: str):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     try:
-        cursor.execute("SELECT HEX(client_id) as client_id FROM clients WHERE client_name = %s", (client_name,))
+        cursor.execute("SELECT HEX(cl_id) as cl_id FROM clients WHERE cl_name = %s", (client_name,))
         client = cursor.fetchone()
         if not client:
             raise HTTPException(status_code=404, detail="Client not found.")
-        client_id = client['client_id']
-        cursor.execute("SELECT filename FROM job_descriptions WHERE client_id = %s", (bytes.fromhex(client_id),))
+        client_id = client['cl_id']
+        cursor.execute("SELECT filename FROM job_descriptions WHERE cl_id = %s", (bytes.fromhex(client_id),))
         job_filenames = cursor.fetchall()
         return {
             "client_name": client_name,
@@ -289,4 +291,4 @@ def get_summary_counts():
 # Run the application (only if this script is executed directly)
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8002)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

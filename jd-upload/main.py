@@ -30,6 +30,8 @@ logger = logging.getLogger(__name__)
 # Backend service URLs
 #BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 BACKEND_URL = "http://jd-s3:8001/api/jd_s3"
+# BACKEND_URL = "http://localhost:8001/api/jd_s3"
+
 
 # Endpoint 1: Fetch all clients
 @app.get("/clients")
@@ -42,24 +44,6 @@ def get_clients():
     except requests.RequestException as e:
         logger.error(f"Error fetching clients: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch clients.")
-
-# Endpoint 2: Post a new client (Using query parameters)
-@app.post("/clients")
-def post_client(client_name: str = Form(...)):
-    try:
-        create_client_url = f"{BACKEND_URL}/clients"
-        logger.info(f"Creating client with name: {client_name}")
-        
-        # Send client_name as query parameter
-        response = requests.post(create_client_url, params={"client_name": client_name})
-        
-        response.raise_for_status()  # Check for errors in the response
-        logger.info(f"Client creation response: {response.json()}")  # Log the response
-        return {"message": "Client created successfully!", "client": response.json()}
-    except requests.HTTPError as e:
-        logger.error(f"Error creating client {client_name}: {e}")
-        logger.error(f"Response content: {response.content}")  # Log the response content for debugging
-        raise HTTPException(status_code=500, detail="Failed to create client.")
 
 
 # Endpoint 3: Upload a JD for a specific client
@@ -76,7 +60,7 @@ async def upload_jd(
         clients = clients_response.json()
 
         # Verify if the client exists in the list
-        if not any(client['client_name'] == client_name for client in clients):
+        if not any(client['cl_name'] == client_name for client in clients):
             raise HTTPException(status_code=404, detail="Client not found.")
     except requests.RequestException as e:
         logger.error(f"Error fetching clients: {e}")
@@ -100,4 +84,4 @@ async def upload_jd(
 # Run locally with uvicorn
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    uvicorn.run(app, host="0.0.0.0", port=8002)

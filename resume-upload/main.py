@@ -26,7 +26,9 @@ logger = logging.getLogger(__name__)
 
 # Local backend service URL for testing
 # BACKEND_URL = "http://localhost:8000"  # Replace with your backend API URL if different
+
 BACKEND_URL = "http://resume-s3:8000/api/resume_s3"
+
 # Endpoint 1: Fetch all clients
 @app.get("/clients")
 def get_clients():
@@ -66,7 +68,7 @@ async def upload_resume(
         clients = clients_response.json()
 
         # Verify if the client exists in the list
-        if not any(client['client_name'] == client_name for client in clients):
+        if not any(client['cl_name'] == client_name for client in clients):
             raise HTTPException(status_code=404, detail="Client not found.")
 
     except requests.RequestException as e:
@@ -106,4 +108,4 @@ async def upload_resume(
 # Run locally with uvicorn
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    uvicorn.run(app, host="0.0.0.0", port=8003)
