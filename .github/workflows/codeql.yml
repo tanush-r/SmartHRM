@@ -15,7 +15,7 @@ on:
   push:
     branches: [ "codeql" ]
   pull_request:
-    branches: [ "codeql" ]
+    branches: [ "release-mvp-0.6", "codeql" ]
   schedule:
     - cron: '41 0 * * 4'
 
