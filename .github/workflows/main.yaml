@@ -13,7 +13,13 @@ jobs:
     strategy:
       matrix:
         service:
-          - dashboard-api  # Add all microservice folders here
+          - dashboard-api
+          - cand-master
+          - intermediate-master
+          - jd-upload
+          - req-master
+          - resume-upload
+          - resume-viewer # Add all microservice folders here
 
     steps:
       # Step 1: Checkout Code
