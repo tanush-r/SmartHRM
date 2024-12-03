@@ -1,4 +1,4 @@
-name: Code Scan and Build Docker Images
+name: HRM Image build pipeline
 
 on:
   push:
