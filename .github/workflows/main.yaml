@@ -3,7 +3,8 @@ name: Code Scan and Build Docker Images
 on:
   push:
     branches:
-      - release  # Trigger only on the release branch
+      - release-mvp-0.6
+  workflow_dispatch: # Trigger only on the release branch
 
 jobs:
   code-scan-and-build:
@@ -11,8 +12,8 @@ jobs:
     strategy:
       matrix:
         service:
-          - intermediate-master-service
-          - another-service  # Add all microservice folders here
+          - client-master
+          - dashboard-api  # Add all microservice folders here
 
     steps:
       # Step 1: Checkout Code
