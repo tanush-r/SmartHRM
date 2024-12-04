@@ -1,5 +1,6 @@
 # Stage 1: Build the Angular application
-FROM node:18 AS build
+FROM --platform=linux/arm64 node:18 AS build
+
 
 # Set the working directory
 WORKDIR /app
@@ -11,7 +12,6 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 RUN npm install firebase @angular/fire
-
 
 # Copy the rest of the application code
 COPY . .
