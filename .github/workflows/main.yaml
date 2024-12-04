@@ -17,13 +17,13 @@ jobs:
         - front-end # Add all microservice folder
 
     steps:
-    # Step 1: Set up QEMU to enable cross-platform builds
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
-      # Step 2: Set up Docker Buildx (for multi-architecture builds)
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-    # Step 3: Checkout Code
+    # # Step 1: Set up QEMU to enable cross-platform builds
+    # - name: Set up QEMU
+    #   uses: docker/setup-qemu-action@v3
+    #   # Step 2: Set up Docker Buildx (for multi-architecture builds)
+    # - name: Set up Docker Buildx
+    #   uses: docker/setup-buildx-action@v2
+    # # Step 3: Checkout Code
     - name: Checkout repository
       uses: actions/checkout@v3
 
@@ -31,7 +31,7 @@ jobs:
     - name: Build Docker Image for ${{ matrix.service }}
       run: |
         cd ${{ matrix.service }}
-        docker buildx build --platform linux/arm64 -t tracktwok/smart_hr_system:${{ matrix.service }} .
+        docker build -t tracktwok/smart_hr_system:${{ matrix.service }} .
 
     # Step 5: Push Docker Image to Registry (Optional)
     - name: Push Docker Image to Registry
