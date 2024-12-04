@@ -1,5 +1,5 @@
 # Stage 1: Build the Angular application
-FROM --platform=linux/arm64 node:18 AS build
+FROM node:18 AS build
 
 
 # Set the working directory
