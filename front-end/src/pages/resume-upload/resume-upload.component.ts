@@ -7,9 +7,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 interface Client {
-  client_name: string;
+  cl_name: string;
 }
 interface PositionResponse {
+  position: string;
   jd_filenames: string[];
 }
 @Component({
@@ -55,17 +56,18 @@ export class ResumeUploadComponent implements OnInit {
   }
   onClientChange(): void {
     if (this.selectedClientName) {
-      this.http.get<PositionResponse>(`http://localhost:8000/jd_filenames_by_name/${this.selectedClientName}`).subscribe(
-        (data) => {
-          this.positions = data.jd_filenames;
+      this.http.get<PositionResponse>(`/api/resume_upload/positions/${this.selectedClientName}`).subscribe(
+        (data: PositionResponse) => {
+          this.positions = data.jd_filenames; // Store the positions for the selected client
+          // Log available job descriptions
         },
         (error) => {
           console.error('Error fetching positions:', error);
-          this.positions = [];
+          this.positions = []; // Clear positions on error
         }
       );
     } else {
-      this.positions = [];
+      this.positions = []; // Clear positions if no client is selected
     }
   }
   triggerFileUpload(): void {
@@ -130,10 +132,13 @@ export class ResumeUploadComponent implements OnInit {
       formData.append('file', this.selectedFile);
       this.isUploading = true;
       this.uploadStatus = null;
-      this.http.post('api/resume_upload/uploadResume', formData).subscribe(
+      this.http.post('/api/resume_upload/uploadResume', formData).subscribe(
         () => {
           this.isUploading = false;
           this.uploadStatus = 'success';
+          setTimeout(() => {
+            window.location.reload(); // Reload the page
+          }, 2000);
           this.fileName = 'Upload Successful';
           this.isFileViewActive = true; // Show the file view immediately after upload
         },
@@ -181,3 +186,12 @@ export class ResumeUploadComponent implements OnInit {
     }
   }
 }
+
+
+
+
+
+
+
+
+
