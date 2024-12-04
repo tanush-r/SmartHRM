@@ -45,7 +45,7 @@ export class ResumeUploadComponent implements OnInit {
     this.loadClients();
   }
   loadClients(): void {
-    this.http.get<Client[]>('http://shrs-nlb-c8873bc6e76059c6.elb.ap-south-1.amazonaws.com/api/resume_upload/clients').subscribe(
+    this.http.get<Client[]>('/api/resume_upload/clients').subscribe(
       (data) => {
         this.clients = data;
       },
@@ -56,7 +56,7 @@ export class ResumeUploadComponent implements OnInit {
   }
   onClientChange(): void {
     if (this.selectedClientName) {
-      this.http.get<PositionResponse>(`http://shrs-nlb-c8873bc6e76059c6.elb.ap-south-1.amazonaws.com/api/resume_upload/positions/${this.selectedClientName}`).subscribe(
+      this.http.get<PositionResponse>(`/api/resume_upload/positions/${this.selectedClientName}`).subscribe(
         (data: PositionResponse) => {
           this.positions = data.jd_filenames; // Store the positions for the selected client
           // Log available job descriptions
@@ -132,7 +132,7 @@ export class ResumeUploadComponent implements OnInit {
       formData.append('file', this.selectedFile);
       this.isUploading = true;
       this.uploadStatus = null;
-      this.http.post('http://shrs-nlb-c8873bc6e76059c6.elb.ap-south-1.amazonaws.com/api/resume_upload/uploadResume', formData).subscribe(
+      this.http.post('/api/resume_upload/uploadResume', formData).subscribe(
         () => {
           this.isUploading = false;
           this.uploadStatus = 'success';
