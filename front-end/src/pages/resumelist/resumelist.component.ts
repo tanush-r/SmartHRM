@@ -10,12 +10,31 @@ import { ListboxModule } from 'primeng/listbox';
 import { DropdownModule } from 'primeng/dropdown';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBar } from '@angular/material/snack-bar'; // Import MatSnackBar
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-resumelist',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterLink, RouterOutlet, SkeletonModule, ListboxModule, DropdownModule, MatSelectModule, MatIconModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    RouterLink,
+    RouterOutlet,
+    SkeletonModule,
+    ListboxModule,
+    DropdownModule,
+    MatSelectModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatTableModule,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './resumelist.component.html',
   styleUrls: ['./resumelist.component.css']
 })
@@ -27,25 +46,32 @@ export class ResumelistComponent implements OnInit {
   selectedPosition: string = '';
   selectedPositionS3Link: string | null = null;
   isLoadingResumes: boolean = false;
-  statusOptions: Status[] = []; // Store statuses
+  statusOptions: Status[] = [];
+  private pollingSubscription: Subscription | null = null;
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private resumeStateService: ResumeStateService,
-    private snackBar: MatSnackBar // Inject MatSnackBar
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     this.loadClients();
-    this.loadStatuses(); // Load statuses on initialization
+    this.loadStatuses();
     this.restoreState();
+    this.subscribeToResumes();
+  }
+
+  private subscribeToResumes(): void {
+    this.resumeStateService.resumes$.subscribe((resumes: Resume[]) => {
+      this.resumes = resumes;
+    });
   }
 
   private restoreState(): void {
     this.selectedClientId = this.resumeStateService.getSelectedClientId();
     this.selectedPosition = this.resumeStateService.getSelectedPosition();
-    this.resumes = this.resumeStateService.getResumes();
     this.selectedPositionS3Link = this.resumeStateService.getPositionS3Link();
 
     if (this.selectedClientId) {
@@ -59,14 +85,14 @@ export class ResumelistComponent implements OnInit {
 
   loadClients(): void {
     this.http.get<Client[]>('/api/viewer/clients').subscribe(
-      (data: Client[]) => this.clients = data,
+      (data) => (this.clients = data),
       (error) => this.handleError('Error fetching clients', error)
     );
   }
 
   loadStatuses(): void {
-    this.http.get<Status[]>('/api/viewer/statuses').subscribe(
-      (data: Status[]) => this.statusOptions = data,
+    this.http.get<Status[]>('api/viewer/statuses').subscribe(
+      (data) => (this.statusOptions = data),
       (error) => this.handleError('Error fetching statuses', error)
     );
   }
@@ -83,7 +109,7 @@ export class ResumelistComponent implements OnInit {
 
   loadPositions(clientId: string): void {
     this.http.get<Position[]>(`/api/viewer/positions?cl_id=${clientId}`).subscribe(
-      (data: Position[]) => this.positions = data,
+      (data) => (this.positions = data),
       (error) => this.handleError('Error fetching positions', error)
     );
   }
@@ -92,10 +118,10 @@ export class ResumelistComponent implements OnInit {
     if (this.selectedClientId && this.selectedPosition) {
       this.isLoadingResumes = true;
       this.http.get<Resume[]>(`/api/viewer/resumes?jd_id=${this.selectedPosition}`).subscribe(
-        (data: Resume[]) => {
-          this.resumes = data.map(resume => ({
+        (data) => {
+          this.resumes = data.map((resume) => ({
             ...resume,
-            st_name: this.getStatusName(resume.st_id) // Ensure status name is fetched
+            st_name: this.getStatusName(resume.st_id),  // Update status name
           }));
           this.resumeStateService.setResumes(this.resumes);
           this.isLoadingResumes = false;
@@ -110,9 +136,10 @@ export class ResumelistComponent implements OnInit {
     }
   }
 
-  getStatusName(st_id: string): string {
-    const status = this.statusOptions.find(s => s.st_id === st_id);
-    return status ? status.st_name : 'Unknown Status'; // Return the status name or a default
+  getStatusName(st_id: string | null): string {
+    if (!st_id) return 'Unknown Status'; // Handle null case
+    const status = this.statusOptions.find((s) => s.st_id === st_id);
+    return status ? status.st_name : 'Unknown Status';
   }
 
   downloadResume(resume: Resume): void {
@@ -130,8 +157,8 @@ export class ResumelistComponent implements OnInit {
           resumeS3Link: resume.s3_link,
           positionS3Link: this.selectedPositionS3Link,
           resumeId: resume.resume_id,
-          jdId: resume.jd_id
-        }
+          jdId: resume.jd_id,
+        },
       });
     } else {
       this.snackBar.open('No S3 link available for the selected resume.', 'Close', { duration: 3000 });
@@ -139,12 +166,10 @@ export class ResumelistComponent implements OnInit {
   }
 
   onPositionSelect(): void {
-    const selectedPosition = this.positions.find(pos => pos.jd_id === this.selectedPosition);
+    const selectedPosition = this.positions.find((pos) => pos.jd_id === this.selectedPosition);
     if (selectedPosition) {
       this.selectedPositionS3Link = selectedPosition.s3_link;
       this.resumeStateService.setPositionS3Link(this.selectedPositionS3Link);
-    } else {
-      console.error('Selected position not found');
     }
   }
 
@@ -163,20 +188,24 @@ export class ResumelistComponent implements OnInit {
       this.snackBar.open('Status cannot be empty. Please select a status.', 'Close', { duration: 3000 });
       return;
     }
-  
+
     const apiUrl = `/api/viewer/resumes/status/${resume.resume_id}?st_id=${resume.st_id}`;
-    
-    console.log('Updating status with URL:', apiUrl); // Log the URL for debugging
-  
+
     this.http.post(apiUrl, {}).subscribe(
-      (response) => {
-        console.log('Status updated successfully:', response);
+      () => {
         this.snackBar.open('Status updated successfully.', 'Close', { duration: 3000 });
+
+        const updatedResumes = this.resumes.map((r) =>
+          r.resume_id === resume.resume_id
+            ? { ...r, st_id: resume.st_id, st_name: this.getStatusName(resume.st_id) }
+            : r
+        );
+        this.resumeStateService.setResumes(updatedResumes);
       },
       (error) => this.handleError('Error updating status', error)
     );
-  }  
-  
+  }
+
   sortResumes(order: 'asc' | 'desc'): void {
     this.resumes.sort((a, b) => {
       const dateA = new Date(a.created_at).getTime();
@@ -188,9 +217,14 @@ export class ResumelistComponent implements OnInit {
   onStatusChange(resume: Resume): void {
     this.updateStatus(resume);
   }
-  
+
   private handleError(message: string, error: any): void {
     console.error(message, error);
     this.snackBar.open(`${message}. Please try again later.`, 'Close', { duration: 3000 });
+  }
+
+  // Call this method after updating the status in the question page
+  onStatusUpdated(): void {
+    this.fetchResumes();  // Refresh resume list after status update
   }
 }

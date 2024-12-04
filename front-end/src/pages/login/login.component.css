@@ -1,0 +1,145 @@
+/* Basic reset */
+* {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Body and HTML elements to ensure full height */
+  html, body {
+    height: 100% !important;
+    font-family: Arial, sans-serif !important;
+  }
+  
+  /* Navbar styles */
+  .navbar {
+    background-color: #007bff !important; /* Blue background */
+    padding: 10px 20px !important;
+    position: fixed !important;
+    width: 100% !important;
+    top: 0 !important;
+    z-index: 1000 !important;
+  }
+  
+  .navbar .logo {
+    width: 50px !important;
+    height: 50px !important;
+    margin-right: 10px !important;
+  }
+  
+  .navbar span {
+    font-size: 24px !important;
+    font-weight: bold !important;
+    color: white !important;
+  }
+  
+  /* Container for centering the login form */
+  /* Container for centering the login form */
+  /* Basic reset */
+  /* Basic reset */
+  * {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Container for centering the login form */
+  .container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: fixed !important; /* Use fixed positioning for better control */
+    top: 0 !important; /* Align top to the viewport */
+    left: 0 !important; /* Align left to the viewport */
+    right: 0 !important; /* Ensure the container spans full width */
+    bottom: 0 !important; /* Ensure the container spans full height */
+    background-color: #fff !important;
+    overflow: hidden !important; /* Prevent any overflow */
+  }
+  
+  /* Optional: If you want to ensure the form is centered with full width */
+  .form-container {
+    width: 100% !important; /* Ensure the form container is full width */
+    max-width: 100% !important; /* Prevent form from exceeding screen width */
+    padding: 0 !important; /* Remove any padding if needed */
+  }
+  
+  
+  /* Login box styles */
+  .login-box {/* Container for centering the login form */
+    .container {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      position: absolute !important; /* Use absolute positioning */
+      top: 0 !important; /* Align top to the viewport */
+      left: 10 !important; /* Align left to the viewport */
+      right: 0 !important; /* Ensure the container spans full width */
+      bottom: 0 !important; /* Ensure the container spans full height */
+      background-color: #f0f4f7ba !important;
+    }
+    
+    background-color: white !important;
+    padding: 30px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+    width: 100% !important;
+    max-width: 400px !important; /* Responsive max width */
+    text-align: center !important;
+  }
+  
+  h2 {
+    margin-bottom: 20px !important;
+    font-size: 24px !important;
+    color: #333 !important;
+  }
+  
+  .example-form {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important; /* Space between form fields */
+  }
+  
+  .form-field {
+    margin-bottom: 20px !important;
+    text-align: left !important;
+  }
+  
+  .mat-form-field {
+    width: 100% !important;
+  }
+  
+  .toggle-password {
+    background: none !important;
+    border: none !important;
+    font-size: 14px !important;
+    color: #007bff !important;
+    cursor: pointer !important;
+    text-decoration: underline !important;
+    margin-top: 10px !important;
+    text-align: right !important;
+  }
+  
+  .toggle-password:hover {
+    text-decoration: none !important;
+  }
+  
+  .login-btn {
+    width: 100% !important;
+    padding: 12px !important;
+    background-color: #007bff !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 4px !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+    margin-top: 10px !important;
+  }
+  
+  .login-btn:hover {
+    background-color: #0056b3 !important;
+  }
+  
+  .login-btn:focus {
+    outline: none !important; 
+  }

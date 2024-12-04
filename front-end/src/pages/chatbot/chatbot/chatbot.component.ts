@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms'; // Import ReactiveFormsModule
-import { CommonModule } from '@angular/common'; // Import CommonModule
+import { ReactiveFormsModule, FormsModule } from '@angular/forms'; 
+import { CommonModule } from '@angular/common'; 
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,9 +10,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
-import { ChatbotService } from './Chat service';  // Import the ChatbotService
-
+import { ChatbotService } from './Chat service';// Ensure the correct service path
+import { marked } from 'marked'; // Import marked
+import { SkeletonModule } from 'primeng/skeleton';
 
 interface Message {
   sender: string;
@@ -23,13 +23,23 @@ interface Message {
 @Component({
   selector: 'app-chatbot',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, CommonModule, MatFormFieldModule, MatMenuModule, MatCardModule, MatButtonModule, MatSelectModule, MatIconModule, MatToolbarModule],
+  imports: [
+    ReactiveFormsModule, 
+    FormsModule, 
+    CommonModule, 
+    MatFormFieldModule, 
+    MatMenuModule, 
+    MatCardModule, 
+    MatButtonModule, 
+    MatSelectModule, 
+    MatIconModule, 
+    MatToolbarModule,
+    SkeletonModule
+  ],
   templateUrl: './chatbot.component.html',
   styleUrls: ['./chatbot.component.css']
 })
 export class ChatbotComponent implements OnInit {
-
-  prompt: string = '';  // This will bind to the input field
   messages: Message[] = [
     {
       sender: 'bot',
@@ -37,55 +47,59 @@ export class ChatbotComponent implements OnInit {
       editable: false
     }
   ];
-  userInputForm = new FormControl('');  // Input field form control
-  editingIndex: number | null = null;   // Track which message is being edited
+  
+  userInputForm = new FormControl('');  
+  isLoading: boolean = false; // Loading state
 
   constructor(
-    private router: Router,
     private dialogRef: MatDialogRef<ChatbotComponent>,
-    private chatbotService: ChatbotService  // Inject the ChatbotService
+    private chatbotService: ChatbotService  
   ) {}
 
   ngOnInit() {}
 
   sendMessage() {
     const userText = this.userInputForm.value?.trim();
+    
+    // Ensure the user input is not empty
     if (!userText) {
-      return; // Prevent adding empty messages
+      return; 
     }
 
-    if (this.editingIndex !== null) {
-      // If editing a message, update it
-      this.messages[this.editingIndex].text = userText;
-      this.editingIndex = null; // Reset editing index
-    } else {
-      // Add new user's message
-      const userMessage: Message = {
-        sender: 'user',
-        text: userText,
-        editable: true  // Allow editing of the message
-      };
-      this.messages.push(userMessage);
+    // Add the user's message to the chat
+    this.addMessage('user', userText);
 
-      // Call the service to get the bot's response
-      this.chatbotService.getBotResponse(userText).subscribe((response: string) => {
-        const botMessage: Message = {
-          sender: 'bot',
-          text: response,
-          editable: false
-        };
-        this.messages.push(botMessage);  // Add bot response to the message list
-      });
-    }
+    // Set loading state to true
+    this.isLoading = true;
 
-    // Clear input field after sending
+    // Call the chatbot service to get the bot's response
+    this.chatbotService.getBotResponse(userText).subscribe(
+      (response: { human_response: string }) => {
+        // Ensure the response is treated as a string
+        const botResponseText = marked(response.human_response) as string; // Convert Markdown to HTML
+        this.addMessage('bot', botResponseText);
+      },
+      error => {
+        console.error('Error fetching bot response', error);
+        this.addMessage('bot', 'Sorry, I could not process your request.'); 
+      }
+    );
+
+    // Clear the input field after sending the message
     this.userInputForm.setValue('');
   }
 
-  editMessage(index: number) {
-    // Set the input field value to the message text for editing
-    this.userInputForm.setValue(this.messages[index].text);
-    this.editingIndex = index;  // Mark the message as being edited
+  private addMessage(sender: string, text: string) {
+    const message: Message = {
+      sender,
+      text,
+      editable: false
+    };
+    this.messages.push(message);
+    // Reset loading state if it's the bot's response
+    if (sender === 'bot') {
+      this.isLoading = false; // Reset loading state
+    }
   }
 
   closeChatbot() {

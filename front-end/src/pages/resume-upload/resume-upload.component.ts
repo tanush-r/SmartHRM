@@ -194,4 +194,3 @@ export class ResumeUploadComponent implements OnInit {
 
 
 
-

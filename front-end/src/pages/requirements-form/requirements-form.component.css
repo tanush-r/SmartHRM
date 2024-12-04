@@ -1,172 +1,148 @@
 .form-container {
-    max-width: 900px;
-    width: 100%;
-    margin-left: 230px;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
+  max-width: 900px !important;
+  width: 100% !important;
+  margin-left: 230px !important;
+  padding: 20px !important;
+  background-color: #fff !important;
+  border: 1px solid #ccc !important;
+  border-radius: 5px !important;
+}
 
+.add-client-banner {
+  background-color: #0747A6 !important;
+  height: 100px !important;
+  color: #fff !important;
+  padding: 10px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  border-radius: 5px 5px 0 0 !important;
+}
 
-  .add-client-banner {
-    background-color: #0747A6;
-    height: 100px;
-    color: #fff;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 5px 5px 0 0; /* Rounded corners for the top */
-  }
+.add-client-banner span {
+  font-size: 18px !important;
+  font-weight: bold !important;
+  width: 100% !important;
+  margin-right: auto !important;
+}
 
-  .add-client-banner span {
-    font-size: 18px;
-    font-weight: bold;
-    width: 100%;
-    margin-right: auto; /* Ensures the span is aligned to the left */
-  }
-  .close-button {
-    background-color: transparent;
-    border: none;
-    width: 50px;
-    color: #fff;
-    cursor: pointer;
-    font-size: 18px;
-    margin-left: auto; 
-  }
- 
-  h6 {
-    font-size: 1rem;
-    font-weight: bold;
-  }
-  
-  /* Section styling */
-  .section {
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f5f5f5;
-  }
-  
+.close-button {
+  background-color: transparent !important;
+  border: none !important;
+  width: 50px !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  font-size: 18px !important;
+  margin-left: auto !important;
+}
 
-  
-  /* Individual form rows and groups */
-  .form-row {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
-  }
-  
-  .form-group {
-    flex: 1 1 100%; /* 50% width for two-column layout */
-    padding: 10px;
-  }
-  
-  label {
-   
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .form-group.wide {
-    flex: 1 1 100%; /* Make the container span full width */
-  }
-  
-  /* Button styling */
-  button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0069d9;
-  }
-  
-  /* Modal header */
-  .modal-header {
-    background-color: #007bff;
-    color: white;
-    padding: 15px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-  }
-  
-  .modal-title {
-    font-size: 20px;
-    font-weight: bold;
-  }
-  
-  .btn-close {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-  }
+h6 {
+  font-size: 1rem !important;
+  font-weight: bold !important;
+}
 
-  .submit-button {
-    background-color:#0747A6; /* Different background color for submit button */
-    border-color: #0747A6; /* Different border color for submit button */
-    width:15%;
-    margin-left: 210px;
-    
-  }
+/* Section styling */
+.section {
+  margin-bottom: 20px !important;
+  padding: 10px !important;
+  border: 1px solid #ccc !important;
+  border-radius: 5px !important;
+  background-color: #f5f5f5 !important;
+}
 
-  /* Container for select input and custom icon */
+/* Individual form rows and groups */
+.form-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  margin-bottom: 15px !important;
+}
+
+.form-group {
+  flex: 1 1 100% !important; 
+  padding: 10px !important;
+}
+
+label {
+  display: block !important;
+  margin-bottom: 5px !important;
+}
+
+.form-group.wide {
+  flex: 1 1 100% !important;
+}
+
+/* Button styling */
+button {
+  width: 100% !important;
+  padding: 10px !important;
+  background-color: #007bff !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 3px !important;
+  cursor: pointer !important;
+}
+
+button:hover {
+  background-color: #0069d9 !important;
+}
+
+/* Modal header */
+.modal-header {
+  background-color: #007bff !important;
+  color: white !important;
+  padding: 15px !important;
+  border-top-left-radius: 5px !important;
+  border-top-right-radius: 5px !important;
+}
+
+.modal-title {
+  font-size: 20px !important;
+  font-weight: bold !important;
+}
+
+.btn-close {
+  background: none !important;
+  border: none !important;
+  color: white !important;
+  font-size: 24px !important;
+  cursor: pointer !important;
+}
+
+.submit-button {
+  background-color:#0747A6 !important;
+  border-color: #0747A6 !important;
+  width:15% !important;
+  margin-left: 210px !important;
+}
+
+/* Container for select input and custom icon */
 .dropdown-container {
-  position: relative;
-  width: 100%;
+position: relative !important;
+width: 100% !important;
 }
 
 /* Style the select input and hide the default arrow */
 .dropdown-container select {
-  width: 100%;
-  appearance: none; /* Removes default dropdown arrow */
-  padding-right: 30px; /* Space for custom icon */
+width: 100% !important;
+appearance: none !important; 
+padding-right: 30px !important;
 }
 
 /* Position and style the custom dropdown icon */
 .dropdown-icon {
-  position: absolute;
-  right: 10px; /* Adjust as needed */
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none; /* Prevent icon from interfering with select */
-  font-size: 16px;
-  color: #777; /* Customize color as needed */
+position: absolute !important;
+right: 10px !important;
+top: 50% !important;
+transform: translateY(-50%) !important;
+pointer-events: none !important;
+font-size: 16px !important;
+color: #777 !important;
 }
 
 .masked {
-  background-color: #f0f0f0; 
-  color: transparent; 
-  text-shadow: 0 0 0 black; 
+background-color: #f0f0f0 !important; 
+color: transparent !important; 
+text-shadow: 0 0 0 black !important; 
 }
 
 
-  
-  
-  
-  
-  /* Adjustments for smaller screens */
-  @media (max-width: 768px) {
-    .form-container {
-      margin-left: auto;
-      margin-right: auto;
-    }
-  
-    .form-group {
-      flex: 1 1 100%; /* Full width on smaller screens */
-    }
-  
-    .add-client-banner span {
-      font-size: 16px;
-    }
-  }
-  

@@ -13,11 +13,13 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label for="companyName">Company Name*</label>
-            <select class="form-control" id="companyName" formControlName="cl_id" [disabled]="readonly" [ngClass]="{'masked': readonly}" required>
-              <option value="">Select Company</option>
-              <option *ngFor="let client of clients" [value]="client.cl_id">{{ client.cl_name }}</option>
-            </select>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Company Name</mat-label>
+              <mat-select formControlName="cl_id" [disabled]="readonly" [ngClass]="{'masked': readonly}" required>
+                <mat-option value="">Select Company</mat-option>
+                <mat-option *ngFor="let client of clients" [value]="client.cl_id">{{ client.cl_name }}</mat-option>
+              </mat-select>
+            </mat-form-field>
             <div *ngIf="requirementForm.get('cl_id')?.invalid && requirementForm.get('cl_id')?.touched" class="text-danger">
               Company Name is required.
             </div>
@@ -26,8 +28,10 @@
 
         <div class="col-md-6">
           <div class="form-group">
-            <label for="requirementName">Requirement Name*</label>
-            <input type="text" class="form-control" id="requirementName" formControlName="rq_name" placeholder="Enter requirement name" [disabled]="readonly" [ngClass]="{'masked': readonly}" required>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Requirement Name</mat-label>
+              <input matInput type="text" formControlName="rq_name" placeholder="Enter requirement name" [disabled]="readonly" [ngClass]="{'masked': readonly}" required />
+            </mat-form-field>
             <div *ngIf="requirementForm.get('rq_name')?.invalid && requirementForm.get('rq_name')?.touched" class="text-danger">
               Requirement Name is required.
             </div>
@@ -38,14 +42,21 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label for="location">Location</label>
-            <input type="text" class="form-control" id="location" formControlName="rq_loc" placeholder="Enter location" [disabled]="readonly" [ngClass]="{'masked': readonly}">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Job Location</mat-label>
+              <input matInput type="text" formControlName="rq_loc" placeholder="Enter location" [disabled]="readonly" [ngClass]="{'masked': readonly}" required />
+            </mat-form-field>
+            <div class="text-danger" *ngIf="requirementForm.get('rq_loc')?.invalid && requirementForm.get('rq_loc')?.touched">
+              Job Location is required.
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label for="mapLink">Map Link</label>
-            <input type="text" class="form-control" id="mapLink" formControlName="rq_map_url" placeholder="Enter map link" [disabled]="readonly" [ngClass]="{'masked': readonly}">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Job Location Map Link</mat-label>
+              <input matInput type="text" formControlName="rq_map_url" placeholder="Enter map link" [disabled]="readonly" [ngClass]="{'masked': readonly}" />
+            </mat-form-field>
           </div>
         </div>
       </div>
@@ -56,29 +67,24 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label for="numberOfPositions">No. of Positions</label>
-            <input type="number" class="form-control" id="numberOfPositions" formControlName="rq_no_pos" placeholder="Enter number of positions" [disabled]="readonly" [ngClass]="{'masked': readonly}">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Number of Positions</mat-label>
+              <input matInput type="number" formControlName="rq_no_pos" placeholder="Enter number of positions" [disabled]="readonly" [ngClass]="{'masked': readonly}" required/>
+            </mat-form-field>
+            <div class="text-danger" *ngIf="requirementForm.get('rq_no_pos')?.invalid && requirementForm.get('rq_no_pos')?.touched">
+              Number of Positions is required.
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label for="qualification">Qualification</label>
-            <input type="text" class="form-control" id="qualification" formControlName="rq_qual" placeholder="Enter qualification" [disabled]="readonly" [ngClass]="{'masked': readonly}">
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="skills">Skills</label>
-            <input type="text" class="form-control" id="skills" formControlName="rq_skills" placeholder="Enter skills" [disabled]="readonly" [ngClass]="{'masked': readonly}">
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="experience">Experience (in years)</label>
-            <input type="number" class="form-control" id="experience" formControlName="rq_exp" placeholder="Enter experience" [disabled]="readonly" [ngClass]="{'masked': readonly}">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Qualification</mat-label>
+              <input matInput type="text" formControlName="rq_qual" placeholder="Enter qualification" [disabled]="readonly" [ngClass]="{'masked': readonly}" required />
+            </mat-form-field>
+            <div class="text-danger" *ngIf="requirementForm.get('rq_qual')?.invalid && requirementForm.get('rq_qual')?.touched">
+              Qualification is required.
+            </div>
           </div>
         </div>
       </div>
@@ -86,20 +92,52 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label for="workMode">Work Mode</label>
-            <select class="form-control" id="workMode" formControlName="rq_work_mode" [disabled]="readonly" [ngClass]="{'masked': readonly}">
-              <option value="">Select work mode</option>
-              <option value="remote">Remote</option>
-              <option value="onsite">Onsite</option>
-              <option value="hybrid">Hybrid</option>
-            </select>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Skills</mat-label>
+              <input matInput type="text" formControlName="rq_skills" placeholder="Enter skills" [disabled]="readonly" [ngClass]="{'masked': readonly}" required/>
+            </mat-form-field>
+            <div class="text-danger" *ngIf="requirementForm.get('rq_skills')?.invalid && requirementForm.get('rq_skills')?.touched">
+              Skills are required.
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Experience (in years)</mat-label>
+              <input matInput type="number" formControlName="rq_exp" placeholder="Enter experience" [disabled]="readonly" [ngClass]="{'masked': readonly}" required/>
+            </mat-form-field>
+            <div class="text-danger" *ngIf="requirementForm.get('rq_exp')?.invalid && requirementForm.get('rq_exp')?.touched">
+              Experience is required.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Work Mode</mat-label>
+              <mat-select formControlName="rq_work_mode" [disabled]="readonly" [ngClass]="{'masked': readonly}"required>
+                <mat-option value="">Select work mode</mat-option>
+                <mat-option value="remote">Remote</mat-option>
+                <mat-option value="onsite">Onsite</mat-option>
+                <mat-option value="hybrid">Hybrid</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="text-danger" *ngIf="requirementForm.get('rq_work_mode')?.invalid && requirementForm.get('rq_work_mode')?.touched">
+              Work Mode is required.
+            </div>
           </div>
         </div>
         
         <div class="col-md-6">
           <div class="form-group">
-            <label for="budget">Budget</label>
-            <input type="number" class="form-control" id="budget" formControlName="rq_budget" placeholder="Enter budget" [disabled]="readonly" [ngClass]="{'masked': readonly}">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Budget (LPA)</mat-label>
+              <input matInput type="number" formControlName="rq_budget" step="0.1" placeholder="Enter budget" [disabled]="readonly" [ngClass]="{'masked': readonly}" />
+            </mat-form-field>
           </div>
         </div>
       </div>
@@ -107,27 +145,38 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label for="noticePeriod">Notice Period</label>
-            <select class="form-control" id="noticePeriod" formControlName="rq_no_of_days" [disabled]="readonly" [ngClass]="{'masked': readonly}">
-              <option value="">Select notice period</option>
-              <option value="immediate">Immediate</option>
-              <option value="15_days">15 Days</option>
-              <option value="30_days">30 Days</option>
-            </select>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Notice Period</mat-label>
+              <mat-select formControlName="rq_no_of_days" [disabled]="readonly" [ngClass]="{'masked': readonly}" required>
+                <mat-option value="">Select notice period</mat-option>
+                <mat-option value="immediate">Immediate</mat-option>
+                <mat-option value="15_days">7 Days</mat-option>
+                <mat-option value="30_days">15 Days</mat-option>
+                <mat-option value="15_days">30 Days</mat-option>
+                <mat-option value="30_days">45 Days</mat-option>
+                <mat-option value="15_days">60 Days</mat-option>
+                <mat-option value="30_days">90 Days</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="text-danger" *ngIf="requirementForm.get('rq_no_of_days')?.invalid && requirementForm.get('rq_no_of_days')?.touched">
+              Notice Period is required.
+            </div>
           </div>
         </div>
 
         <div class="col-md-6">
           <div class="form-group">
-            <label for="requirementNotes">Requirement Notes</label>
-            <textarea class="form-control" id="requirementNotes" formControlName="rq_notes" cols="10" placeholder="Enter notes" [disabled]="readonly" [ngClass]="{'masked': readonly}"></textarea>
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Requirement Notes</mat-label>
+              <textarea matInput formControlName="rq_notes" placeholder="Enter notes" [disabled]="readonly" [ngClass]="{'masked': readonly}"></textarea>
+            </mat-form-field>
           </div>
         </div>
       </div>
-
+     
       <div class="row mt-4" *ngIf="!readonly">
         <div class="button-container">
-          <button type="submit" class="btn btn-secondary submit-button" [disabled]="requirementForm.invalid && !isEditing">Submit</button>
+          <button mat-raised-button color="primary" type="submit" class="submit-button" [disabled]="requirementForm.invalid && !isEditing">Submit</button>
         </div>
       </div>
     </div>
