@@ -6,15 +6,13 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ChatbotService {
-
-  private apiUrl = 'http://your-backend-url/api/chatbot'; // URL to your backend API
+  private apiUrl = 'http://localhost:8008/api/ai-assistant-4o/query'; // Ensure this is correct
 
   constructor(private http: HttpClient) {}
 
-  // Sending the user input to the backend and getting the AI response
-  getBotResponse(userInput: string): Observable<string> {
-    const requestPayload = { message: userInput }; // Payload to send to the backend
-
-    return this.http.post<string>(this.apiUrl, requestPayload);
-  }
+  // Make sure to use POST if your FastAPI endpoint expects it
+  getBotResponse(userInput: string): Observable<{ human_response: string }> {
+    const encodedQuery = encodeURIComponent(userInput); // Encode the user input
+    return this.http.get<{ human_response: string }>(`${this.apiUrl}?query=${encodedQuery}`);
+}
 }

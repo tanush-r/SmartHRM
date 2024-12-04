@@ -5,13 +5,29 @@ import { Client, Requirement, Candidate } from '../candidate-master/candidate.mo
 import { CandidateService } from '../candidate-master/client.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button'; // For Material buttons
+import { MatCardModule } from '@angular/material/card'; // For Material cards
+import { MatFormFieldModule } from '@angular/material/form-field'; // For Material form fields
+import { MatInputModule } from '@angular/material/input'; // For Material input fields
+import { MatSelectModule } from '@angular/material/select'; // For dropdown menus
+import { MatCheckboxModule } from '@angular/material/checkbox'; // For Material checkboxes
+import { MatIconModule } from '@angular/material/icon'; // For Material icons
+
 
 @Component({
   selector: 'app-candidate-form',
   templateUrl: './candidate-form.component.html',
   styleUrls: ['./candidate-form.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule]
+  imports: [ReactiveFormsModule, CommonModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatCardModule,
+    MatButtonModule
+  ]
 })
 export class CandidateFormComponent implements OnInit {
   candidateForm: FormGroup;
@@ -28,20 +44,22 @@ export class CandidateFormComponent implements OnInit {
     this.candidateForm = this.fb.group({
       cl_id: ['', Validators.required], // Client ID
       rq_id: ['', Validators.required], // Requirement ID
-      cd_first_name: ['', Validators.required], // Candidate first name
-      cd_last_name: [''], // Candidate last name (optional)
-      cd_email: ['', [Validators.required, Validators.email]], // Make email mandatory with email validation
-      cd_phno: [''], // Phone number (optional)
-      cd_loc: [''], // Location (optional)
-      cd_qual: [''], // Qualification (optional)
-      cd_total_exp: [0, [Validators.min(0)]], // Total experience (default to 0)
-      cd_related_exp: [0, [Validators.min(0)]], // Relevant experience (default to 0)
-      cd_cur_ctc: [0, [Validators.min(0)]], // Current CTC (default to 0)
-      cd_exp_ctc: [0, [Validators.min(0)]], // Expected CTC (default to 0)
-      cd_notice: [''], // Notice period (optional)
+      cd_first_name: ['', Validators.required, Validators.pattern('^[A-Za-z\\s]+$')], // Candidate first name
+      cd_last_name: ['', Validators.required, Validators.pattern('^[A-Za-z\\s]+$')], // Candidate last name (optional)
+      cd_email: ['', Validators.required, Validators.email], // Make email mandatory with email validation
+      cd_phno: ['', Validators.required, 
+        Validators.maxLength(10), 
+        Validators.pattern('^[0-9]*$')], // Phone number (optional)
+      cd_loc: ['', Validators.required,Validators.pattern('^[A-Za-z\\s]+$')], // Location (optional)
+      cd_qual: ['', Validators.required], // Qualification (optional)
+      cd_total_exp: [0, Validators.required, [Validators.min(0)]], // Total experience (default to 0)
+      cd_related_exp: [0 ,Validators.required, [Validators.min(0)]], // Relevant experience (default to 0)
+      cd_cur_ctc: [0, Validators.required, [Validators.min(0)]], // Current CTC (default to 0)
+      cd_exp_ctc: [0, Validators.required, [Validators.min(0)]], // Expected CTC (default to 0)
+      cd_notice: ['',Validators.required], // Notice period (optional)
       cd_work_mode: [''], // Work mode (optional)
       cd_valid_passport: [false], // Valid passport status (optional)
-      cd_skills: [''], // Skills (optional)
+      cd_skills: ['',Validators.required], // Skills (optional)
     });
   }
 
@@ -113,4 +131,16 @@ export class CandidateFormComponent implements OnInit {
   closeDialog(): void {
     this.dialogRef.close(); // Close dialog
   }
+
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'];
+    const isNumberKey = event.key >= '0' && event.key <= '9';
+    const isAllowedKey = allowedKeys.includes(event.key);
+  
+    if (!isNumberKey && !isAllowedKey) {
+      event.preventDefault();
+    }
+  }
+  
+
 }

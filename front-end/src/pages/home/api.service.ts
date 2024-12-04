@@ -27,7 +27,7 @@ export interface PositionMetrics {
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = '/'; // Set your backend API URL
+  private apiUrl = 'http://localhost:8000'; // Set your backend API URL
 
   constructor(private http: HttpClient) {}
 

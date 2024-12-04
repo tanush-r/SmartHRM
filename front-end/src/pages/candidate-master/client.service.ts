@@ -8,7 +8,7 @@ import { Client, Candidate, Requirement } from './candidate.model'; // Import ne
   providedIn: 'root'
 })
 export class CandidateService {
-  private apiUrl = '/api/candidate-master'; // Ensure this is your backend API URL
+  private apiUrl = 'http://localhost:8004'; // Ensure this is your backend API URL
 
   constructor(private http: HttpClient) { }
 

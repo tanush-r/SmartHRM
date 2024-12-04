@@ -1,0 +1,58 @@
+<!-- Navbar -->
+<nav class="navbar">
+  <a
+    routerLink="/"
+    class="d-flex align-items-center mb-2 text-white text-decoration-none"
+  >
+    <img src="assets/user_logo.jpg" alt="HR Hub Logo" class="logo" />
+    <span class="fs-4 fw-bold">HR Hub</span>
+  </a>
+</nav>
+<!-- Centering the form -->
+<div class="container">
+  <div class="login-box">
+    <h2>Login</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="login()" class="example-form">
+      <mat-form-field class="example-full-width form-field" appearance="fill">
+        <mat-label>Email address</mat-label>
+        <input
+          matInput
+          placeholder="Enter your email"
+          formControlName="username"
+          required
+        />
+        <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+          Username is required.
+        </mat-error>
+        <mat-error *ngIf="loginForm.get('username')?.hasError('email')">
+          Please enter a valid email.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="example-full-width form-field" appearance="fill">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          placeholder="Enter your password"
+          [type]="show ? 'text' : 'password'"
+          formControlName="password"
+          required
+        />
+        <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+          Password is required.
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary" class="login-btn" type="submit">
+        Login
+      </button>
+      <button
+        mat-button
+        color="accent"
+        class="toggle-password"
+        type="button"
+        (click)="togglePasswordVisibility()"
+      >
+        {{ show ? "Hide" : "Show" }} Password
+      </button>
+    </form>
+  </div>
+</div>
