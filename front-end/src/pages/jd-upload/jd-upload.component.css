@@ -1,106 +1,94 @@
-/* General container styling */
+/* Ensure dropdown text is visible */
+.form-select {
+  color: #000; /* Change to your desired text color */
+  background-color: #fff; /* Set a white background for contrast */
+}
 
+/* General container styling */
 .fullscreen-card {
-    width: 80vw;    /* Full width of the viewport */
-    height: 50vw;    /* Height based on content or adjust as needed */
-    margin: 30px auto;
-    padding: 0;      /* Optional: Remove padding if needed */
-    align-content: center;
-    display: flex;
-  }
-  
-        
-  /* Form labels */
-  label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-  }
-  
-  /* Change the button background color to #0747A6 */
-  .btn-success {
-      background-color: #0747A6;
-      border-color: #0747A6;
-  }
-  
-  .btn-success:hover {
-      background-color: #053b84; /* Slightly darker shade for hover effect */
-      border-color: #053b84;
-  }
-  
-  /* Change the button background color to #0747A6 */
-  .btn-primary {
-      background-color: #0747A6;
-      border-color: #0747A6;
-  }
-  
-  .btn-primary:hover {
-      background-color: #053b84; /* Slightly darker shade for hover effect */
-      border-color: #053b84;
-  }
-  
-  /* Uploaded File View */
-  .document-preview {
-    margin-top: 16px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fcfbfb;
-  }
-  
-  /* Controls and Zoom buttons */
-  /* Zoom section alignment */
-  .controls {
-    display: flex;
-    justify-content: flex-end;  /* Aligns content to the right */
-    margin-right: 0;  /* Ensures no margin on the right */
-  }
-  
-  
-  button {
-    background-color: #0747A6;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  button:hover {
-    background-color: #053b7a;
-  }
-  
-  /* PDF and Document Viewers */
-  pdf-viewer, ngx-doc-viewer {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-    height: 500px;
-  }
-  
-  /* Title Styling */
-  h6 {
-    font-weight: bold;
-    color: #050505;
-    margin-bottom: 20px;
-  }
-  
-  /* Centering content */
-  .row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .container {
+  width: 80vw;    
+  height: 50vw;    
+  margin: 30px auto;
+  padding: 0;      
+  align-content: center;
+  display: flex;
+}
+
+/* Form labels */
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+/* Button styles */
+.btn-success, .btn-primary {
+  background-color: #0747A6;
+  border-color: #0747A6;
+}
+.btn-success:hover, .btn-primary:hover {
+  background-color: #053b84; 
+  border-color: #053b84;
+}
+
+/* Uploaded File View */
+.document-preview {
+  margin-top: 16px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fcfbfb;
+}
+
+/* Controls and Zoom buttons */
+.controls {
+  display: flex;
+  justify-content: flex-end;  
+  margin-right: 0;  
+}
+
+button {
+  background-color: #0747A6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+button:hover {
+  background-color: #053b7a;
+}
+
+/* PDF and Document Viewers */
+pdf-viewer, ngx-doc-viewer {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  height: 500px;
+}
+
+/* Title Styling */
+h6 {
+  font-weight: bold;
+  color: #050505;
+  margin-bottom: 20px;
+}
+
+/* Centering content */
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
       padding: 0 10px;
-    }
-  
-    pdf-viewer,
-    ngx-doc-viewer {
-      height: auto;
-    }
   }
+  pdf-viewer,
+  ngx-doc-viewer {
+      height: auto;
+  }
+}
