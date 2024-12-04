@@ -84,14 +84,14 @@ export class ResumelistComponent implements OnInit {
   }
 
   loadClients(): void {
-    this.http.get<Client[]>('http://localhost:8080/api/viewer/clients').subscribe(
+    this.http.get<Client[]>('/api/viewer/clients').subscribe(
       (data) => (this.clients = data),
       (error) => this.handleError('Error fetching clients', error)
     );
   }
 
   loadStatuses(): void {
-    this.http.get<Status[]>('http://localhost:8080/statuses').subscribe(
+    this.http.get<Status[]>('api/viewer/statuses').subscribe(
       (data) => (this.statusOptions = data),
       (error) => this.handleError('Error fetching statuses', error)
     );
@@ -108,7 +108,7 @@ export class ResumelistComponent implements OnInit {
   }
 
   loadPositions(clientId: string): void {
-    this.http.get<Position[]>(`http://localhost:8080/api/viewer/positions?cl_id=${clientId}`).subscribe(
+    this.http.get<Position[]>(`/api/viewer/positions?cl_id=${clientId}`).subscribe(
       (data) => (this.positions = data),
       (error) => this.handleError('Error fetching positions', error)
     );
@@ -117,7 +117,7 @@ export class ResumelistComponent implements OnInit {
   fetchResumes(): void {
     if (this.selectedClientId && this.selectedPosition) {
       this.isLoadingResumes = true;
-      this.http.get<Resume[]>(`http://localhost:8080/api/viewer/resumes?jd_id=${this.selectedPosition}`).subscribe(
+      this.http.get<Resume[]>(`/api/viewer/resumes?jd_id=${this.selectedPosition}`).subscribe(
         (data) => {
           this.resumes = data.map((resume) => ({
             ...resume,
@@ -189,7 +189,7 @@ export class ResumelistComponent implements OnInit {
       return;
     }
 
-    const apiUrl = `http://localhost:8080/api/viewer/resumes/status/${resume.resume_id}?st_id=${resume.st_id}`;
+    const apiUrl = `/api/viewer/resumes/status/${resume.resume_id}?st_id=${resume.st_id}`;
 
     this.http.post(apiUrl, {}).subscribe(
       () => {
