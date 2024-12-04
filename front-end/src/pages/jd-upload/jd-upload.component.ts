@@ -163,7 +163,7 @@ export class JDUploadComponent implements OnInit {
       formData.append('file', this.selectedFile); // Append the file
       this.isUploading = true;
       this.uploadStatus = null; // Reset status
-      this.http.post('http://shrs-nlb-c8873bc6e76059c6.elb.ap-south-1.amazonaws.com/api/jd_upload/uploadJD', formData)
+      this.http.post('/api/jd_upload/uploadJD', formData)
         .subscribe(
           response => {
             this.isUploading = false;
