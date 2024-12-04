@@ -9,7 +9,7 @@ on:
 
 jobs:
   code-scan-and-build:
-    runs-on: blacksmith-2vcpu-ubuntu-2204-arm
+    runs-on: ubuntu-latest
     environment: dev
     strategy:
       matrix:
