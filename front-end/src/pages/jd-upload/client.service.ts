@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ClientService {
-  private clientsApiUrl = 'http://shrs-nlb-c8873bc6e76059c6.elb.ap-south-1.amazonaws.com/api/jd_upload/clients'; // API URL for clients
+  private clientsApiUrl = '/api/jd_upload/clients'; // API URL for clients
   
 
   constructor(private http: HttpClient) {}
