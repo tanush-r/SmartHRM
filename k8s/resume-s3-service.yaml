@@ -7,8 +7,7 @@ spec:
   selector:
     app: resume-s3
   ports:
-    - protocol: TCP
-      port: 8000
-      targetPort: 8000
-      nodePort: 30005
-  type: NodePort  # Internal communication within the cluster
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+  type: ClusterIP # Internal communication within the cluster

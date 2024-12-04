@@ -7,8 +7,7 @@ spec:
   selector:
     app: resume-upload
   ports:
-    - protocol: TCP
-      port: 8003
-      targetPort: 8003
-      nodePort: 30007
-  type: NodePort  # Internal communication within the cluster
+  - protocol: TCP
+    port: 8003
+    targetPort: 8003
+  type: ClusterIP # Internal communication within the cluster
