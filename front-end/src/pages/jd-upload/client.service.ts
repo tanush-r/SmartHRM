@@ -6,19 +6,14 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ClientService {
-  private apiUrl = '/api/jd_upload/clients'; // Replace with your actual API URL
+  private clientsApiUrl = '/api/jd_upload/clients'; // API URL for clients
+  
 
   constructor(private http: HttpClient) {}
 
   // Method to fetch clients
   getClients(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+    return this.http.get<any[]>(this.clientsApiUrl);
   }
 
-  // Update to send client_name as a query parameter
-  addClient(clientName: string): Observable<any> {
-    const params = new HttpParams().set('client_name', clientName);
-    return this.http.post(this.apiUrl, null, { params });
-  }
-  
 }
