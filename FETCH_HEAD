@@ -7,9 +7,9 @@ import logging
 import json
 # Define base backend URLs
 BASE_BACKEND_URLS = {
-    "clients": "/api/client-master",
-    "requirements": "/api/requirement-master",
-    "candidates": "/api/candidate-master",
+    "clients": "http://shrs-nlb-c8873bc6e76059c6.elb.ap-south-1.amazonaws.com/api/client-master",
+    "requirements": "http://shrs-nlb-c8873bc6e76059c6.elb.ap-south-1.amazonaws.com/api/requirement-master",
+    "candidates": "http://shrs-nlb-c8873bc6e76059c6.elb.ap-south-1.amazonaws.com/api/candidate-master",
 }
 # Configure logging
 logging.basicConfig(level=logging.INFO)
