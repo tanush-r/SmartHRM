@@ -7,9 +7,9 @@ import logging
 import json
 # Define base backend URLs
 BASE_BACKEND_URLS = {
-    "clients": "/api/client-master",
-    "requirements": "/api/requirement-master",
-    "candidates": "/api/candidate-master",
+    "clients": "http://client-master:8009/api/client-master",  # Client service
+    "requirements": "http://requirement-master:8008/api/requirement-master",  # Requirement service
+    "candidates": "http://candidate-master:8007/api/candidate-master",  # Candidate service
 }
 # Configure logging
 logging.basicConfig(level=logging.INFO)
