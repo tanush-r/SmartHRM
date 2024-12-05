@@ -2,128 +2,180 @@
   <div class="showBanner add-client-banner">
     <span *ngIf="!viewMode">Add Candidate Details</span>
     <span *ngIf="viewMode">View Candidate Details</span>
-    <button class="close-button" (click)="closeDialog()">
-      <i class="fas fa-times"></i>
+    <button mat-icon-button class="close-button" (click)="closeDialog()">
+      <mat-icon>close</mat-icon>
     </button>
   </div>
   <br>
   <form [formGroup]="candidateForm" (ngSubmit)="onSubmit()">
-    <div class="section">
+    <mat-card>
       <h6>Candidate Primary Details</h6>
       <div class="form-row">
-        <div class="form-group">
-          <label for="companyName">Client Name*</label>
-          <select class="form-control" id="companyName" formControlName="cl_id" [disabled]="viewMode" required>
-            <option value="">Select Client Name</option>
-            <option *ngFor="let client of clients" [value]="client.cl_id">{{ client.cl_name }}</option>
-          </select>
-          <div *ngIf="candidateForm.get('cl_id')?.invalid && (candidateForm.get('cl_id')?.touched || candidateForm.get('cl_id')?.dirty)" class="text-danger">
-            <div *ngIf="candidateForm.get('cl_id')?.errors?.['required']">Client Name is required.</div>
-          </div>
-        </div>
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Company Name</mat-label>
+          <mat-select formControlName="cl_id" [disabled]="viewMode" required>
+            <mat-option value="">Select Client Name</mat-option>
+            <mat-option *ngFor="let client of clients" [value]="client.cl_id">{{ client.cl_name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="candidateForm.get('cl_id')?.hasError('required')">Client Name is required.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Requirement Name</mat-label>
+          <mat-select formControlName="rq_id" [disabled]="viewMode" required>
+            <mat-option value="">Select Requirement Name</mat-option>
+            <mat-option *ngFor="let requirement of requirements" [value]="requirement.rq_id">{{ requirement.rq_name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="candidateForm.get('rq_id')?.hasError('required')">Requirement Name is required.</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label for="firstName" id="firstName">First Name</mat-label>
+          <input matInput type="text" id="firstName" name="first_name" formControlName="cd_first_name" placeholder="Enter first name" [disabled]="viewMode" required pattern="[A-Za-z\s]+">
+          <mat-error *ngIf="candidateForm.get('cd_first_name')?.hasError('required')">First Name is required.</mat-error>
+          <mat-error *ngIf="candidateForm.get('cd_first_name')?.hasError('pattern')">First Name must contain only letters and spaces.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Last Name</mat-label>
+          <input matInput type="text" formControlName="cd_last_name" placeholder="Enter last name" [disabled]="viewMode" required pattern="[A-Za-z\s]+">
+          <mat-error *ngIf="candidateForm.get('cd_last_name')?.hasError('required')">Last Name is required.</mat-error>
+          <mat-error *ngIf="candidateForm.get('cd_last_name')?.hasError('pattern')">
+            Last Name should only contain letters.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="cd_email" placeholder="Enter email" [disabled]="viewMode" required>
+          <mat-error *ngIf="candidateForm.get('cd_email')?.hasError('required')">Email is required.</mat-error>
+          <mat-error *ngIf="candidateForm.get('cd_email')?.hasError('email')">Please enter a valid email address.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Phone Number</mat-label>
+          <input matInput type="tel" formControlName="cd_phno" placeholder="Enter phone number" 
+                 [disabled]="viewMode" required maxlength="10" pattern="^[0-9]*$" 
+                 (keydown)="allowOnlyNumbers($event)">
+          <!-- Error Messages -->
+          <mat-error *ngIf="candidateForm.get('cd_phno')?.hasError('required')">
+            Phone number is required.
+          </mat-error>
+          <mat-error *ngIf="candidateForm.get('cd_phno')?.hasError('maxlength')">
+            Phone number cannot be more than 10 digits.
+          </mat-error>
+          <mat-error *ngIf="candidateForm.get('cd_phno')?.hasError('pattern')">
+            Phone number must be numeric.
+          </mat-error>
+        </mat-form-field>
         
-        <div class="form-group">
-          <label for="requirementName">Requirement Name*</label>
-          <select class="form-control" id="requirementName" formControlName="rq_id" [disabled]="viewMode" required>
-            <option value="">Select Requirement Name</option>
-            <option *ngFor="let requirement of requirements" [value]="requirement.rq_id">{{ requirement.rq_name }}</option>
-          </select>
-          <div *ngIf="candidateForm.get('rq_id')?.invalid && (candidateForm.get('rq_id')?.touched || candidateForm.get('rq_id')?.dirty)" class="text-danger">
-            <div *ngIf="candidateForm.get('rq_id')?.errors?.['required']">Requirement Name is required.</div>
-          </div>
-        </div>        
       </div>
+
       <div class="form-row">
-        <div class="form-group">
-          <label for="firstName">First Name*</label>
-          <input type="text" class="form-control" id="firstName" formControlName="cd_first_name" placeholder="Enter first name" [disabled]="viewMode" required>
-          <div *ngIf="candidateForm.get('cd_first_name')?.invalid && (candidateForm.get('cd_first_name')?.touched || candidateForm.get('cd_first_name')?.dirty)" class="text-danger">
-            <div *ngIf="candidateForm.get('cd_first_name')?.errors?.['required']">First Name is required.</div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="lastName">Last Name</label>
-          <input type="text" class="form-control" id="lastName" formControlName="cd_last_name" placeholder="Enter last name" [disabled]="viewMode">
-        </div>
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Location</mat-label>
+          <input 
+            matInput 
+            type="text" 
+            formControlName="rq_loc" 
+            placeholder="Enter location" 
+            [disabled]="viewMode" 
+            required 
+            pattern="[A-Za-z\s]+" />
+          <!-- Error for required validation -->
+          <mat-error *ngIf="candidateForm.get('rq_loc')?.hasError('required') && candidateForm.get('rq_loc')?.touched">
+            Location is required.
+          </mat-error>
+          <!-- Error for pattern validation -->
+          <mat-error *ngIf="candidateForm.get('rq_loc')?.hasError('pattern') && candidateForm.get('rq_loc')?.touched">
+            Location must contain only letters and spaces.
+          </mat-error>
+        </mat-form-field>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="email">Email*</label>
-          <input type="email" class="form-control" id="email" formControlName="cd_email" placeholder="Enter email" [disabled]="viewMode" required>
-          <div *ngIf="candidateForm.get('cd_email')?.invalid && (candidateForm.get('cd_email')?.touched || candidateForm.get('cd_email')?.dirty)" class="text-danger">
-            <div *ngIf="candidateForm.get('cd_email')?.errors?.['required']">Email is required.</div>
-            <div *ngIf="candidateForm.get('cd_email')?.errors?.['email']">Please enter a valid email address.</div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="phoneNo">Phone No.</label>
-          <input type="tel" class="form-control" id="phoneNo" formControlName="cd_phno" placeholder="Enter phone number" [disabled]="viewMode">
-        </div>
-      </div>      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="location">Location</label>
-          <input type="text" class="form-control" id="location" formControlName="cd_loc" placeholder="Enter location" [disabled]="viewMode">
-        </div>
-      </div>
-    </div>
-    <div class="section">
+      
+      
+
+    </mat-card>
+
+    <mat-card>
       <h6>Other Details</h6>
       <div class="form-row">
-        <div class="form-group">
-          <label for="qualification">Qualification:</label>
-          <input type="text" class="form-control" id="qualification" formControlName="cd_qual" placeholder="Enter qualification" [disabled]="viewMode">
-        </div>
-        <div class="form-group">
-          <label for="skills">Skills</label>
-          <input type="text" class="form-control" id="skills" formControlName="cd_skills" placeholder="Enter skills" [disabled]="viewMode">
-        </div>
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Qualification*</mat-label>
+          <input matInput type="text" formControlName="cd_qual" placeholder="Enter qualification" [disabled]="viewMode" required>
+          <mat-error *ngIf="candidateForm.get('cd_qual')?.hasError('required')">Qualification is required.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Skills*</mat-label>
+          <input matInput type="text" formControlName="cd_skills" placeholder="Enter skills" [disabled]="viewMode"required>
+          <mat-error *ngIf="candidateForm.get('cd_skills')?.hasError('required')">Skills are required.</mat-error>
+        </mat-form-field>
       </div>
+
       <div class="form-row">
-        <div class="form-group">
-          <label for="experience">Total Experience (Years)</label>
-          <input type="number" class="form-control" id="experience" formControlName="cd_total_exp" placeholder="Enter total experience" [disabled]="viewMode" min="0">
-        </div>
-        <div class="form-group">
-          <label for="relevantExperience">Relevant Experience (Years):</label>
-          <input type="number" class="form-control" id="relevantExperience" formControlName="cd_related_exp" placeholder="Enter relevant experience" [disabled]="viewMode" min="0">
-        </div>
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Total Experience (Years)*</mat-label>
+          <input matInput type="number" formControlName="cd_total_exp" placeholder="Enter total experience" [disabled]="viewMode" min="0" required>
+          <mat-error *ngIf="candidateForm.get('cd_total_exp')?.hasError('required')">Total Experience is required.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Relevant Experience (Years)*</mat-label>
+          <input matInput type="number" formControlName="cd_related_exp" placeholder="Enter relevant experience" [disabled]="viewMode" min="0" required>
+          <mat-error *ngIf="candidateForm.get('cd_related_exp')?.hasError('required')">Relevant Experience is required.</mat-error>
+        </mat-form-field>
       </div>
+
       <div class="form-row">
-        <div class="form-group">
-          <label for="currentCTC">Current CTC</label>
-          <input type="number" class="form-control" id="currentCTC" formControlName="cd_cur_ctc" placeholder="Enter current CTC" [disabled]="viewMode" min="0">
-        </div>
-        <div class="form-group">
-          <label for="expectedCTC">Expected CTC</label>
-          <input type="number" class="form-control" id="expectedCTC" formControlName="cd_exp_ctc" placeholder="Enter expected CTC" [disabled]="viewMode" min="0">
-        </div>
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Current CTC*</mat-label>
+          <input matInput type="number" formControlName="cd_cur_ctc" placeholder="Enter current CTC" [disabled]="viewMode" min="0" required>
+          <mat-error *ngIf="candidateForm.get('cd_cur_ctc')?.hasError('required')">Current CTC is required.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Expected CTC*</mat-label>
+          <input matInput type="number" formControlName="cd_exp_ctc" placeholder="Enter expected CTC" [disabled]="viewMode" min="0" required>
+          <mat-error *ngIf="candidateForm.get('cd_exp_ctc')?.hasError('required')">Expected CTC is required.</mat-error>
+        </mat-form-field>
       </div>
+
       <div class="form-row">
-        <div class="form-group">
-          <label for="noticePeriod">Notice Period</label>
-          <select class="form-control" id="noticePeriod" formControlName="cd_notice" [disabled]="viewMode">
-            <option value="">Select notice period</option>
-            <option value="immediate">Immediate</option>
-            <option value="15_days">15 Days</option>
-            <option value="30_days">30 Days</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="workMode">Work Mode</label>
-          <select class="form-control" id="workMode" formControlName="cd_work_mode" [disabled]="viewMode">
-            <option value="">Select work mode</option>
-            <option value="remote">Remote</option>
-            <option value="onsite">Onsite</option>
-            <option value="hybrid">Hybrid</option>
-          </select>
-        </div>
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Notice Period*</mat-label>
+          <mat-select formControlName="cd_notice" [disabled]="viewMode" required>
+            <mat-option value="">Select notice period</mat-option>
+            <mat-option value="immediate">Immediate</mat-option>
+            <mat-option value="15_days">7 Days</mat-option>
+            <mat-option value="30_days">15 Days</mat-option>
+            <mat-option value="15_days">30 Days</mat-option>
+            <mat-option value="30_days">45 Days</mat-option>
+            <mat-option value="15_days">60 Days</mat-option>
+            <mat-option value="30_days">90 Days</mat-option>
+          </mat-select>
+          <mat-error *ngIf="candidateForm.get('cd_notice')?.hasError('required')">Notice Period is required.</mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Work Mode</mat-label>
+          <mat-select formControlName="cd_work_mode" [disabled]="viewMode">
+            <mat-option value="">Select work mode</mat-option>
+            <mat-option value="remote">Remote</mat-option>
+            <mat-option value="onsite">Onsite</mat-option>
+            <mat-option value="hybrid">Hybrid</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
-      <div class="form-group custom-form-group valid-passport-group">
-        <input type="checkbox" class="form-check-input custom-checkbox" id="validPassport" formControlName="cd_valid_passport" [disabled]="viewMode">
-        <label for="validPassport">Valid Passport</label>
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary" [disabled]="viewMode">Submit</button>
+
+      <mat-checkbox formControlName="cd_valid_passport" [disabled]="viewMode">Valid Passport</mat-checkbox>
+    </mat-card>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="viewMode">Submit</button>
   </form>
 </div>

@@ -58,12 +58,11 @@ class JobDescription(BaseModel):
 class Resume(BaseModel):
     resume_id: str
     jd_id: str
-    created_at: str
     s3_link: str
     filename: str
     created_at: Optional[str] = None
     st_id: Optional[str] = None  # Changed from 'status' to 'st_id'
-    st_name: str
+    st_name: Optional[str] = None
 
 class Status(BaseModel):
     st_id: str
@@ -130,7 +129,7 @@ def get_resumes(jd_id: str):
         for resume in resumes:
             if resume['created_at']:
                 resume['created_at'] = datetime_to_str(resume['created_at'])
-        
+                
         return resumes
     except mysql.connector.Error as err:
         raise HTTPException(status_code=500, detail=str(err))

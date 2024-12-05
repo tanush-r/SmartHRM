@@ -21,7 +21,7 @@ app.add_middleware(
 chain = SQLChain()
 
 @app.get("/query")
-def query(question: str):
+async def query(question: str):
     try:
         response = chain.invoke(question)
         if "Error" in response:
@@ -29,9 +29,4 @@ def query(question: str):
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
-# @app.get("/model")
-# def model_test():
-    
-#     return model
     
