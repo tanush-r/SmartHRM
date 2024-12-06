@@ -56,21 +56,17 @@ jobs:
     # Step 2: Deploy to EC2
     - name: Deploy Docker Containers on EC2
       run: |
-        # Define service variable on the remote server
-        SERVICE=${{ matrix.service }}
+        # Pass the service name explicitly to the EC2 instance
+        ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} << EOF
+        export SERVICE=${{ matrix.service }}
+        echo "Deploying service: \$SERVICE"
 
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
-
-
-
-        echo "Deploying service: $SERVICE"
         # Pull the latest Docker image
+        docker pull tracktwok/smart_hr_system:\$SERVICE
 
-        docker pull tracktwok/smart_hr_system:$SERVICE
-        # Stop any running container of this service
+        # Stop and remove any existing container
+        docker rm -f \$SERVICE || true
 
-        docker rm -f $SERVICE || true
         # Run the container
-
-        docker run -d --name $SERVICE -p 8009:8009 tracktwok/smart_hr_system:$SERVICE
+        docker run -d --name \$SERVICE -p 8009:8009 tracktwok/smart_hr_system:\$SERVICE
         EOF
