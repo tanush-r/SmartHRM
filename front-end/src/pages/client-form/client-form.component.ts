@@ -55,7 +55,7 @@ interface ClientsWithContacts {
     MatDividerModule
   ]
 })
-export class ClientsFormComponent implements OnInit {
+export class ClientFormComponent implements OnInit {
   clients: ClientsWithContacts = {
     cl_name: '',
     cl_type: '',
@@ -77,7 +77,7 @@ export class ClientsFormComponent implements OnInit {
   isSubmitDisabled: boolean = false;
 
   constructor(
-    public dialogRef: MatDialogRef<ClientsFormComponent>,
+    public dialogRef: MatDialogRef<ClientFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
