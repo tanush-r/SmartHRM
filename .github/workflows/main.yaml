@@ -54,22 +54,18 @@ jobs:
         ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
     # Step 2: Deploy to EC2
     - name: Deploy Docker Containers on EC2
-      env:
-        SERVICE: ${{ matrix.service }}
       run: |
-        # Debug: Print local SERVICE value
-        echo "Local SERVICE value: $SERVICE"
-
-        # Use explicit environment variable passing
+        # Pass SERVICE as a command-line argument
         ssh -o StrictHostKeyChecking=no \
             ubuntu@${{ secrets.EC2_HOST }} \
-            "export SERVICE='$SERVICE' && echo \"Remote SERVICE value: \$SERVICE\" && \
+            "SERVICE='${{ matrix.service }}' bash -c '\
+            echo \"Remote SERVICE value: \$SERVICE\" && \
             if [ -z \"\$SERVICE\" ]; then \
               echo \"Error: SERVICE variable is not set\"; \
               exit 1; \
-            fi"
+            fi'"
 
-         echo "Deploying service: $SERVICE""
+          echo "Deploying service: $SERVICE""
 
         # Pull the latest Docker image
         docker pull tracktwok/smart_hr_system:"$SERVICE"
