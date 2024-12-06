@@ -24,13 +24,13 @@ export class ClientsService {
   }
 
   // Create a new client
-  createClient(client: ClientWithContacts): Observable<any> {
-    return this.http.post(this.apiUrl, client);
+  createClient(clients: ClientWithContacts): Observable<any> {
+    return this.http.post(this.apiUrl, clients);
   }
 
   // Update a client
-  updateClient(clientId: string, client: ClientWithContacts): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${clientId}`, client);
+  updateClient(clientId: string, clients: ClientWithContacts): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${clientId}`, clients);
   }
 
   // Delete a client

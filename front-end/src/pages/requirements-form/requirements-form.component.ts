@@ -86,5 +86,31 @@ export class RequirementsFormComponent implements OnInit {
       console.log("Form is invalid:", this.requirementForm.errors); // Log form errors
     }
   }
+
+  preventNumbers(event: KeyboardEvent): void {
+    const charCode = event.charCode || event.keyCode;
+    // Allow only non-numeric characters
+    if (charCode >= 48 && charCode <= 57) {
+      event.preventDefault();
+    }
+  }
+
+  blockNegative(event: KeyboardEvent): void {
+    const key = event.key;
+    if (key === '-' || key === 'e') {
+      event.preventDefault();
+    }
+  }
+  
+  blockNegativeInput(event: Event): void {
+  const inputElement = event.target as HTMLInputElement;
+  if (Number(inputElement.value) < 0) {
+    inputElement.value = inputElement.value.replace(/^-/, '');
+    // Update the reactive form control if using form groups
+    if (this.requirementForm.get('rq_name')) {
+      this.requirementForm.get('rq_name')!.setValue(inputElement.value);
+    }
+  }
+}
   
 }

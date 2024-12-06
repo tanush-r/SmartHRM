@@ -32,8 +32,8 @@
 
       <div class="form-row">
         <mat-form-field appearance="fill" class="form-group">
-          <mat-label for="firstName" id="firstName">First Name</mat-label>
-          <input matInput type="text" id="firstName" name="first_name" formControlName="cd_first_name" placeholder="Enter first name" [disabled]="viewMode" required pattern="[A-Za-z\s]+">
+          <mat-label>First Name</mat-label>
+          <input matInput type="text" formControlName="cd_first_name" placeholder="Enter first name" [disabled]="viewMode" required pattern="[A-Za-z\s]+">
           <mat-error *ngIf="candidateForm.get('cd_first_name')?.hasError('required')">First Name is required.</mat-error>
           <mat-error *ngIf="candidateForm.get('cd_first_name')?.hasError('pattern')">First Name must contain only letters and spaces.</mat-error>
         </mat-form-field>
@@ -65,12 +65,6 @@
           <mat-error *ngIf="candidateForm.get('cd_phno')?.hasError('required')">
             Phone number is required.
           </mat-error>
-          <mat-error *ngIf="candidateForm.get('cd_phno')?.hasError('maxlength')">
-            Phone number cannot be more than 10 digits.
-          </mat-error>
-          <mat-error *ngIf="candidateForm.get('cd_phno')?.hasError('pattern')">
-            Phone number must be numeric.
-          </mat-error>
         </mat-form-field>
         
       </div>
@@ -81,17 +75,17 @@
           <input 
             matInput 
             type="text" 
-            formControlName="rq_loc" 
+            formControlName="cd_loc" 
             placeholder="Enter location" 
             [disabled]="viewMode" 
             required 
             pattern="[A-Za-z\s]+" />
           <!-- Error for required validation -->
-          <mat-error *ngIf="candidateForm.get('rq_loc')?.hasError('required') && candidateForm.get('rq_loc')?.touched">
+          <mat-error *ngIf="candidateForm.get('cd_loc')?.hasError('required') && candidateForm.get('cd_loc')?.touched">
             Location is required.
           </mat-error>
           <!-- Error for pattern validation -->
-          <mat-error *ngIf="candidateForm.get('rq_loc')?.hasError('pattern') && candidateForm.get('rq_loc')?.touched">
+          <mat-error *ngIf="candidateForm.get('cd_loc')?.hasError('pattern') && candidateForm.get('cd_loc')?.touched">
             Location must contain only letters and spaces.
           </mat-error>
         </mat-form-field>
@@ -105,13 +99,13 @@
       <h6>Other Details</h6>
       <div class="form-row">
         <mat-form-field appearance="fill" class="form-group">
-          <mat-label>Qualification*</mat-label>
+          <mat-label>Qualification</mat-label>
           <input matInput type="text" formControlName="cd_qual" placeholder="Enter qualification" [disabled]="viewMode" required>
           <mat-error *ngIf="candidateForm.get('cd_qual')?.hasError('required')">Qualification is required.</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="form-group">
-          <mat-label>Skills*</mat-label>
+          <mat-label>Skills</mat-label>
           <input matInput type="text" formControlName="cd_skills" placeholder="Enter skills" [disabled]="viewMode"required>
           <mat-error *ngIf="candidateForm.get('cd_skills')?.hasError('required')">Skills are required.</mat-error>
         </mat-form-field>
@@ -119,13 +113,13 @@
 
       <div class="form-row">
         <mat-form-field appearance="fill" class="form-group">
-          <mat-label>Total Experience (Years)*</mat-label>
+          <mat-label>Total Experience (Years)</mat-label>
           <input matInput type="number" formControlName="cd_total_exp" placeholder="Enter total experience" [disabled]="viewMode" min="0" required>
           <mat-error *ngIf="candidateForm.get('cd_total_exp')?.hasError('required')">Total Experience is required.</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="form-group">
-          <mat-label>Relevant Experience (Years)*</mat-label>
+          <mat-label>Relevant Experience (Years)</mat-label>
           <input matInput type="number" formControlName="cd_related_exp" placeholder="Enter relevant experience" [disabled]="viewMode" min="0" required>
           <mat-error *ngIf="candidateForm.get('cd_related_exp')?.hasError('required')">Relevant Experience is required.</mat-error>
         </mat-form-field>
@@ -133,13 +127,13 @@
 
       <div class="form-row">
         <mat-form-field appearance="fill" class="form-group">
-          <mat-label>Current CTC*</mat-label>
+          <mat-label>Current CTC</mat-label>
           <input matInput type="number" formControlName="cd_cur_ctc" placeholder="Enter current CTC" [disabled]="viewMode" min="0" required>
           <mat-error *ngIf="candidateForm.get('cd_cur_ctc')?.hasError('required')">Current CTC is required.</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="form-group">
-          <mat-label>Expected CTC*</mat-label>
+          <mat-label>Expected CTC</mat-label>
           <input matInput type="number" formControlName="cd_exp_ctc" placeholder="Enter expected CTC" [disabled]="viewMode" min="0" required>
           <mat-error *ngIf="candidateForm.get('cd_exp_ctc')?.hasError('required')">Expected CTC is required.</mat-error>
         </mat-form-field>
@@ -147,7 +141,7 @@
 
       <div class="form-row">
         <mat-form-field appearance="fill" class="form-group">
-          <mat-label>Notice Period*</mat-label>
+          <mat-label>Notice Period</mat-label>
           <mat-select formControlName="cd_notice" [disabled]="viewMode" required>
             <mat-option value="">Select notice period</mat-option>
             <mat-option value="immediate">Immediate</mat-option>
@@ -176,6 +170,8 @@
       <mat-checkbox formControlName="cd_valid_passport" [disabled]="viewMode">Valid Passport</mat-checkbox>
     </mat-card>
 
-    <button mat-raised-button color="primary" type="submit" [disabled]="viewMode">Submit</button>
+  <button mat-button mat-raised-button color="primary" type="submit" [disabled]="viewMode || candidateForm.invalid">Submit</button>
+  
+  
   </form>
 </div>

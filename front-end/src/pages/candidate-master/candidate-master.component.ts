@@ -27,7 +27,8 @@ import { MatTableModule } from '@angular/material/table';
     MatIconModule,
     MatSelectModule,
     MatInputModule,
-    MatTableModule
+    MatTableModule,
+    
   ]
 })
 export class CandidateMasterComponent implements OnInit {
@@ -84,41 +85,51 @@ export class CandidateMasterComponent implements OnInit {
     });
   }
   
-  openCandidateForm() {
+  openCandidateForm() { 
     const dialogRef = this.dialog.open(CandidateFormComponent, {
       height: '80%',
       width: '600px',
       maxHeight: '90vh',
       data: { 
         clients: this.clients,
+        requirements: this.requirements,  // Ensure this is passed
         viewMode: false
       }
     });
-  
+    
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.createCandidate(result.rq_id, result);
+      } else {
+        console.log('Dialog closed without result.');
       }
     });
   }
   
+  
+  
   createCandidate(rq_id: string | null, candidate: Candidate): void {
-    if (rq_id) {
-      this.candidateService.createCandidate(rq_id, candidate).subscribe({
-        next: (response) => {
-          console.log('Candidate created successfully:', response);
-          this.loadCandidates();
-          this.snackBar.open('Candidate added successfully!', 'Close', { duration: 3000 });
-        },
-        error: (err) => {
-          console.error('Error creating candidate:', err);
-          this.snackBar.open('Error adding candidate. Please try again.', 'Close', { duration: 3000 });
-        }
-      });
-    } else {
+    if (!rq_id) {
+      // Provide user feedback when rq_id is null
+      this.snackBar.open('Please select a valid requirement ID.', 'Close', { duration: 3000 });
       console.error('Requirement ID is not selected.');
+      return;  // Early exit to prevent further code execution
     }
+  
+    // Proceed with creating the candidate if rq_id is valid
+    this.candidateService.createCandidate(rq_id, candidate).subscribe({
+      next: (response) => {
+        console.log('Candidate created successfully:', response);
+        this.loadCandidates();
+        this.snackBar.open('Candidate added successfully!', 'Close', { duration: 3000 });
+      },
+      error: (err) => {
+        console.error('Error creating candidate:', err);
+        this.snackBar.open('Error adding candidate. Please try again.', 'Close', { duration: 3000 });
+      }
+    });
   }
+  
 
   viewCandidate(candidate: Candidate): void {
     this.candidateService.getCandidate(candidate.cd_id).subscribe({

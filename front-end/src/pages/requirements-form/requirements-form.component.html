@@ -30,13 +30,23 @@
           <div class="form-group">
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Requirement Name</mat-label>
-              <input matInput type="text" formControlName="rq_name" placeholder="Enter requirement name" [disabled]="readonly" [ngClass]="{'masked': readonly}" required />
+              <input
+                matInput
+                type="text"
+                formControlName="rq_name"
+                placeholder="Enter requirement name"
+                [disabled]="readonly"
+                [ngClass]="{ 'masked': readonly }"
+                required
+                (keypress)="preventNumbers($event)"
+              />
             </mat-form-field>
             <div *ngIf="requirementForm.get('rq_name')?.invalid && requirementForm.get('rq_name')?.touched" class="text-danger">
               Requirement Name is required.
             </div>
           </div>
         </div>
+        
       </div>
 
       <div class="row">
@@ -44,13 +54,14 @@
           <div class="form-group">
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Job Location</mat-label>
-              <input matInput type="text" formControlName="rq_loc" placeholder="Enter location" [disabled]="readonly" [ngClass]="{'masked': readonly}" required />
+              <input matInput type="text" formControlName="rq_loc" placeholder="Enter location" [disabled]="readonly" [ngClass]="{'masked': readonly}" required  (keypress)="preventNumbers($event)"/>
             </mat-form-field>
             <div class="text-danger" *ngIf="requirementForm.get('rq_loc')?.invalid && requirementForm.get('rq_loc')?.touched">
               Job Location is required.
             </div>
           </div>
         </div>
+
         <div class="col-md-6">
           <div class="form-group">
             <mat-form-field appearance="fill" class="full-width">
@@ -69,7 +80,7 @@
           <div class="form-group">
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Number of Positions</mat-label>
-              <input matInput type="number" formControlName="rq_no_pos" placeholder="Enter number of positions" [disabled]="readonly" [ngClass]="{'masked': readonly}" required/>
+              <input matInput type="number" formControlName="rq_no_pos" placeholder="Enter number of positions" [disabled]="readonly" [ngClass]="{'masked': readonly}" required (keydown)="blockNegative($event)" (input)="blockNegativeInput($event)"/>
             </mat-form-field>
             <div class="text-danger" *ngIf="requirementForm.get('rq_no_pos')?.invalid && requirementForm.get('rq_no_pos')?.touched">
               Number of Positions is required.
@@ -80,7 +91,7 @@
           <div class="form-group">
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Qualification</mat-label>
-              <input matInput type="text" formControlName="rq_qual" placeholder="Enter qualification" [disabled]="readonly" [ngClass]="{'masked': readonly}" required />
+              <input matInput type="text" formControlName="rq_qual" placeholder="Enter qualification" [disabled]="readonly" [ngClass]="{'masked': readonly}" required (keypress)="preventNumbers($event)"/>
             </mat-form-field>
             <div class="text-danger" *ngIf="requirementForm.get('rq_qual')?.invalid && requirementForm.get('rq_qual')?.touched">
               Qualification is required.
@@ -94,18 +105,19 @@
           <div class="form-group">
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Skills</mat-label>
-              <input matInput type="text" formControlName="rq_skills" placeholder="Enter skills" [disabled]="readonly" [ngClass]="{'masked': readonly}" required/>
+              <input matInput type="text" formControlName="rq_skills" placeholder="Enter skills" [disabled]="readonly" [ngClass]="{'masked': readonly}" required (keypress)="preventNumbers($event)"/>
             </mat-form-field>
             <div class="text-danger" *ngIf="requirementForm.get('rq_skills')?.invalid && requirementForm.get('rq_skills')?.touched">
               Skills are required.
             </div>
           </div>
         </div>
+
         <div class="col-md-6">
           <div class="form-group">
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Experience (in years)</mat-label>
-              <input matInput type="number" formControlName="rq_exp" placeholder="Enter experience" [disabled]="readonly" [ngClass]="{'masked': readonly}" required/>
+              <input matInput type="number" formControlName="rq_exp" placeholder="Enter experience" [disabled]="readonly" [ngClass]="{'masked': readonly}" required min="0"/>
             </mat-form-field>
             <div class="text-danger" *ngIf="requirementForm.get('rq_exp')?.invalid && requirementForm.get('rq_exp')?.touched">
               Experience is required.
@@ -136,7 +148,16 @@
           <div class="form-group">
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Budget (LPA)</mat-label>
-              <input matInput type="number" formControlName="rq_budget" step="0.1" placeholder="Enter budget" [disabled]="readonly" [ngClass]="{'masked': readonly}" />
+              <input
+                matInput
+                type="number"
+                formControlName="rq_budget"
+                step="0.1"
+                placeholder="Enter budget"
+                [disabled]="readonly"
+                [ngClass]="{ masked: readonly }"
+                min="0"
+              />
             </mat-form-field>
           </div>
         </div>
@@ -169,6 +190,7 @@
             <mat-form-field appearance="fill" class="example-full-width">
               <mat-label>Requirement Notes</mat-label>
               <textarea matInput formControlName="rq_notes" placeholder="Enter notes" [disabled]="readonly" [ngClass]="{'masked': readonly}"></textarea>
+            
             </mat-form-field>
           </div>
         </div>
