@@ -16,8 +16,39 @@ spec:
       containers:
       - name: ai-assistant
         imagePullPolicy: Always
-        image: opentechxdoclabs/smart_hr_system:front-end-arm64-v1 # This is the image you built in Minikube
+        image: opentechxdoclabs/smart_hr_system:front-end-arm64 # This is the image you built in Minikube
         ports:
         - containerPort: 8010
+        env:
+        - name: MYSQL_DB
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_DB
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_PASSWORD
+        - name: MYSQL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_HOST
+        - name: MYSQL_PORT
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_PORT
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: MYSQL_USER
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: OPENAI_API_KEY
       imagePullSecrets:
       - name: docker-registry-secret

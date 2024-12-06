@@ -7,8 +7,7 @@ spec:
   selector:
     app: jd-s3
   ports:
-    - protocol: TCP
-      port: 8001
-      targetPort: 8001
-      nodePort: 30004
-  type: NodePort  # Internal communication within the cluster
+  - protocol: TCP
+    port: 8001
+    targetPort: 8001
+  type: ClusterIP # Internal communication within the cluster
