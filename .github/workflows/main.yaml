@@ -31,7 +31,7 @@ jobs:
     - name: Build Docker Image for ${{ matrix.service }}
       run: |
         cd ${{ matrix.service }}
-        docker buildx build --platform linux/arm64 -t tracktwok/smart_hr_system:${{ matrix.service }} .
+        docker buildx build --platform linux/arm64 -t tracktwok/smart_hr_system:${{ matrix.service }} --push.
 
     # Step 5: Push Docker Image to Registry
     - name: Push Docker Image to Registry
