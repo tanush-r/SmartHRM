@@ -7,7 +7,7 @@ import { Requirement, Client } from './requirement.model'; // Import both Requir
   providedIn: 'root'
 })
 export class RequirementService {
-  private apiUrl = 'http://localhost:8002'; // Ensure this matches your FastAPI base URL
+  private apiUrl = '/api/requirement-master'; // Ensure this matches your FastAPI base URL
 
   constructor(private http: HttpClient) {}
 
