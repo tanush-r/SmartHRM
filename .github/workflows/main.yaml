@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         service:
-        - front-end # Add all microservice folder
+        - client-master # Add all microservice folder
 
     steps:
     # # Step 1: Set up QEMU to enable cross-platform builds
@@ -33,7 +33,7 @@ jobs:
         cd ${{ matrix.service }}
         docker build -t tracktwok/smart_hr_system:${{ matrix.service }} .
 
-    # Step 5: Push Docker Image to Registry (Optional)
+    # Step 5: Push Docker Image to Registry
     - name: Push Docker Image to Registry
       run: |
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
@@ -41,3 +41,25 @@ jobs:
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  deploy:
+    needs: code-scan-and-build
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Set up SSH to connect to the EC2 instance
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+    # Step 2: Deploy to EC2
+    - name: Deploy Docker Containers on EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+        # Pull the latest Docker image
+        docker pull tracktwok/smart_hr_system:${{ matrix.service }}
+        # Stop any running container of this service
+        docker rm -f ${service} || true
+        # Run the container
+        docker run -d --name ${service} -p 8009:8009 tracktwok/smart_hr_system:${{ matrix.service }}
+        EOF
