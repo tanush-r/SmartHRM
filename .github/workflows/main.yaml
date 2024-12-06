@@ -52,7 +52,8 @@ jobs:
       uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
-
+      env:
+        SERVICE: ${{ matrix.service }}
     # Step 2: Deploy to EC2
     - name: Deploy Docker Containers on EC2
       run: |
