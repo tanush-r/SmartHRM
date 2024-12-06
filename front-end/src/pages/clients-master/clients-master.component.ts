@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableDataSource } from '@angular/material/table'; // Import MatTableDataSource
+import { MatTableDataSource } from '@angular/material/table';
 import { ClientsService } from './client.service';
 import { ClientWithContacts } from './client.model';
-import { ClientFormComponent } from '../client-form/client-form.component';
+import { ClientsFormComponent } from '../client-form/client-form.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -28,7 +28,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatIconModule,
     MatButtonModule,
     MatInputModule,
-    ClientFormComponent,
+    ClientsFormComponent,
     ConfirmDialogComponent
   ],
   templateUrl: './clients-master.component.html',
@@ -64,17 +64,19 @@ export class ClientsMasterComponent implements OnInit {
   }
 
   openAddClientForm(): void {
-    const dialogRef = this.dialog.open(ClientFormComponent, {
+    const dialogRef = this.dialog.open(ClientsFormComponent, {
       height: '600px',
       width: '700px',
       data: {
         cl_name: '',
         cl_email: '',
+        cl_co_per_name: '',
         cl_phno: '',
         cl_addr: '',
         cl_map_url: '',
         cl_type: '',
         cl_notes: '',
+        cl_si_ag: '',
         contacts: [{
           co_name: '',
           co_position_hr: '',
@@ -84,7 +86,7 @@ export class ClientsMasterComponent implements OnInit {
         formType: 'add'
       },
     });
-  
+
     dialogRef.afterClosed().subscribe((result: ClientWithContacts | undefined) => {
       if (result) {
         this.clientsService.createClient(result).subscribe(
@@ -92,7 +94,7 @@ export class ClientsMasterComponent implements OnInit {
             this.loadClients();
             this.snackBar.open('Client created successfully!', 'Close', { duration: 3000 });
           },
-          (error) => {
+          (error: unknown) => {
             this.snackBar.open('Failed to create client. Please try again.', 'Close', { duration: 3000 });
             console.error('Failed to create client:', error);
           }
@@ -102,7 +104,7 @@ export class ClientsMasterComponent implements OnInit {
   }
 
   openEditClientForm(client: ClientWithContacts): void {
-    const dialogRef = this.dialog.open(ClientFormComponent, {
+    const dialogRef = this.dialog.open(ClientsFormComponent, {
       height: '600px',
       width: '700px',
       data: {
@@ -128,7 +130,7 @@ export class ClientsMasterComponent implements OnInit {
   }
 
   openViewClientForm(client: ClientWithContacts): void {
-    const dialogRef = this.dialog.open(ClientFormComponent, {
+    const dialogRef = this.dialog.open(ClientsFormComponent, {
       height: '600px',
       width: '700px',
       data: {
@@ -142,36 +144,36 @@ export class ClientsMasterComponent implements OnInit {
 
   deleteClient(client: ClientWithContacts): void {
     if (client.cl_id) {
-        const dialogRef = this.dialog.open(ConfirmDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDialogComponent);
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.clientsService.deleteClient(client.cl_id!).subscribe(
-                    () => {
-                        this.loadClients();
-                        this.snackBar.open('Client deleted successfully!', 'Close', { duration: 3000 });
-                    },
-                    (error) => {
-                        this.snackBar.open('Failed to delete client. Please try again.', 'Close', { duration: 3000 });
-                        console.error('Failed to delete client:', error);
-                    }
-                );
-            } else {
-                console.log('Client deletion was cancelled.');
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.clientsService.deleteClient(client.cl_id!).subscribe(
+            () => {
+              this.loadClients();
+              this.snackBar.open('Client deleted successfully!', 'Close', { duration: 3000 });
+            },
+            (error) => {
+              this.snackBar.open('Failed to delete client. Please try again.', 'Close', { duration: 3000 });
+              console.error('Failed to delete client:', error);
             }
-        });
+          );
+        } else {
+          console.log('Client deletion was cancelled.');
+        }
+      });
     } else {
-        console.error('Client ID is undefined, cannot delete client.');
+      console.error('Client ID is undefined, cannot delete client.');
     }
-}
+  }
 
-filterClients(): ClientWithContacts[] {
-  return this.clients.filter(client =>
-    client.cl_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-    (client.cl_email && client.cl_email.toLowerCase().includes(this.searchQuery.toLowerCase())) ||
-    (client.cl_addr && client.cl_addr.toLowerCase().includes(this.searchQuery.toLowerCase())) ||
-    (client.contacts && client.contacts.length > 0 && 
-      client.contacts[0].co_name.toLowerCase().includes(this.searchQuery.toLowerCase()))
-  );
-}
+  filterClients(): ClientWithContacts[] {
+    return this.clients.filter(client =>
+      client.cl_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+      (client.cl_email && client.cl_email.toLowerCase().includes(this.searchQuery.toLowerCase())) ||
+      (client.cl_addr && client.cl_addr.toLowerCase().includes(this.searchQuery.toLowerCase())) ||
+      (client.contacts && client.contacts.length > 0 &&
+        client.contacts[0].co_name.toLowerCase().includes(this.searchQuery.toLowerCase()))
+    );
+  }
 }

@@ -1,138 +1,222 @@
-<mat-card>
-  <div class="showBanner add-client-banner">
-    <span>{{ formHeading }}</span>
+<div class="form-container mat-elevation-z8">
+  <!-- Toolbar Header -->
+  <div class="mat-toolbar mat-toolbar-color-primary add-client-banner">
+    <h5>{{ formHeading }}</h5>
     <button mat-icon-button class="close-button" (click)="closeDialog()">
       <mat-icon>close</mat-icon>
     </button>
   </div>
-  <br>
 
+  <br />
+
+  <!-- Company Details Section -->
   <div class="section">
     <h6>Company Details</h6>
-    <div class="form-row">
-      <mat-form-field appearance="fill" style="flex: 1; margin-right: 8px;">
-        <mat-label>Company Name *</mat-label>
-        <input matInput type="text" placeholder="Enter company name"
-               [(ngModel)]="client.cl_name" required>
-        <mat-error *ngIf="submitted && !client.cl_name">Company Name is required.</mat-error>
+    <form #clientForm="ngForm">
+      <div class="form-row">
+        <!-- Company Name -->
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Company Name</mat-label>
+          <input
+            matInput
+            placeholder="Enter company name"
+            [(ngModel)]="clients.cl_name"
+            name="cl_name"
+            required
+          />
+          <mat-error *ngIf="clientForm.submitted && !clients.cl_name">Company name is required.</mat-error>
+        </mat-form-field>
+
+        <!-- Company Type -->
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Company Type</mat-label>
+          <mat-select [(ngModel)]="clients.cl_type" name="cl_type">
+            <mat-option value="">Select company type</mat-option>
+            <mat-option value="service">Service Based</mat-option>
+            <mat-option value="product">Product Based</mat-option>
+            <mat-option value="both">Both</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <!-- Company Email -->
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Company Email</mat-label>
+          <input
+            matInput
+            type="email"
+            placeholder="Enter company email"
+            [(ngModel)]="clients.cl_email"
+            name="cl_email"
+            required
+            email
+          />
+          <mat-error *ngIf="clientForm.submitted && !clients.cl_email">Please enter a valid email address.</mat-error>
+        </mat-form-field>
+
+        <!-- Contact Person Name -->
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Contact Person Name</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Enter contact person name"
+            [(ngModel)]="clients.cl_co_per_name"
+            name="cl_co_per_name"
+            required
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <!-- Address -->
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Address</mat-label>
+          <input
+            matInput
+            placeholder="Enter company address"
+            [(ngModel)]="clients.cl_addr"
+            name="cl_addr"
+            required
+          />
+          <mat-error *ngIf="clientForm.submitted && !clients.cl_addr">Address is required.</mat-error>
+        </mat-form-field>
+
+        <!-- Map Link -->
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Map Link</mat-label>
+          <input
+            matInput
+            placeholder="Enter map link"
+            [(ngModel)]="clients.cl_map_url"
+            name="cl_map_url"
+            required
+          />
+          <mat-error *ngIf="clientForm.submitted && !clients.cl_map_url">Map link is required.</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <!-- Contact Number -->
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Contact Number</mat-label>
+          <input
+            matInput
+            type="tel"
+            placeholder="Enter contact number"
+            [(ngModel)]="clients.cl_phno"
+            name="cl_phno"
+            required
+            pattern="^\+?\d{1,4}[\s\-]?\(?\d{1,3}\)?[\s\-]?\d{1,4}[\s\-]?\d{1,4}[\s\-]?\d{1,4}$"
+            maxlength="15"
+          />
+          <mat-error *ngIf="clientForm.submitted && !clients.cl_phno">Contact number is required and must be valid.</mat-error>
+        </mat-form-field>
+        
+      
+
+      <!-- Notes -->
+      <mat-form-field appearance="fill" class="form-group">
+        <mat-label>Client Notes</mat-label>
+        <textarea matInput rows="3" [(ngModel)]="clients.cl_notes" name="cl_notes"></textarea>
       </mat-form-field>
 
-      <mat-form-field appearance="fill" style="flex: 1;">
-        <mat-label>Company Type</mat-label>
-        <mat-select [(ngModel)]="client.cl_type">
-          <mat-option value="" disabled>Select company type</mat-option>
-          <mat-option value="Service Based">Service Based</mat-option>
-          <mat-option value="Product Based">Product Based</mat-option>
-          <mat-option value="Both">Both</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
 
-    <div class="form-row" style="margin-top: 16px;">
-      <mat-form-field appearance="fill" style="flex: 1; margin-right: 8px;">
-        <mat-label>Company Email *</mat-label>
-        <input matInput type="email" placeholder="Enter company email"
-               [(ngModel)]="client.cl_email" required>
-        <mat-error *ngIf="submitted && !isEmailValid(client.cl_email)">Valid Email is required.</mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" style="flex: 1;">
-        <mat-label>Phone Number *</mat-label>
-        <input matInput type="tel" placeholder="Enter phone number with country code"
-               [(ngModel)]="client.cl_phno" required>
-        <mat-error *ngIf="submitted && !isPhoneNumberValid(client.cl_phno)">Phone number must include country code.</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="form-row" style="margin-top: 16px;">
-      <mat-form-field appearance="fill" style="flex: 1; margin-right: 8px;">
-        <mat-label>Address</mat-label>
-        <input matInput type="text" placeholder="Enter company address"
-               [(ngModel)]="client.cl_addr">
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" style="flex: 1;">
-        <mat-label>Map Link</mat-label>
-        <input matInput type="text" placeholder="Enter map link (URL)"
-               [(ngModel)]="client.cl_map_url">
-      </mat-form-field>
-    </div>
-
-    <mat-form-field appearance="fill" style="width: 100%; margin-top: 16px;">
-      <mat-label>Clients Notes</mat-label>
-      <textarea matInput rows="3" [(ngModel)]="client.cl_notes"></textarea>
-      <mat-error *ngIf="submitted"></mat-error>
-    </mat-form-field>
+        <!-- Agreement Checkbox -->
+        <mat-checkbox [(ngModel)]="clients.cl_si_ag" name="cl_si_ag" [disabled]="isSubmitDisabled">
+          Agreement signed
+      </mat-checkbox>      
+      </div>
+    </form>
   </div>
 
-  <div class="section">
-    <h6>Primary Contact Person</h6>
-    <div class="form-row" style="display: flex; flex-wrap: wrap; margin-bottom: 16px;">
-      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px; margin-right: 8px;">
-        <mat-label>Name *</mat-label>
-        <input matInput type="text" placeholder="Enter name"
-               [(ngModel)]="client.contacts[0].co_name" required>
-        <mat-error *ngIf="submitted && !client.contacts[0].co_name">Name is required.</mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px; margin-right: 8px;">
-        <mat-label>Hiring Position</mat-label>
-        <input matInput type="text" placeholder="Enter hiring position"
-               [(ngModel)]="client.contacts[0].co_position_hr">
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px; margin-right: 8px;">
-        <mat-label>Phone No. *</mat-label>
-        <input matInput type="tel" placeholder="Enter Phone No."
-               [(ngModel)]="client.contacts[0].co_phno" required>
-        <mat-error *ngIf="submitted && !isPhoneNumberValid(client.contacts[0].co_phno)">Phone number must include country code.</mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px;">
-        <mat-label>Email *</mat-label>
-        <input matInput type="email" placeholder="Enter Email"
-               [(ngModel)]="client.contacts[0].co_email" required>
-        <mat-error *ngIf="submitted && !isEmailValid(client.contacts[0].co_email)">Valid Email is required.</mat-error>
-      </mat-form-field>
+ <!-- Contact Person Section -->
+<div class="section">
+  <div class="contacts-section">
+    <div class="form-row" >
+      <!-- Contact Persons Heading (Left) -->
+      <h6 style="margin: 0;">Contact Persons</h6>
     </div>
 
-    <div *ngFor="let contact of client.contacts.slice(1); let i = index" class="form-row" style="display: flex; flex-wrap: wrap; margin-bottom: 16px;">
-      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px; margin-right: 8px;">
-        <mat-label>Name</mat-label>
-        <input matInput type="text" placeholder="Enter name"
-               [(ngModel)]="contact.co_name">
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px; margin-right: 8px;">
-        <mat-label>Hiring Position</mat-label>
-        <input matInput type="text" placeholder="Enter hiring position"
-               [(ngModel)]="contact.co_position_hr">
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px; margin-right: 8px;">
-        <mat-label>Phone No.</mat-label>
-        <input matInput type="tel" placeholder="Enter Phone No."
-               [(ngModel)]="contact.co_phno">
-        <mat-error *ngIf="submitted && !isPhoneNumberValid(contact.co_phno)">Phone number must include country code.</mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" style="flex: 1; min-width: 250px;">
-        <mat-label>Email</mat-label>
-        <input matInput type="email" placeholder="Enter Email"
-               [(ngModel)]="contact.co_email">
-        <mat-error *ngIf="submitted ">Valid Email is required.</mat-error>
-      </mat-form-field>
-
-      <button mat-icon-button (click)="removeContactPerson(i + 1)" class="remove-button">
-        <mat-icon>close</mat-icon>
+    <div *ngFor="let contact of clients.contacts; let i = index" class="contact-person">
+      <!-- Remove Contact Button -->
+      <button mat-icon-button color="warn" (click)="removeContactPerson(i)">
+        <mat-icon  style="display: flex; margin-right: auto;">delete</mat-icon>
       </button>
+      
+
+      <div class="form-row">
+        <!-- Name -->
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Name</mat-label>
+          <input
+            matInput
+            placeholder="Enter name"
+            [(ngModel)]="contact.co_name"
+            name="co_name_{{ i }}"
+            required
+          />
+          <mat-error *ngIf="!contact.co_name">Name is required.</mat-error>
+        </mat-form-field>
+
+        <!-- Hiring Position -->
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Hiring Position</mat-label>
+          <input
+            matInput
+            placeholder="Enter hiring position"
+            [(ngModel)]="contact.co_position_hr"
+            name="co_position_hr_{{ i }}"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <!-- Phone Number -->
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Phone Number</mat-label>
+          <input
+            matInput
+            type="tel"
+            placeholder="Enter phone number"
+            [(ngModel)]="contact.co_phno"
+            name="co_phno_{{ i }}"
+            required
+            pattern="^\+?\d{1,4}[\s\-]?\(?\d{1,3}\)?[\s\-]?\d{1,4}[\s\-]?\d{1,4}[\s\-]?\d{1,4}$"
+            maxlength="15"
+          />
+          <mat-error *ngIf="!contact.co_phno">Phone number is required.</mat-error>
+        </mat-form-field>
+
+        <!-- Email -->
+        <mat-form-field appearance="fill" class="form-group">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            placeholder="Enter email"
+            [(ngModel)]="contact.co_email"
+            name="co_email_{{ i }}"
+            required
+            email
+          />
+          <mat-error *ngIf="!contact.co_email">Email is required and must be valid.</mat-error>
+        </mat-form-field>
+      </div>
     </div>
   </div>
 
-  <div class="button-container" style="margin-top: 16px;">
-    <button mat-raised-button color="primary" (click)="addContactPerson()" 
-            [disabled]="client.contacts.length >= 5">Add contact person</button>
-    <button mat-raised-button color="accent" (click)="onSubmit()" 
-            [disabled]="!isFormValid()">Submit</button>
-  </div>
-</mat-card>
+     <!-- Submit Button -->
+
+    <!-- Add Contact Button -->
+    <button mat-raised-button color="primary" (click)="addContactPerson()" style="display: flex; justify-content: flex-end;">Add Contact Person</button>
+ 
+    <div class="button-container">
+ 
+    <button mat-raised-button color="accent" [disabled]="isSubmitDisabled" (click)="onSubmit()">
+      Submit
+    </button>
+  
+
+    
