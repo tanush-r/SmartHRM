@@ -1,5 +1,4 @@
 name: HRM Image build pipeline
-
 on:
   push:
     branches:
@@ -15,15 +14,8 @@ jobs:
       matrix:
         service:
         - client-master # Add all microservice folder
-
     steps:
-    # # Step 1: Set up QEMU to enable cross-platform builds
-    # - name: Set up QEMU
-    #   uses: docker/setup-qemu-action@v3
-    #   # Step 2: Set up Docker Buildx (for multi-architecture builds)
-    # - name: Set up Docker Buildx
-    #   uses: docker/setup-buildx-action@v2
-    # # Step 3: Checkout Code
+    # Step 3: Checkout Code
     - name: Checkout repository
       uses: actions/checkout@v3
 
@@ -41,38 +33,44 @@ jobs:
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
   deploy:
     needs: code-scan-and-build
     runs-on: ubuntu-latest
     environment: dev
-
+    strategy:
+      matrix:
+        service:
+        - client-master # Match the services from the build job
     steps:
     # Step 1: Set up SSH to connect to the EC2 instance
     - name: Setup SSH
       uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
     # Step 2: Deploy to EC2
     - name: Deploy Docker Containers on EC2
+      env:
+        SERVICE: ${{ matrix.service }}
       run: |
-        # Pass SERVICE as a command-line argument
         ssh -o StrictHostKeyChecking=no \
-            ubuntu@${{ secrets.EC2_HOST }} \
-            "SERVICE='${{ matrix.service }}' bash -c '\
-            echo \"Remote SERVICE value: \$SERVICE\" && \
-            if [ -z \"\$SERVICE\" ]; then \
-              echo \"Error: SERVICE variable is not set\"; \
-              exit 1; \
-            fi'"
+        ubuntu@${{ secrets.EC2_HOST }} \
+        "bash -c '
+        export SERVICE=\"$SERVICE\"
+        echo \"Remote SERVICE value: \$SERVICE\" 
 
-          echo "Deploying service: $SERVICE""
+        if [ -z \"\$SERVICE\" ]; then 
+          echo \"Error: SERVICE variable is not set\"; 
+          exit 1; 
+        fi
 
         # Pull the latest Docker image
-        docker pull tracktwok/smart_hr_system:"$SERVICE"
+        docker pull tracktwok/smart_hr_system:\"\$SERVICE\"
 
         # Stop and remove any existing container
-        docker rm -f "$SERVICE" || true
+        docker rm -f \"\$SERVICE\" || true
 
         # Run the container
-        docker run -d --name "$SERVICE" -p 8009:8009 tracktwok/smart_hr_system:"$SERVICE"
-        EOF
+        docker run -d --name \"\$SERVICE\" -p 8009:8009 tracktwok/smart_hr_system:\"\$SERVICE\"
+        '"
