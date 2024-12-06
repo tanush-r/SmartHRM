@@ -9,7 +9,7 @@ import { ClientWithContacts } from './client.model'; // Import the client model
   providedIn: 'root',
 })
 export class ClientsService {
-  private apiUrl = '/api/client-master/clients'; // FastAPI URL
+  private apiUrl = 'http://localhost:8010/clients'; // FastAPI URL
 
   constructor(private http: HttpClient) {}
 
@@ -24,13 +24,13 @@ export class ClientsService {
   }
 
   // Create a new client
-  createClient(client: ClientWithContacts): Observable<any> {
-    return this.http.post(this.apiUrl, client);
+  createClient(clients: ClientWithContacts): Observable<any> {
+    return this.http.post(this.apiUrl, clients);
   }
 
   // Update a client
-  updateClient(clientId: string, client: ClientWithContacts): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${clientId}`, client);
+  updateClient(clientId: string, clients: ClientWithContacts): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${clientId}`, clients);
   }
 
   // Delete a client
