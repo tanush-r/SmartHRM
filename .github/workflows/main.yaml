@@ -52,25 +52,24 @@ jobs:
       uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
-      env:
-        SERVICE: ${{ matrix.service }}
     # Step 2: Deploy to EC2
     - name: Deploy Docker Containers on EC2
+      env:
+        SERVICE: ${{ matrix.service }}
       run: |
+        # Debug: Print local SERVICE value
+        echo "Local SERVICE value: $SERVICE"
+
+        # Use explicit environment variable passing
         ssh -o StrictHostKeyChecking=no \
-          ubuntu@${{ secrets.EC2_HOST }} \
-          SERVICE=${{ matrix.service }} \
-          'bash -s' << 'EOF'
-        # Verify the SERVICE variable on the remote host
-        echo "Remote SERVICE value: $SERVICE"
+            ubuntu@${{ secrets.EC2_HOST }} \
+            "export SERVICE='$SERVICE' && echo \"Remote SERVICE value: \$SERVICE\" && \
+            if [ -z \"\$SERVICE\" ]; then \
+              echo \"Error: SERVICE variable is not set\"; \
+              exit 1; \
+            fi"
 
-          # Check if SERVICE is set
-        if [ -z "$SERVICE" ]; then
-          echo "Error: SERVICE variable is not set"
-          exit 1
-        fi
-
-        echo "Deploying service: $SERVICE""
+         echo "Deploying service: $SERVICE""
 
         # Pull the latest Docker image
         docker pull tracktwok/smart_hr_system:"$SERVICE"
