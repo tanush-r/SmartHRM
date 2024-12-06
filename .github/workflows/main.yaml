@@ -44,6 +44,7 @@ jobs:
   deploy:
     needs: code-scan-and-build
     runs-on: ubuntu-latest
+    environment: dev
 
     steps:
     # Step 1: Set up SSH to connect to the EC2 instance
