@@ -1,12 +1,18 @@
 .form-container {
   max-width: 800px !important;
   width: 100% !important;
-  margin-left: 230px !important;
   padding: 20px !important;
   background-color: #fff !important;
   border: 1px solid #ccc !important;
   border-radius: 5px !important;
+
+  /* Center horizontally */
+  position: relative; /* Use relative positioning */
+  left: 50%; /* Position it from the left to the center of the container */
+  transform: translateX(-50%); /* Adjust back by half the width for perfect centering */
+  margin-left: 0 !important; /* Override the existing margin-left */
 }
+
 
 .add-client-banner {
   display: flex !important;
@@ -64,13 +70,7 @@
   align-items: center !important;
 }
 
-.close-button {
-  background-color: transparent !important;
-  border: none !important;
-  color: #fff !important;
-  cursor: pointer !important;
-  font-size: 18px !important;
-}
+
 
 h6 {
   font-weight: bold !important;
@@ -101,7 +101,6 @@ input,
 select {
   width: 100% !important;
   padding: 5px !important;
-  border: 1px solid #ccc !important;
   border-radius: 3px !important;
 }
 
@@ -163,7 +162,23 @@ button[mat-raised-button]:hover {
 
 button[mat-raised-button][disabled] {
   color: white; /* White text for disabled state */
-  background-color: #e0e0e0; /* Light gray background */
+ /* Light gray background */
   box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5); /* White blur effect */
   cursor: not-allowed;
+}
+input:-internal-autofill-selected {
+  appearance: menulist-button;
+  background-image: none !important;
+  color: fieldtext !important;
+}
+mat-form-field input {
+  cursor: text !important;
+}
+
+mat-form-field .mat-form-field-appearance-fill .mat-input-element {
+  cursor: text !important;
+}
+
+.mdc-text-field--filled.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  caret-color: var(--mdc-filled-text-field-error-caret-color);
 }

@@ -1,12 +1,18 @@
 .form-container {
   max-width: 900px !important;
   width: 100% !important;
-  margin-left: 230px !important;
   padding: 20px !important;
   background-color: #fff !important;
   border: 1px solid #ccc !important;
   border-radius: 5px !important;
+
+  /* Add these properties */
+  position: relative; /* Or absolute/fixed based on your need */
+  left: 50%;
+  transform: translateX(-50%);
+  margin-left: 0 !important; /* Reset to avoid conflict */
 }
+
 
 .add-client-banner {
   background-color: #0747A6 !important;

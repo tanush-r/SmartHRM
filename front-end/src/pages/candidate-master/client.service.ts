@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Client, Candidate, Requirement } from './candidate.model'; // Import necessary models
 
@@ -22,18 +22,25 @@ export class CandidateService {
       // Server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
+    console.error(errorMessage); // Log the error message
     return throwError(errorMessage);
   }
 
   getClients(): Observable<Client[]> {
     return this.http.get<Client[]>(`${this.apiUrl}/clients`).pipe(
-      catchError(this.handleError)
+      catchError(() => {
+        console.error('Error loading clients'); // Log the error
+        return of([]); // Return an empty array
+      })
     );
   }
 
   getRequirements(clientId: string): Observable<Requirement[]> {
     return this.http.get<Requirement[]>(`${this.apiUrl}/requirements/${clientId}`).pipe(
-      catchError(this.handleError)
+      catchError(err => {
+        console.error(`Error loading requirements: ${err}`); // Log the error
+        return of([]); // Return an empty array
+      })
     );
   }
 
@@ -45,13 +52,19 @@ export class CandidateService {
 
   getCandidates(): Observable<Candidate[]> {
     return this.http.get<Candidate[]>(`${this.apiUrl}/candidates`).pipe(
-      catchError(this.handleError)
+      catchError(err => {
+        console.error(`Error loading candidates: ${err}`); // Log the error
+        return of([]); // Return an empty array
+      })
     );
   }
 
   getCandidatesByRqId(rq_id: string): Observable<Candidate[]> {
     return this.http.get<Candidate[]>(`${this.apiUrl}/candidates/requirement/${rq_id}`).pipe(
-      catchError(this.handleError)
+      catchError(err => {
+        console.error(`Error loading candidates by requirement: ${err}`); // Log the error
+        return of([]); // Return an empty array
+      })
     );
   }  
 
