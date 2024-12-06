@@ -2,7 +2,7 @@ name: HRM CI/CD pipeline
 on:
   push:
     branches:
-    - release-mvp-0.6 # Trigger only on the release branch
+    - release-mvp-0.6-123 # Trigger only on the release branch
   workflow_dispatch:
     # Enable manual triggering
 
