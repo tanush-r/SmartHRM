@@ -73,4 +73,3 @@ jobs:
 
         # Run the container
         docker run -d --name \"\$SERVICE\" -p 8009:8009 tracktwok/smart_hr_system:\"\$SERVICE\"
-        '"
