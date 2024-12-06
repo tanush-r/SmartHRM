@@ -32,7 +32,7 @@ export interface PrimaryDetail {
   providedIn: 'root'
 })
 export class ClientService {
-  private baseUrl = '/api/viewer'; // Replace with your actual API base URL
+  private baseUrl = 'http://localhost:8080/api/viewer'; // Replace with your actual API base URL
 
   constructor(private http: HttpClient) {}
 
