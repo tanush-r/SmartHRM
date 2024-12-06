@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -11,6 +11,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { ChatbotComponent } from '../chatbot/chatbot/chatbot.component';
 import { ApiService, DashboardMetrics, PositionMetrics } from './api.service'; // Adjust the import path
+import { AuthService } from '../../services/auth.service'; // Adjust the import path
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -30,11 +32,12 @@ import { ApiService, DashboardMetrics, PositionMetrics } from './api.service'; /
     MatFormFieldModule,
   ],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   // Variables
   prompt: string = '';
   selectedTabFirstCard: string = 'all';
   selectedTabSecondCard: string = 'all';
+  userEmail: string | null = ''; // Declare userEmail property
 
   // Data for Master section cards
   clientCount = 0;
@@ -46,15 +49,28 @@ export class HomeComponent implements OnInit {
   closedPositions = 0;
   onHoldPositions = 0;
 
-  constructor(private apiService: ApiService, private dialog: MatDialog) {}
+  private emailSubscription: Subscription | null = null; // Initialize with null
+
+  constructor(private apiService: ApiService, private dialog: MatDialog, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loadDashboardMetrics(this.selectedTabFirstCard);
     this.loadPositionMetrics(this.selectedTabSecondCard);
+    
+    // Subscribe to get user's email
+    this.emailSubscription = this.authService.getUserEmail().subscribe(email => {
+      this.userEmail = email; // Set userEmail to the retrieved email
+    });
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe to prevent memory leaks
+    if (this.emailSubscription) {
+      this.emailSubscription.unsubscribe();
+    }
   }
 
   selectTab(selectedFilter: string, card: string): void {
-    // API에서 기대하는 값으로 변환
     const periodMap: { [key: string]: string } = {
       'today': 'today',
       'this week': 'this week',
@@ -62,7 +78,7 @@ export class HomeComponent implements OnInit {
       'all': 'all'
     };
 
-    const period = periodMap[selectedFilter] || selectedFilter; // 디폴트는 selectedFilter
+    const period = periodMap[selectedFilter] || selectedFilter; 
 
     if (card === 'first') {
       this.selectedTabFirstCard = selectedFilter;
@@ -106,7 +122,8 @@ export class HomeComponent implements OnInit {
       disableClose: false,
       hasBackdrop: true,
       panelClass: 'custom-chatbot-dialog',
-      data: { prompt: this.prompt },
+      data: { prompt: this.prompt }, // Pass the prompt to the chatbot component
     });
+    this.prompt = ''; // Clear the prompt after opening the chatbot
   }
 }

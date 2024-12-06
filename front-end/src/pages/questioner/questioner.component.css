@@ -96,6 +96,7 @@ strong {
 }
 
 .tab-button {
+  width: 212px;
   padding: 10px 15px;
   background-color: #0747A6;
   color: white;
@@ -129,10 +130,10 @@ strong {
   background-color: #0747A6;
   color: white;
   border: none;
-  padding: 5px 10px;
+  padding: 5px 5px;
   cursor: pointer;
-  border-radius: 3px;
   margin-right: 10px;
+  width: 25px;
 }
 
 .controls button:hover {
@@ -143,6 +144,39 @@ strong {
   font-size: 1rem;
   font-weight: bold;
 }
+.primary-details-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.details-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.details-table th,
+.details-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.details-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.loader {
+  text-align: center;
+  font-size: 16px;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+}
+
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
@@ -167,7 +201,7 @@ strong {
   border: none; /* Remove any default border */
   padding: 10px 20px; /* Add padding for a cleaner look */
   font: size 1 rem; /* Set font size */
-  border-radius: 5px; /* Rounded corners */
+  /* Rounded corners */
   cursor: pointer; /* Change cursor to pointer on hover */
   transition: background-color 0.3s ease; /* Smooth transition on hover */
 }
@@ -185,5 +219,231 @@ strong {
 
 
 
+.row-container {
+  display: flex; /* Align items in a row */
+  justify-content: space-between; /* Creates space between the two sections */
+  gap: 50px; /* Adjusts the space between the two sections */
+}
+
+.header-Primary {
+  display: flex;
+  flex-direction: column; /* Keeps the details in a column inside header */
+  flex: 1; /* Ensures it takes the available space */
+  width: 500px; /* You can adjust this width as needed */
+  gap: 20px;
+}
+
+.primary-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  width: 538px;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  border-bottom: 1px solid #ddd; /* Border between items */
+}
+
+.detail-item:last-child {
+  border-bottom: none; /* Removes border for the last item */
+}
+
+.label {
+  font-weight: bold;
+  color: #333;
+}
+
+.value {
+  color: #555;
+}
+
+.status-dropdown {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  background-color: white;
+}
+
+.status-dropdown:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.question-section {
+  flex: 2; /* Ensures this section takes more space compared to header */
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  width: 500px;
+  margin-left: 2px;
+}
+
+.jd-questions-container,
+.resume-questions-container {
+  margin-bottom: 20px;
+}
+
+h4 {
+  margin-bottom: 10px;
+}
+
+.btn {
+  margin-bottom: 10px;
+}
+
+.status-dropdown {
+  padding: 10px 15px; /* Increase padding for a larger size */
+  font-size: 16px; /* Increase font size */
+  height: 40px; /* Adjust height to make it larger */
+  border-radius: 5px; /* Slightly round corners */
+  border: 1px solid #ddd;
+  background-color: white;
+}
+
+.status-dropdown:focus {
+  outline: none;
+  border-color: #007bff;
+}
+/* Base Styles for Buttons */
+.btn {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-icon {
+  background-color: transparent;
+  color: #007bff;
+  border: none;
+  font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon:hover {
+  color: #0056b3;
+  transform: scale(1.1);
+}
+
+.btn-secondary {
+  background-color: #0747A6;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  font-weight: bold;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+.btn-secondary[_ngcontent-ng-c3796325584] {
+  background-color: #0747A6;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+}
+.btn-secondary:active {
+  background-color: #495057;
+  transform: scale(0.98);
+}
+
+.btn[disabled] {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+/* Container Styling for the Question Sections */
+.jd-question-section,
+.resume-question-section {
+  padding: 15px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.jd-questions-container,
+.resume-questions-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.jd-questions-container h4,
+.resume-questions-container h4 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: normal;
+  color: #000000;
+}
+
+/* FAQ Items */
+.faq-item {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #ffffff;
+}
+
+.loader p-skeleton {
+  margin-bottom: 5px;
+}
+
+/* Accordion Styling */
+p-accordion p-accordionTab {
+  margin: 5px 0;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+}
+
+p-accordionTab ng-template span {
+  font-size: 15px;
+  color: #000000;
+}
 
 
+.resume-back {
+  background-color: #0747A6; /* Blue background */
+  color: white; /* White text */
+  font-size: 16px; /* Font size */
+  padding: 10px 20px; /* Padding for better spacing */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.resume-back:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.resume-back:active {
+  background-color: #004085; /* Even darker blue when pressed */
+  transform: scale(0.98); /* Slightly shrink the button */
+}
+
+.resume-back:disabled {
+  background-color: #c0c0c0; /* Gray color when disabled */
+  cursor: not-allowed; /* Not-allowed cursor */
+}
+.questions{
+  gap: 20px;
+}
+
+.button_updateStatus{
+  background-color: #0747A6;
+  color: white;
+}

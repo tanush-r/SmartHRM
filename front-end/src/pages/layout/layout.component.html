@@ -54,15 +54,15 @@
   
     <!-- Main Content Area -->
     <div class="flex-grow-1" style="margin-left: 250px; width: calc(100% - 250px);">
-      <!-- Full-Width Horizontal Navbar with User Profile Icon -->
+      <!-- Full-Width Horizontal Navbar with User Profile Email -->
       <div class="top-navbar d-flex justify-content-end align-items-center p-2" style="background-color: #0747A6; color: white;">
-          <div class="dropdown d-flex align-items-center">
-              <img src="assets/user_logo.jpg" alt="User Icon" class="user-icon rounded-circle me-2">
+          <div class="d-flex align-items-center">
+              <span class="text-white me-2">{{ userEmail }}</span> <!-- Display user's email -->
               <button class="btn btn-link dropdown-toggle text-white" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                   <i class="bi bi-person-circle fa-lg me-2"></i>
               </button>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                  <li><a class="dropdown-item">Logout</a></li>
+                  <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
               </ul>
               <span></span>
           </div>

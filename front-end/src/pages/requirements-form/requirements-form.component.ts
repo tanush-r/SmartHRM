@@ -6,13 +6,19 @@ import { RequirementService } from '../requirements-master/client.service';
 import { Client } from '../requirements-master/requirement.model';
 import { FormsModule } from '@angular/forms'; 
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+// import { FormBuilder, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-requirements-form',
   standalone: true,
   templateUrl: './requirements-form.component.html',
   styleUrls: ['./requirements-form.component.css'],
-  imports: [ReactiveFormsModule, FormsModule, CommonModule]
+  imports: [ReactiveFormsModule, FormsModule, CommonModule, MatButtonModule,MatFormFieldModule, MatInputModule, MatSelectModule]
 })
 export class RequirementsFormComponent implements OnInit {
   requirementForm!: FormGroup;
@@ -80,4 +86,5 @@ export class RequirementsFormComponent implements OnInit {
       console.log("Form is invalid:", this.requirementForm.errors); // Log form errors
     }
   }
+  
 }
