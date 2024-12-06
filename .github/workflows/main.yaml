@@ -59,15 +59,20 @@ jobs:
       run: |
         # Pass the service name explicitly to the EC2 instance
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << EOF
-        export SERVICE=${{ matrix.service }}
-        echo "Deploying service: \$SERVICE"
+        # Ensure the SERVICE variable is correctly passed and not empty
+        if [ -z "$SERVICE" ]; then
+         echo "Error: SERVICE variable is not set"
+         exit 1
+        fi
+
+         echo "Deploying service: $SERVICE"
 
         # Pull the latest Docker image
-        docker pull tracktwok/smart_hr_system:\$SERVICE
+        docker pull tracktwok/smart_hr_system:"$SERVICE"
 
         # Stop and remove any existing container
-        docker rm -f \$SERVICE || true
+        docker rm -f "$SERVICE" || true
 
         # Run the container
-        docker run -d --name \$SERVICE -p 8009:8009 tracktwok/smart_hr_system:\$SERVICE
+        docker run -d --name "$SERVICE" -p 8009:8009 tracktwok/smart_hr_system:"$SERVICE"
         EOF
