@@ -61,14 +61,18 @@ class Contact(BaseModel):
 class ClientWithContacts(BaseModel):
     cl_id: Optional[str] = None 
     cl_name: str
+    cl_co_per_name: str  # New field
     cl_email: Optional[str] = None
     cl_phno: Optional[str] = None
     cl_addr: Optional[str] = None
     cl_map_url: Optional[str] = None
     cl_type: Optional[str] = None
     cl_notes: Optional[str] = None
+    cl_ag_si: Optional[int] = 0  # New field (checkbox - 0 or 1)
     created_by: Optional[str] = None
     created_at: Optional[datetime] = None
+    updated_by: Optional[str] = None
+    updated_at: Optional[datetime] = None
     contacts: List[Contact] = []
 
 # 1. Create a new client with multiple contacts (POST)
@@ -78,10 +82,14 @@ def create_client_with_contacts(client: ClientWithContacts):
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
-        # Insert client data
+        # Insert client data (updated with cl_co_per_name and cl_ag_si)
         cursor.execute(
-            "INSERT INTO clients (cl_id, cl_name, cl_email, cl_phno, cl_addr, cl_map_url, cl_type, cl_notes, created_by) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-            (cl_uuid.hex, client.cl_name, client.cl_email, client.cl_phno, client.cl_addr, client.cl_map_url, client.cl_type, client.cl_notes, client.created_by)
+            """
+            INSERT INTO clients (cl_id, cl_name, cl_co_per_name, cl_email, cl_phno, cl_addr, cl_map_url, cl_type, cl_notes, cl_ag_si, created_by) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            (cl_uuid.hex, client.cl_name, client.cl_co_per_name, client.cl_email, client.cl_phno, client.cl_addr, 
+             client.cl_map_url, client.cl_type, client.cl_notes, client.cl_ag_si, client.created_by)
         )
         # Insert contact data for each contact in the list
         for contact in client.contacts:
@@ -150,8 +158,12 @@ def update_client(client_id: str, client: ClientWithContacts):
     cursor = conn.cursor()
     try:
         cursor.execute(
-            "UPDATE clients SET cl_name = %s, cl_email = %s, cl_phno = %s, cl_addr = %s, cl_map_url = %s, cl_type = %s, cl_notes = %s, created_by = %s WHERE cl_id = %s",
-            (client.cl_name, client.cl_email, client.cl_phno, client.cl_addr, client.cl_map_url, client.cl_type, client.cl_notes, client.created_by, client_id)
+            """
+            UPDATE clients SET cl_name = %s, cl_co_per_name = %s, cl_email = %s, cl_phno = %s, cl_addr = %s, 
+            cl_map_url = %s, cl_type = %s, cl_notes = %s, cl_ag_si = %s, created_by = %s WHERE cl_id = %s
+            """,
+            (client.cl_name, client.cl_co_per_name, client.cl_email, client.cl_phno, client.cl_addr, client.cl_map_url, 
+             client.cl_type, client.cl_notes, client.cl_ag_si, client.created_by, client_id)
         )
         # Clear existing contacts for the client
         cursor.execute("DELETE FROM contacts WHERE cl_id = %s", (client_id,))
@@ -195,6 +207,5 @@ def delete_client(client_id: str):
     return {"message": "Client deleted successfully."}
 
 if __name__ == "__main__":
-    port = int(os.getenv("main", 8009)) 
+    port = int(os.getenv("main", 8010)) 
     uvicorn.run(app, host="0.0.0.0", port=port)
-
