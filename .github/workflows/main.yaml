@@ -8,20 +8,20 @@ on:
 
 jobs:
   image-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-arm
     environment: dev
     strategy:
       matrix:
         service:
         - client-master # Add all microservice folder
     steps:
-    # Step 1: Set up QEMU to enable cross-platform builds
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
+    # # Step 1: Set up QEMU to enable cross-platform builds
+    # - name: Set up QEMU
+    #   uses: docker/setup-qemu-action@v3
 
-    # Step 2: Set up Docker Buildx (for multi-architecture builds)
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+    # # Step 2: Set up Docker Buildx (for multi-architecture builds)
+    # - name: Set up Docker Buildx
+    #   uses: docker/setup-buildx-action@v2
 
     # Step 3: Checkout Code
     - name: Checkout repository
@@ -31,7 +31,7 @@ jobs:
     - name: Build Docker Image for ${{ matrix.service }}
       run: |
         cd ${{ matrix.service }}
-        docker buildx build --platform linux/arm64 -t tracktwok/smart_hr_system:${{ matrix.service }} --push .
+        docker build -t tracktwok/smart_hr_system:${{ matrix.service }} .
 
     # Step 5: Push Docker Image to Registry
     - name: Push Docker Image to Registry
