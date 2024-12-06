@@ -124,6 +124,7 @@ strong {
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 10px;
+  margin-left: 400px;
 }
 
 .controls button {
@@ -421,7 +422,7 @@ p-accordionTab ng-template span {
   font-size: 16px; /* Font size */
   padding: 10px 20px; /* Padding for better spacing */
   border: none; /* Remove border */
-  border-radius: 5px; /* Rounded corners */
+
   cursor: pointer; /* Change cursor to pointer on hover */
   transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
@@ -446,4 +447,21 @@ p-accordionTab ng-template span {
 .button_updateStatus{
   background-color: #0747A6;
   color: white;
+  color: white;
+  padding: 5px 10px;
+  border: #0747A6;
+  margin-left: 5px;
+  margin-bottom: 10px;
+}
+.button_updateStatus:hover{
+  background-color: #0056b3;
+}
+.question_ge{
+  background-color: #0747A6;
+  border: #0747A6;
+  color: white;
+  padding: 5px 10px;
+}
+.question_ge:hover{
+  background-color: #0056b3;
 }

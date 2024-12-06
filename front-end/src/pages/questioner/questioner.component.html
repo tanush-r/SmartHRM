@@ -16,7 +16,7 @@
           <select class="status-dropdown" [(ngModel)]="selectedStatusId">
             <option *ngFor="let status of statuses" [value]="status.st_id">{{ status.st_name }}</option>
           </select>
-          <button (click)="updateStatus(resumeId || '')" [disabled]="!resumeId || !selectedStatusId">Update Status</button>
+          <button class="button_updateStatus" (click)="updateStatus(resumeId || '')" [disabled]="!resumeId || !selectedStatusId">Update Status</button>
         </div>
         <!-- <div *ngIf="resumeStatus">
           <p>Current Status: {{ resumeStatus.st_name }}</p>
@@ -34,7 +34,7 @@
           <i class="pi" [ngClass]="isJDQuestionsVisible ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
         </button>
         <h4>JD Based Questions</h4>
-        <button class="btn btn-secondary" (click)="isJDGenerated ? regenerateJDQuestions() : generateJDQuestions(jdId)">
+        <button class="question_ge" (click)="!isJDGenerated ? regenerateJDQuestions() : generateJDQuestions(jdId ?? '')">
           {{ isJDGenerated ? 'Regenerate' : 'Generate' }}
         </button>
       </div>
@@ -67,7 +67,7 @@
           <i class="pi" [ngClass]="isResumeQuestionsVisible ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
         </button>
         <h4>Resume Based Questions</h4>
-        <button class="btn btn-secondary" (click)="isResumeGenerated ? regenerateResumeQuestions() : generateResumeQuestions(resumeId)">
+        <button class="question_ge" (click)="!isResumeGenerated ? regenerateResumeQuestions() : generateResumeQuestions(resumeId ?? '')">
           {{ isResumeGenerated ? 'Regenerate' : 'Generate' }}
         </button>
       </div>
